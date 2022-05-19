@@ -1,0 +1,33 @@
+# Your files
+config.json
+
+# Vendor
+node_modules
+
+# Environment
+
+npm-debug.log
+yarn-error.log
+
+# Source Maps
+*.css.map
+*.js.map
+
+# OS
+*~
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea
+.settings
+.project
+.build
+.vscode
+*.code-workspace
+
+# File Types
+*.log
+*.zip
+.svn
