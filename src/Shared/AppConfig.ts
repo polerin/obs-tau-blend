@@ -1,4 +1,4 @@
-const localConfig = require("../config.json");
+const localConfig = require("../../config.json");
 import { get }  from "lodash";
 
 

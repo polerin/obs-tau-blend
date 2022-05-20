@@ -1,10 +1,10 @@
 import { token } from "brandi";
-import OverlayController from "Infrastructure/Controllers/OverlayController";
 
 import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
+import OverlayController from "Infrastructure/Controllers/OverlayController";
 
-export const TOKENS = {
-    //Control Worker
+export const OVERLAY_TOKENS = {
+    // Service adapter
     controlSharedWorker: token<SharedWorker>("SharedWorker"),
     controlWorker: token<IControlWorker>("ControlWorker"),
 

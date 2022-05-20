@@ -1,3 +1,7 @@
-// Central control entry point
-// This should only be loaded into the shared worker, you probably want to be looking
-// at the Overlay entry point.
+import {centralContainer, CENTRAL_TOKENS } from "Bindings";
+import { conf_get } from "Shared/AppConfig";
+
+const controller = centralContainer.get(CENTRAL_TOKENS.centralController);
+controller.init(conf_get("centralController", {}));
+
+onconnect = controller.onSharedWorkerConnect;
