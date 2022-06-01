@@ -1,6 +1,6 @@
-import { ControlMessage } from "Infrastructure/Shared/Types";
+import { SystemMessage } from "Shared/MessageHandling";
 import { LitElement } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, state, property} from 'lit/decorators.js';
 import elementTemplate from './DebugContainer.template';
 
 
@@ -8,24 +8,32 @@ import elementTemplate from './DebugContainer.template';
 export class DebugContainer extends LitElement
 {
     @state()
-    public messages : Array<string> = [];
+    protected messages : Array<string> = [];
 
-    public addMessage(message : string | ControlMessage) : void {
-        let messageString: string;
+    @property({attribute: "max-messages", type : Number})
+    public maxMessages = 10;
 
-        if ((message as ControlMessage).type) {
-            let cast : ControlMessage = <ControlMessage>message;
-            messageString = `${cast.type} : ${cast.label} : ${JSON.stringify(cast.data)}`;
-        } else {
-            messageString = <string>message;
-        }
+    public addMessage(message : string | SystemMessage) : void
+    {
+        this.messages.unshift(this.formatMessage(message));
 
-        this.messages.unshift(messageString);
-        this.requestUpdate();
+        // setter to the state triggers refresh
+        this.messages = this.messages.slice(0, this.maxMessages);
     }
 
-    public render () { 
+    public render ()
+    { 
+        return elementTemplate({messages: this.messages});
+    }
 
-        return elementTemplate(this);
+    protected formatMessage(message : string | SystemMessage) : string
+    {
+        if ((message as SystemMessage).type) {
+            let cast : SystemMessage = <SystemMessage>message;
+            
+            return `${cast.type} : ${cast.name} : ${JSON.stringify(cast)}`;
+        }
+
+        return <string>message;
     }
 }

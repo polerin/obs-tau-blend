@@ -1,11 +1,7 @@
-import { ControlMessage } from "Infrastructure/Shared/Types";
+import IPortMessageAdapter from "./IPortMessageAdapter";
 
-export default interface IControlWorker extends EventTarget
+export default interface IControlWorker extends IPortMessageAdapter
 {
     connect() : void;
     disconnect() : void;
-
-    dispatch(message : ControlMessage) : boolean;
-
-    dispatchMessage(label : string, messageData : any) : void
 }

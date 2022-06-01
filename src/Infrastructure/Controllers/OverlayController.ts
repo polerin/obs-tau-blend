@@ -1,7 +1,7 @@
-import { OVERLAY_TOKENS, injected } from "Bindings";
+import { injected, OVERLAY_TOKENS,  SHARED_TOKENS } from "Bindings";
 
 import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
-import { ControlMessage, ControlRequest, ControlMessageOrEvent, ComponentDefinition } from "Infrastructure/Shared/Types";
+import { SystemMessageOrEvent, SystemMessage, SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
 
 import * as Components from "Overlay/Components";
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
@@ -28,7 +28,7 @@ class OverlayController {
     constructor(controlWorker: IControlWorker)
     {
         this.controlWorker = controlWorker;
-        this.messageHandler = this.messageHandler.bind(this);
+        this.portMessageHandler = this.portMessageHandler.bind(this);
         this.connectComponent = this.connectComponent.bind(this);
 
     }
@@ -40,7 +40,6 @@ class OverlayController {
         this.locateElements();
         this.connectRequestedComponents();
         this.startControlWorker();
-        this.connectToObs();
     }
 
     protected locateElements()
@@ -58,7 +57,7 @@ class OverlayController {
         }
 
         const query = Object.keys(componentMaps).join(", ");
-        const elements = document.querySelectorAll(query);
+        const elements = this.container?.querySelectorAll(query) || false;
 
         if (!elements) {
             return;
@@ -69,37 +68,28 @@ class OverlayController {
 
     protected connectComponent(component : Element)
     {
-        if (!(<unknown>component as IOverlayComponent).componentType) {
+        const overlayComponent = <unknown>component as IOverlayComponent;
+        if (!overlayComponent.componentType) {
             return;
         }
 
-
+        overlayComponent.registerCallbacks();
     }
 
     protected startControlWorker() : void
     {
-        this.controlWorker.addEventListener('controlMessage', this.messageHandler)
+        this.controlWorker.setCallback(this.portMessageHandler)
         this.controlWorker.connect();
 
-        this.controlWorker.dispatchMessage("overlayController.connected", {});
+        // this.controlWorker.dispatchMessage("overlayController.connected", {});
     }
 
-    protected messageHandler(message : Event) : void
+    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
     {
-        if (!(message as ControlMessageOrEvent).type || message.type != 'controlMessage') { 
-            return;
-        }
-
-        this.debugContainer?.addMessage(<ControlMessage><unknown>message);
+        // @TODO actually handle messages
+        this.debugContainer?.addMessage(message as SystemMessage);
     }
 
-    protected connectToObs() : void
-    {
-        if (!window.obsstudio) {
-            this.debugContainer?.addMessage("No obs detected");
-            return;
-        }
-    }
 }
 
 export default OverlayController;

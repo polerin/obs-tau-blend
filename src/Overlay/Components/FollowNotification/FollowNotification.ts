@@ -5,6 +5,6 @@ import followNotificationTemplate from './FollowNotification.template';
 @customElement('follow-notification')
 export class FollowNotification extends LitElement {
     render () { 
-        return followNotificationTemplate;
+        return followNotificationTemplate(this);
     }
 }

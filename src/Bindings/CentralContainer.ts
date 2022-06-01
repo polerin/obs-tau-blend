@@ -2,17 +2,18 @@ import { Container } from "brandi";
 import { container as parentContainer } from "./Container";
 import { CENTRAL_TOKENS } from "./CentralTokens";
 
-import ObsConnector from "Infrastructure/Adapters/ObsConnector";
-import CentralController from "Infrastructure/Controllers/CentralController";
-import { ObsWebsocket } from "Infrastructure/Adapters/ObsWebsocket";
 import { conf_get } from "Shared/AppConfig";
+
+import CentralController from "Infrastructure/Controllers/CentralController";
+import ObsV4Connector from "Infrastructure/Adapters/ObsV4Connector/V4Connector";
+import ObsWebsocket from "obs-websocket-js";
 
 export const centralContainer = new Container().extend(parentContainer);
 
 // Service Adapters
 centralContainer
     .bind(CENTRAL_TOKENS.obsConnector)
-    .toInstance(ObsConnector)
+    .toInstance(ObsV4Connector)
     .inSingletonScope();
 
 centralContainer

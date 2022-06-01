@@ -1,4 +1,8 @@
+import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
+
 export default interface IObsConnector
 {
-    connect() : boolean;
+    connect() : Promise<boolean>;
+
+    getStatus() : ExternalConnectionStatus;
 }

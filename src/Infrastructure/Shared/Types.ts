@@ -1,28 +1,6 @@
-export type ControlMessage = {
-    type : 'controlMessage',
-    label : string,
-    data : any
-};
+// External system status definition
 
-export type ControlMessageOrEvent = ControlMessage | Event;
-
-export type ControlRequest = {
-    type : 'controlRequest',
-    label : string,
-    data : any
+export type ExternalConnectionStatus = {
+    status : "disconnected" | "connecting" | "connected" | "disconnecting",
+    details : Record<string, string | number | boolean>
 }
-
-
-// Overlay Component related
-
-export type ComponentDefinition = {
-    elementName: string,
-    sourcePath: string
-    element?: HTMLElement | null | undefined,
-};
-
-// definition of a callback for the component
-export type ComponentCallback = {
-    messageName : string,
-    callback : Function
-};

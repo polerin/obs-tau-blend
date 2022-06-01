@@ -3,4 +3,7 @@ import { PersistantOverlayComponent, EventOverlayComponent } from "../../Overlay
 export default interface IOverlayComponent
 {
     readonly componentType : PersistantOverlayComponent | EventOverlayComponent;
+
+    registerCallbacks() : void;
+    unregisterCallbacks() : void;
 }
