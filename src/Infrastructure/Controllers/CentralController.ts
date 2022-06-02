@@ -14,10 +14,10 @@ export default class CentralController
     private sharedWorkerPort? : MessagePort;
     private portMessageAdapter : PortMessageAdapter;
 
-    protected defaultOptions : any = {
+    protected defaultOptions : object = {
     };
 
-    protected options? : any;
+    protected options? : object;
 
     constructor(obsConnector : IObsConnector, portMessageAdapter : PortMessageAdapter) 
     {
@@ -30,7 +30,7 @@ export default class CentralController
 
     }
 
-    public async init(options : any) : Promise<void>
+    public async init(options : object) : Promise<void>
     {
         this.options = {...this.defaultOptions, ...options};
 

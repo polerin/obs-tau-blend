@@ -64,7 +64,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter
             return;
         }
         
-        const holder = portMessage.data as PortMessage<any>;
+        const holder = portMessage.data as PortMessage<SystemMessageNames>;
 
         if (!holder.name) {
             return;

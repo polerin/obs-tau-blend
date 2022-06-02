@@ -13,7 +13,7 @@ export const CENTRAL_TOKENS = {
     obsConnector: token<IObsConnector>("obsConnector"),
     obsWebsocket: token<ObsWebsocket>("obsWebsocket"),
     obsV4EventTransformers: token<V4EventTransformerSet>("obsV4Transformers"),
-    obsOptions: token<any>('obsOptions'),
+    obsOptions: token<object>('obsOptions'),
 
     // Controller
     centralController: token<CentralController>("centralController")

@@ -328,7 +328,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"filterObsV4EventTransformers\": () => (/* binding */ filterObsV4EventTransformers)\n/* harmony export */ });\nfunction filterObsV4EventTransformers(potentialTransformers) {\n    let transformers = [];\n    for (const transformer of potentialTransformers) {\n        const instance = new transformer();\n        if (instance.obsEventType) {\n            transformers.push(instance);\n        }\n    }\n    return transformers;\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Utility.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"filterObsV4EventTransformers\": () => (/* binding */ filterObsV4EventTransformers)\n/* harmony export */ });\n// @TODO Move to unknown[], just don't know how to do it with a class definition\nfunction filterObsV4EventTransformers(potentialTransformers) {\n    let transformers = [];\n    for (const transformer of potentialTransformers) {\n        if (typeof transformer !== \"function\") {\n            break;\n        }\n        const instance = new transformer();\n        if (instance.obsEventType) {\n            transformers.push(instance);\n        }\n    }\n    return transformers;\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Utility.ts?");
 
 /***/ }),
 

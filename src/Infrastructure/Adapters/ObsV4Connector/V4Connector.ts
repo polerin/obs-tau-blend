@@ -30,7 +30,7 @@ export default class ObsV4Connector implements IObsConnector
     private callback? : SystemMessageCallback | null;
 
 
-    constructor(websocket : ObsWebsocket, eventTransformers : V4EventTransformerSet,  options : any = {}) {
+    constructor(websocket : ObsWebsocket, eventTransformers : V4EventTransformerSet,  options : object = {}) {
         this.websocket = websocket;
 
 
