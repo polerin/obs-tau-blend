@@ -7,262 +7,269 @@ const obs = new ObsWebSocket();
 
 type EventHandlerListener = (Parameters<typeof obs.on>)[1];
 
-export type ConnectionOpened = Extract<Parameters<EventHandlerListener>[0], void>;
-export type ConnectionClosed = Extract<Parameters<EventHandlerListener>[0], void>;
-export type AuthenticationSuccess = Extract<Parameters<EventHandlerListener>[0], void>;
-export type AuthenticationFailure = Extract<Parameters<EventHandlerListener>[0], void>;
-export type error = Extract<Parameters<EventHandlerListener>[0], {
-  error: any;
-  message: string;
-  type: string;
-}>;
+export interface ObsV4EventHandlersData {
+  [name: string]: any,
 
-export type SwitchScenes = Extract<Parameters<EventHandlerListener>[0], { "scene-name": string; sources: ObsWebSocket.SceneItem[] }>;
+  ConnectionOpened: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type ScenesChanged = Extract<Parameters<EventHandlerListener>[0], { scenes: ObsWebSocket.Scene[] }>;
+  ConnectionClosed: Extract<Parameters<EventHandlerListener>[0], void>;
+  AuthenticationSuccess: Extract<Parameters<EventHandlerListener>[0], void>;
+  AuthenticationFailure: Extract<Parameters<EventHandlerListener>[0], void>;
+  error: Extract<Parameters<EventHandlerListener>[0], {
+    error: any;
+    message: string;
+    type: string;
+  }>;
 
-export type SceneCollectionChanged = Extract<Parameters<EventHandlerListener>[0], { sceneCollection: string }>;
+  SwitchScenes: Extract<Parameters<EventHandlerListener>[0], { "scene-name": string; sources: ObsWebSocket.SceneItem[] }>;
 
-export type SceneCollectionListChanged = Extract<Parameters<EventHandlerListener>[0], { sceneCollections: { name: string }[] }>;
+  ScenesChanged: Extract<Parameters<EventHandlerListener>[0], { scenes: ObsWebSocket.Scene[] }>;
 
-export type SwitchTransition = Extract<Parameters<EventHandlerListener>[0], { "transition-name": string }>;
+  SceneCollectionChanged: Extract<Parameters<EventHandlerListener>[0], { sceneCollection: string }>;
 
-export type TransitionListChanged = Extract<Parameters<EventHandlerListener>[0], { transitions: { name: string }[] }>;
+  SceneCollectionListChanged: Extract<Parameters<EventHandlerListener>[0], { sceneCollections: { name: string }[] }>;
 
-export type TransitionDurationChanged = Extract<Parameters<EventHandlerListener>[0], { "new-duration": number }>;
+  SwitchTransition: Extract<Parameters<EventHandlerListener>[0], { "transition-name": string }>;
 
-export type TransitionBegin = Extract<Parameters<EventHandlerListener>[0], {
-  name: string;
-  type: string;
-  duration: number;
-  "from-scene"?: string;
-  "to-scene": string;
-}>;
+  TransitionListChanged: Extract<Parameters<EventHandlerListener>[0], { transitions: { name: string }[] }>;
 
-export type TransitionEnd = Extract<Parameters<EventHandlerListener>[0], {
-  name: string;
-  type: string;
-  duration: number;
-  "to-scene": string;
-}>;
+  TransitionDurationChanged: Extract<Parameters<EventHandlerListener>[0], { "new-duration": number }>;
 
-export type TransitionVideoEnd = Extract<Parameters<EventHandlerListener>[0], {
-  name: string;
-  type: string;
-  duration: number;
-  "from-scene"?: string;
-  "to-scene": string;
-}>;
+  TransitionBegin: Extract<Parameters<EventHandlerListener>[0], {
+    name: string;
+    type: string;
+    duration: number;
+    "from-scene"?: string;
+    "to-scene": string;
+  }>;
 
-export type ProfileChanged = Extract<Parameters<EventHandlerListener>[0], { profile: string }>;
+  TransitionEnd: Extract<Parameters<EventHandlerListener>[0], {
+    name: string;
+    type: string;
+    duration: number;
+    "to-scene": string;
+  }>;
 
-export type ProfileListChanged = Extract<Parameters<EventHandlerListener>[0], { profiles: { name: string }[] }>;
+  TransitionVideoEnd: Extract<Parameters<EventHandlerListener>[0], {
+    name: string;
+    type: string;
+    duration: number;
+    "from-scene"?: string;
+    "to-scene": string;
+  }>;
 
-export type StreamStarting = Extract<Parameters<EventHandlerListener>[0], { "preview-only": boolean }>;
+  ProfileChanged: Extract<Parameters<EventHandlerListener>[0], { profile: string }>;
 
-export type StreamStarted = Extract<Parameters<EventHandlerListener>[0], void>;
+  ProfileListChanged: Extract<Parameters<EventHandlerListener>[0], { profiles: { name: string }[] }>;
 
-export type StreamStopping = Extract<Parameters<EventHandlerListener>[0], { "preview-only": boolean }>;
+  StreamStarting: Extract<Parameters<EventHandlerListener>[0], { "preview-only": boolean }>;
 
-export type StreamStopped = Extract<Parameters<EventHandlerListener>[0], void>;
+  StreamStarted: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type StreamStatus = Extract<Parameters<EventHandlerListener>[0], {
-  streaming: boolean;
-  recording: boolean;
-  "replay-buffer-active": boolean;
-  "bytes-per-sec": number;
-  "kbits-per-sec": number;
-  strain: number;
-  "total-stream-time": number;
-  "num-total-frames": number;
-  "num-dropped-frames": number;
-  fps: number;
-  "render-total-frames": number;
-  "render-missed-frames": number;
-  "output-total-frames": number;
-  "output-skipped-frames": number;
-  "average-frame-time": number;
-  "cpu-usage": number;
-  "memory-usage": number;
-  "free-disk-space": number;
-  "preview-only": boolean;
-}>;
+  StreamStopping: Extract<Parameters<EventHandlerListener>[0], { "preview-only": boolean }>;
 
-export type RecordingStarting = Extract<Parameters<EventHandlerListener>[0], void>;
+  StreamStopped: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type RecordingStarted = Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
+  StreamStatus: Extract<Parameters<EventHandlerListener>[0], {
+    streaming: boolean;
+    recording: boolean;
+    "replay-buffer-active": boolean;
+    "bytes-per-sec": number;
+    "kbits-per-sec": number;
+    strain: number;
+    "total-stream-time": number;
+    "num-total-frames": number;
+    "num-dropped-frames": number;
+    fps: number;
+    "render-total-frames": number;
+    "render-missed-frames": number;
+    "output-total-frames": number;
+    "output-skipped-frames": number;
+    "average-frame-time": number;
+    "cpu-usage": number;
+    "memory-usage": number;
+    "free-disk-space": number;
+    "preview-only": boolean;
+  }>;
 
-export type RecordingStopping = Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
+  RecordingStarting: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type RecordingStopped = Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
+  RecordingStarted: Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
 
-export type RecordingPaused = Extract<Parameters<EventHandlerListener>[0], void>;
+  RecordingStopping: Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
 
-export type RecordingResumed = Extract<Parameters<EventHandlerListener>[0], void>;
+  RecordingStopped: Extract<Parameters<EventHandlerListener>[0], { recordingFilename: string }>;
 
-export type VirtualCamStarted = Extract<Parameters<EventHandlerListener>[0], void>;
+  RecordingPaused: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type VirtualCamStopped = Extract<Parameters<EventHandlerListener>[0], void>;
+  RecordingResumed: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type ReplayStarting = Extract<Parameters<EventHandlerListener>[0], void>;
+  VirtualCamStarted: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type ReplayStarted = Extract<Parameters<EventHandlerListener>[0], void>;
+  VirtualCamStopped: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type ReplayStopping = Extract<Parameters<EventHandlerListener>[0], void>;
+  ReplayStarting: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type ReplayStopped = Extract<Parameters<EventHandlerListener>[0], void>;
+  ReplayStarted: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type Exiting = Extract<Parameters<EventHandlerListener>[0], void>;
+  ReplayStopping: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type Heartbeat = Extract<Parameters<EventHandlerListener>[0], {
-  pulse: boolean;
-  "current-profile"?: string;
-  "current-scene"?: string;
-  streaming?: boolean;
-  "total-stream-time"?: number;
-  "total-stream-bytes"?: number;
-  "total-stream-frames"?: number;
-  recording?: boolean;
-  "total-record-time"?: number;
-  "total-record-bytes"?: number;
-  "total-record-frames"?: number;
-  stats: ObsWebSocket.OBSStats;
-}>;
+  ReplayStopped: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type BroadcastCustomMessage = Extract<Parameters<EventHandlerListener>[0], { realm: string; data: {} }>;
+  Exiting: Extract<Parameters<EventHandlerListener>[0], void>;
 
-export type SourceCreated = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  sourceType: string;
-  sourceKind: string;
-  sourceSettings: {};
-}>;
+  Heartbeat: Extract<Parameters<EventHandlerListener>[0], {
+    pulse: boolean;
+    "current-profile"?: string;
+    "current-scene"?: string;
+    streaming?: boolean;
+    "total-stream-time"?: number;
+    "total-stream-bytes"?: number;
+    "total-stream-frames"?: number;
+    recording?: boolean;
+    "total-record-time"?: number;
+    "total-record-bytes"?: number;
+    "total-record-frames"?: number;
+    stats: ObsWebSocket.OBSStats;
+  }>;
 
-export type SourceDestroyed = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  sourceType: string;
-  sourceKind: string;
-}>;
+  BroadcastCustomMessage: Extract<Parameters<EventHandlerListener>[0], { realm: string; data: {} }>;
 
-export type SourceVolumeChanged = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  volume: number;
-  volumeDb: number;
-}>;
+  SourceCreated: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    sourceType: string;
+    sourceKind: string;
+    sourceSettings: {};
+  }>;
 
-export type SourceMuteStateChanged = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; muted: boolean }>;
+  SourceDestroyed: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    sourceType: string;
+    sourceKind: string;
+  }>;
 
-export type SourceAudioDeactivated = Extract<Parameters<EventHandlerListener>[0], { sourceName: string }>;
+  SourceVolumeChanged: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    volume: number;
+    volumeDb: number;
+  }>;
 
-export type SourceAudioActivated = Extract<Parameters<EventHandlerListener>[0], { sourceName: string }>;
+  SourceMuteStateChanged: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; muted: boolean }>;
 
-export type SourceAudioSyncOffsetChanged = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; syncOffset: number }>;
+  SourceAudioDeactivated: Extract<Parameters<EventHandlerListener>[0], { sourceName: string }>;
 
-export type SourceAudioMixersChanged = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  mixers: { id: number; enabled: boolean }[];
-  hexMixersValue: string;
-}>;
+  SourceAudioActivated: Extract<Parameters<EventHandlerListener>[0], { sourceName: string }>;
 
-export type SourceRenamed = Extract<Parameters<EventHandlerListener>[0], {
-  previousName: string;
-  newName: string;
-  sourceType: string;
-}>;
+  SourceAudioSyncOffsetChanged: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; syncOffset: number }>;
 
-export type SourceFilterAdded = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  filterName: string;
-  filterType: string;
-  filterSettings: {};
-}>;
+  SourceAudioMixersChanged: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    mixers: { id: number; enabled: boolean }[];
+    hexMixersValue: string;
+  }>;
 
-export type SourceFilterRemoved = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  filterName: string;
-  filterType: string;
-}>;
+  SourceRenamed: Extract<Parameters<EventHandlerListener>[0], {
+    previousName: string;
+    newName: string;
+    sourceType: string;
+  }>;
 
-export type SourceFilterVisibilityChanged = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  filterName: string;
-  filterEnabled: boolean;
-}>;
+  SourceFilterAdded: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    filterName: string;
+    filterType: string;
+    filterSettings: {};
+  }>;
 
-export type SourceFiltersReordered = Extract<Parameters<EventHandlerListener>[0], {
-  sourceName: string;
-  filters: { name: string; type: string; enabled: boolean }[];
-}>;
+  SourceFilterRemoved: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    filterName: string;
+    filterType: string;
+  }>;
 
-export type MediaPlaying = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  SourceFilterVisibilityChanged: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    filterName: string;
+    filterEnabled: boolean;
+  }>;
 
-export type MediaPaused = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  SourceFiltersReordered: Extract<Parameters<EventHandlerListener>[0], {
+    sourceName: string;
+    filters: { name: string; type: string; enabled: boolean }[];
+  }>;
 
-export type MediaRestarted = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaPlaying: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type MediaStopped = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaPaused: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type MediaNext = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaRestarted: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type MediaPrevious = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaStopped: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type MediaStarted = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaNext: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type MediaEnded = Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
+  MediaPrevious: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type SourceOrderChanged = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "scene-items": { "source-name": string; "item-id": number }[];
-}>;
+  MediaStarted: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type SceneItemAdded = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-}>;
+  MediaEnded: Extract<Parameters<EventHandlerListener>[0], { sourceName: string; sourceKind: string }>;
 
-export type SceneItemRemoved = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-}>;
+  SourceOrderChanged: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "scene-items": { "source-name": string; "item-id": number }[];
+  }>;
 
-export type SceneItemVisibilityChanged = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-  "item-visible": boolean;
-}>;
+  SceneItemAdded: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+  }>;
 
-export type SceneItemLockChanged = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-  "item-locked": boolean;
-}>;
+  SceneItemRemoved: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+  }>;
 
-export type SceneItemTransformChanged = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-  transform: ObsWebSocket.SceneItemTransform;
-}>;
+  SceneItemVisibilityChanged: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+    "item-visible": boolean;
+  }>;
 
-export type SceneItemSelected = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-}>;
+  SceneItemLockChanged: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+    "item-locked": boolean;
+  }>;
 
-export type SceneItemDeselected = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  "item-name": string;
-  "item-id": number;
-}>;
+  SceneItemTransformChanged: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+    transform: ObsWebSocket.SceneItemTransform;
+  }>;
 
-export type PreviewSceneChanged = Extract<Parameters<EventHandlerListener>[0], {
-  "scene-name": string;
-  sources: ObsWebSocket.SceneItem[];
-}>;
+  SceneItemSelected: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+  }>;
 
-export type StudioModeSwitched = Extract<Parameters<EventHandlerListener>[0], { "new-state": boolean }>;
+  SceneItemDeselected: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    "item-name": string;
+    "item-id": number;
+  }>;
+
+  PreviewSceneChanged: Extract<Parameters<EventHandlerListener>[0], {
+    "scene-name": string;
+    sources: ObsWebSocket.SceneItem[];
+  }>;
+
+  StudioModeSwitched: Extract<Parameters<EventHandlerListener>[0], { "new-state": boolean }>;
+}
+
+export type ObsV4EventNames = keyof ObsV4EventHandlersData;

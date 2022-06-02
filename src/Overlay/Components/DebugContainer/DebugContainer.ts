@@ -31,7 +31,7 @@ export class DebugContainer extends LitElement
         if ((message as SystemMessage).type) {
             let cast : SystemMessage = <SystemMessage>message;
             
-            return `${cast.type} : ${cast.name} : ${JSON.stringify(cast)}`;
+            return `${cast.type} : ${cast.name} : ${JSON.stringify(message)}`;
         }
 
         return <string>message;
