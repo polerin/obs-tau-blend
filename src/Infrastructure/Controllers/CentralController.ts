@@ -1,5 +1,6 @@
 import { CENTRAL_TOKENS , injected, SHARED_TOKENS} from "Bindings";
-import { publish, subscribe } from "pubsub-js";
+
+import { publish } from "Infrastructure/Shared/TypedPubsub";
 
 import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
 
@@ -23,11 +24,10 @@ export default class CentralController
         this.obsConnector = obsConnector;
         this.portMessageAdapter = portMessageAdapter;
 
-        this.onSharedWorkerConnect = this.onSharedWorkerConnect.bind(this);
-        this.sendMessage = this.sendMessage.bind(this);
         this.portMessageHandler = this.portMessageHandler.bind(this);
+        this.serviceMessageHandler = this.serviceMessageHandler.bind(this);
+        this.onSharedWorkerConnect = this.onSharedWorkerConnect.bind(this);
 
-        this.portMessageAdapter.setCallback(this.portMessageHandler);
     }
 
     public async init(options : any) : Promise<void>
@@ -36,33 +36,38 @@ export default class CentralController
 
         this.registerListeners();
 
-        const obsConnected : boolean = await this.obsConnector.connect();
+        await this.obsConnector.connect();
 
-        if (!obsConnected) {
-            console.log("Unable to connect to obs");
-        } else {
-            console.log("Connected to OBS!");
-        }
-
+        this.sendSystemStatusMessage();
         // Connect TAU/Etc
     }
 
     public onSharedWorkerConnect(message : MessageEvent<any>) : void 
     {
         this.portMessageAdapter.setPort(message.ports[0]);
-
-        this.sendSystemStatusMessage();
     }
 
-    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void {
-        console.debug("Message received by central control", {
+    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
+    {
+
+        console.debug("Port message received by central control", {
             messageName : messageName,
             message : message
         });
+        
+        publish(messageName, message);
+    }
+
+    protected serviceMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void 
+    {
+        console.debug("Service message received by central control", message);      
+        publish(messageName, message);
+        this.portMessageAdapter.sendMessage(messageName, message);
     }
 
     protected sendSystemStatusMessage() : void 
     {
+        console.debug("Sending system status");
         this.portMessageAdapter.sendMessage(AppControlMessages.SystemStaus, {
                 type : 'controlMessage',
                 name : AppControlMessages.SystemStaus,
@@ -70,22 +75,16 @@ export default class CentralController
         });
     }
 
-    protected sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
-    {
-        if (!this.sharedWorkerPort) {
-            return;
-        }
-
-        this.sharedWorkerPort?.postMessage(message);
-    }
-
     protected registerListeners()
     {
+        this.portMessageAdapter.setCallback(this.portMessageHandler);
+        this.obsConnector.setCallback(this.serviceMessageHandler);
     }
 
     protected removeListeners()
     {
-
+        this.portMessageAdapter.setCallback(null);
+        this.obsConnector.setCallback(null);
     }
 }
 

@@ -3,7 +3,8 @@ import { ObsV4EventNames, ObsV4EventHandlersData } from "../Definitions/EventHan
 
 export default interface IV4EventTransformer<SystemMessageName extends SystemMessageNames, ObsMessageName extends ObsV4EventNames>
 {
-    readonly obsEventType : ObsMessageName;
+    obsEventType : ObsMessageName;
     readonly systemMessageType : SystemMessageName;
+
     buildSystemMessage(obsMessage : ObsV4EventHandlersData[ObsMessageName]) : AppMessageSet[SystemMessageName]
 };

@@ -1,12 +1,8 @@
 import { PortMessageCallback, SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { IServiceAdapter } from "./IServiceAdapter";
 
-export default interface IPortMessageAdapter 
+export default interface IPortMessageAdapter extends IServiceAdapter<PortMessageCallback>
 {
     setPort(workerPort : MessagePort | null) : void;
-
-    setCallback(callback : PortMessageCallback | null) : void;
-
     closePort() : void;
-
-    sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void;
 }

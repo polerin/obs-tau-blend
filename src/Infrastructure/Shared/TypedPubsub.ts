@@ -6,7 +6,7 @@ export function publish<MessageName extends SystemMessageNames>(messageName : Me
     return basePublish(messageName, message);
 }
 
-export function subscribe<MessageName extends SystemMessageNames>(messageName : MessageName, listener : SystemMessageCallback<MessageName>) : PubSubJS.Token 
+export function subscribe<MessageName extends SystemMessageNames>(messageName : MessageName, listener : SystemMessageCallback) : PubSubJS.Token 
 {
     return baseSubscribe(messageName, (incomingName: string, data? : any) => {
         const name = incomingName as SystemMessageNames; 

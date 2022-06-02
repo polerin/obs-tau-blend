@@ -7,9 +7,9 @@ const obs = new ObsWebSocket();
 
 type EventHandlerListener = (Parameters<typeof obs.on>)[1];
 
-export interface ObsV4EventHandlersData {
-  [name: string]: any,
+export type ObsV4EventNames = Extract<(Parameters<typeof obs.on>)[0], string>;
 
+export interface ObsV4EventHandlersData {
   ConnectionOpened: Extract<Parameters<EventHandlerListener>[0], void>;
 
   ConnectionClosed: Extract<Parameters<EventHandlerListener>[0], void>;
@@ -272,4 +272,4 @@ export interface ObsV4EventHandlersData {
   StudioModeSwitched: Extract<Parameters<EventHandlerListener>[0], { "new-state": boolean }>;
 }
 
-export type ObsV4EventNames = keyof ObsV4EventHandlersData;
+// export type ObsV4EventNames = keyof ObsV4EventHandlersData;

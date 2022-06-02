@@ -1,7 +1,7 @@
 import { injected, OVERLAY_TOKENS,  SHARED_TOKENS } from "Bindings";
 
 import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
-import { SystemMessageOrEvent, SystemMessage, SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessage, SystemMessageNames, AppMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
 
 import * as Components from "Overlay/Components";
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
@@ -30,7 +30,8 @@ class OverlayController {
         this.controlWorker = controlWorker;
         this.portMessageHandler = this.portMessageHandler.bind(this);
         this.connectComponent = this.connectComponent.bind(this);
-
+        
+        this.startControlWorker();
     }
 
     public async init(options: object = {})
@@ -39,7 +40,11 @@ class OverlayController {
 
         this.locateElements();
         this.connectRequestedComponents();
-        this.startControlWorker();
+
+        this.controlWorker.sendMessage(AppOverlayMessages.OverlayOnline, {
+            type: "controlMessage",
+            name: AppOverlayMessages.OverlayOnline
+        });
     }
 
     protected locateElements()
@@ -78,15 +83,14 @@ class OverlayController {
 
     protected startControlWorker() : void
     {
-        this.controlWorker.setCallback(this.portMessageHandler)
+        this.controlWorker.setCallback(this.portMessageHandler);
         this.controlWorker.connect();
-
-        // this.controlWorker.dispatchMessage("overlayController.connected", {});
     }
 
     protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
     {
         // @TODO actually handle messages
+        console.log("Received port message on overlay: ", message);
         this.debugContainer?.addMessage(message as SystemMessage);
     }
 
