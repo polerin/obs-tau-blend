@@ -81,8 +81,8 @@ export default class ObsV4Connector implements IObsConnector
     protected registerEventTransformers(transformers : V4EventTransformerSet) : void 
     {
         for (const transformer of transformers) {
-            this.transformerRegistery[transformer.obsEventType] = transformer;
-            this.websocket.on(transformer.obsEventType, this.notifyListener.bind(this, transformer.obsEventType, transformer));
+            this.transformerRegistery[transformer.adapterEventType] = transformer;
+            this.websocket.on(transformer.adapterEventType, this.notifyListener.bind(this, transformer.adapterEventType, transformer));
         }
     }
 

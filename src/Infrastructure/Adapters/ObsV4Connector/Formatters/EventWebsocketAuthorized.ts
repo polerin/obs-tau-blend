@@ -8,7 +8,7 @@ import IV4EventTransformer from "../Interfaces/IV4EventTransformer";
 export class EventWebsocketAuthorized implements
     IV4EventTransformer<typeof ObsMessages.WebsocketAuthorized, "AuthenticationSuccess">
 {
-    public readonly obsEventType = "AuthenticationSuccess";
+    public readonly adapterEventType = "AuthenticationSuccess";
     public readonly systemMessageType = ObsMessages.WebsocketAuthorized;
 
     public buildSystemMessage(obsMessage: ObsV4EventHandlersData["AuthenticationSuccess"]): AppMessageSet[typeof ObsMessages.WebsocketAuthorized] {
