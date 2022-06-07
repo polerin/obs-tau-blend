@@ -1,16 +1,19 @@
-import { injected, OVERLAY_TOKENS,  SHARED_TOKENS } from "Bindings";
+import _ from "lodash";
+
+import { injected, OVERLAY_TOKENS } from "Bindings";
 
 import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
 import { SystemMessage, SystemMessageNames, AppMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
 
 import * as Components from "Overlay/Components";
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
+import { publish } from "Infrastructure/Shared/TypedPubsub";
+import { DynamicMethodCall } from "Infrastructure/Shared/Mixins";
 
 
 // hack around for now.
 // This forces webpack to keep the web component instead of tree shaking it out
 Object.entries(Components).forEach(([k,v]) => v.prototype);
-
 
 class OverlayController {
     private controlWorker : IControlWorker;
@@ -89,10 +92,26 @@ class OverlayController {
 
     protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
     {
-        // @TODO actually handle messages
         console.log("Received port message on overlay: ", message);
         this.debugContainer?.addMessage(message as SystemMessage);
+
+        // if message handler returns true or no handler, publish message
+        if(this.callMessageHandler(messageName, message)) {
+            publish(messageName, message);
+        }
     }
+
+    // @todo move this to the DynamicMethodCall mixin/decorator
+    // Also implement in CentralController
+    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : boolean 
+    {
+        const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
+
+        // @todo This is annoying, what is the right way to do this dynamic call in TS?
+        // @ts-ignore
+        return (typeof this[functName] == 'function') ? this[functName](message) : true;
+    }
+
 
 }
 

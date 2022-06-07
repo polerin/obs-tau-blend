@@ -1,10 +1,7 @@
 import { CENTRAL_TOKENS, injected } from "Bindings";
 import ObsWebsocket from "obs-websocket-js";
 
-import { publish } from "pubsub-js";
-
 import IObsConnector from "Infrastructure/Interfaces/IObsConnector";
-import IV4EventTransformer from "./Interfaces/IV4EventTransformer";
 
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 import { AppMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
@@ -30,9 +27,9 @@ export default class ObsV4Connector implements IObsConnector
     private callback? : SystemMessageCallback | null;
 
 
-    constructor(websocket : ObsWebsocket, eventTransformers : V4EventTransformerSet,  options : object = {}) {
+    constructor(websocket : ObsWebsocket, eventTransformers : V4EventTransformerSet, options : object = {})
+    {
         this.websocket = websocket;
-
 
         this.markActive = this.markActive.bind(this);
         this.markInactive = this.markInactive.bind(this);

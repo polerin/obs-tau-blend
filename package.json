@@ -18,6 +18,7 @@
     "@types/obs-studio": "^2.17.0",
     "@types/pubsub-js": "^1.8.3",
     "@types/sharedworker": "^0.0.75",
+    "@types/ws": "^8.5.3",
     "brandi": "^4.0.2",
     "buffer": "^6.0.3",
     "jest": "^28.1.0",
@@ -33,5 +34,8 @@
   },
   "sideEffects": [
     "./src/Overlay/Components/DebugContainer/DebugContainer.ts"
-  ]
+  ],
+  "dependencies": {
+    "ws": "^8.7.0"
+  }
 }

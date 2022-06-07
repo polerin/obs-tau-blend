@@ -1,12 +1,16 @@
+import _  from "lodash";
+
 import { CENTRAL_TOKENS , injected, SHARED_TOKENS} from "Bindings";
 
 import { publish } from "Infrastructure/Shared/TypedPubsub";
+import { DynamicMethodCall } from "Infrastructure/Shared/Mixins";
 
-import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
 
 import IObsConnector from "Infrastructure/Interfaces/IObsConnector";
-import { AppControlMessages } from "Shared/MessageHandling";
 import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
+import { SystemMessage, SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { AppControlMessages, AppOverlayMessages } from "Shared/MessageHandling";
+
 
 export default class CentralController
 {
@@ -15,9 +19,10 @@ export default class CentralController
     private portMessageAdapter : PortMessageAdapter;
 
     protected defaultOptions : object = {
+        messageHandlerPrefix : "message_"
     };
 
-    protected options? : object;
+    protected options? : any;
 
     constructor(obsConnector : IObsConnector, portMessageAdapter : PortMessageAdapter) 
     {
@@ -49,21 +54,39 @@ export default class CentralController
 
     protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
     {
-
         console.debug("Port message received by central control", {
             messageName : messageName,
             message : message
         });
-        
-        publish(messageName, message);
+
+        // if the message handler returns true (or no message handler) publish the message on the bus
+        if (this.callMessageHandler(messageName, message)) {
+            publish(messageName, message);
+        }
     }
 
     protected serviceMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void 
     {
         console.debug("Service message received by central control", message);      
-        publish(messageName, message);
-        this.portMessageAdapter.sendMessage(messageName, message);
+
+        // if the message handler returns true (or no message handler) publish the message on the bus
+        if (this.callMessageHandler(messageName, message)) {
+            publish(messageName, message);
+            this.portMessageAdapter.sendMessage(messageName, message);
+        }
     }
+
+    // @todo move this to the DynamicMethodCall mixin/decorator
+    // Also do this in the OverlayController
+    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : boolean 
+    {
+        const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
+
+        // @todo This is annoying, what is the right way to do this dynamic call in TS?
+        // @ts-ignore
+        return (typeof this[functName] == 'function') ? this[functName](message) : true;
+    }
+
 
     protected sendSystemStatusMessage() : void 
     {
@@ -85,6 +108,14 @@ export default class CentralController
     {
         this.portMessageAdapter.setCallback(null);
         this.obsConnector.setCallback(null);
+    }
+
+    protected messageAppControlOverlayOnline(message : AppMessageSet[typeof AppOverlayMessages.OverlayOnline]) : boolean 
+    {
+        console.log("yup we see the overlay online!");
+        this.sendSystemStatusMessage();
+
+        return false;
     }
 }
 
