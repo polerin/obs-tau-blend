@@ -67,6 +67,7 @@ export default class ObsV4Connector implements IObsConnector
 
     public getStatus(): ExternalConnectionStatus {
         return {
+            serviceName: "obsV4Websocket",
             status : this.websocketConnected ? "connected" : "disconnected",
             details: {}
         };

@@ -12,6 +12,6 @@ export interface AppControlMessageSet {
     [AppControlMessages.ControlOnline] : ControlMessage;
     [AppControlMessages.ControlOffline] : ControlMessage;
     [AppControlMessages.SystemStaus] : ControlMessage & {
-        obsStatus : ExternalConnectionStatus
+        serviceStatuses : ExternalConnectionStatus[]
     }
 }

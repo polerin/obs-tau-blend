@@ -3,19 +3,16 @@ import _  from "lodash";
 import { CENTRAL_TOKENS , injected, SHARED_TOKENS} from "Bindings";
 
 import { publish } from "Infrastructure/Shared/TypedPubsub";
-import { DynamicMethodCall } from "Infrastructure/Shared/Mixins";
 
-
-import IObsConnector from "Infrastructure/Interfaces/IObsConnector";
 import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
-import { SystemMessage, SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
 import { AppControlMessages, AppOverlayMessages } from "Shared/MessageHandling";
+import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
 
 
 export default class CentralController
 {
-    private obsConnector : IObsConnector;
-    private sharedWorkerPort? : MessagePort;
+    private serviceAdapters : IServiceAdapter<unknown>[];
     private portMessageAdapter : PortMessageAdapter;
 
     protected defaultOptions : object = {
@@ -24,9 +21,9 @@ export default class CentralController
 
     protected options? : any;
 
-    constructor(obsConnector : IObsConnector, portMessageAdapter : PortMessageAdapter) 
+    constructor(serviceAdapters: IServiceAdapter<unknown>[], portMessageAdapter : PortMessageAdapter) 
     {
-        this.obsConnector = obsConnector;
+        this.serviceAdapters = serviceAdapters;
         this.portMessageAdapter = portMessageAdapter;
 
         this.portMessageHandler = this.portMessageHandler.bind(this);
@@ -41,10 +38,16 @@ export default class CentralController
 
         this.registerListeners();
 
-        await this.obsConnector.connect();
+        await this.connectAdapters();
 
         this.sendSystemStatusMessage();
-        // Connect TAU/Etc
+    }
+
+    public connectAdapters() : Promise<boolean[]>
+    {
+        const connectionPromises : Array<Promise<boolean>> = this.serviceAdapters.map((adapter) => adapter.connect());
+
+        return Promise.all(connectionPromises);
     }
 
     public onSharedWorkerConnect(message : MessageEvent<any>) : void 
@@ -94,20 +97,23 @@ export default class CentralController
         this.portMessageAdapter.sendMessage(AppControlMessages.SystemStaus, {
                 type : 'controlMessage',
                 name : AppControlMessages.SystemStaus,
-                obsStatus: this.obsConnector.getStatus()
+                serviceStatuses: this.serviceAdapters.map((adapter) => adapter.getStatus())
         });
     }
 
     protected registerListeners()
     {
         this.portMessageAdapter.setCallback(this.portMessageHandler);
-        this.obsConnector.setCallback(this.serviceMessageHandler);
+
+        for (const adapter of this.serviceAdapters) {
+            adapter.setCallback(this.serviceMessageHandler);
+        }
     }
 
     protected removeListeners()
     {
         this.portMessageAdapter.setCallback(null);
-        this.obsConnector.setCallback(null);
+        this.serviceAdapters.forEach((adapter) => adapter.setCallback(null));
     }
 
     protected messageAppControlOverlayOnline(message : AppMessageSet[typeof AppOverlayMessages.OverlayOnline]) : boolean 
@@ -119,4 +125,4 @@ export default class CentralController
     }
 }
 
-injected(CentralController, CENTRAL_TOKENS.obsConnector, SHARED_TOKENS.portMessageAdapter);
+injected(CentralController, CENTRAL_TOKENS.serviceAdapters, SHARED_TOKENS.portMessageAdapter);
