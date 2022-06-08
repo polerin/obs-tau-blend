@@ -1,7 +1,7 @@
 import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 
-export interface IServiceAdapter<CallbackType> 
+export interface IServiceAdapter<CallbackType, MessageSet> 
 {
     connect() : Promise<boolean>;
 
@@ -9,5 +9,5 @@ export interface IServiceAdapter<CallbackType>
 
     setCallback(callback : CallbackType | null) : void;
 
-    sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void;
+    sendMessage<MessageName extends keyof MessageSet>(messageName : MessageName, message : MessageSet[MessageName]) : void;
 }

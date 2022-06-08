@@ -36,6 +36,18 @@ module.exports.module = {
 module.exports.resolve = {
     modules: ['src', 'node_modules'],
     extensions: ['.tsx', '.ts', '.js'],
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+      "crypto": require.resolve("crypto-browserify"),
+      "http": require.resolve("stream-http"),
+      "https": require.resolve("https-browserify"),
+      "zlib": require.resolve("browserify-zlib"),
+      "assert": require.resolve("assert/"),
+      "net" : require.resolve("net-browserify"),
+      "path": require.resolve("path-browserify"),
+      "tls": require.resolve("tls-browserify"),
+      "os": require.resolve("os-browserify/browser")
+    }
 };
 
 module.exports.optimization = { usedExports : true };

@@ -2,9 +2,11 @@ import { PortMessage, PortMessageCallback, PortMessageOrEvent, SystemMessage, Sy
 import { AppMessageSet } from "Shared/MessageHandling";
 
 import IPortMessageAdapter from "Infrastructure/Interfaces/IPortMessageAdapter";
+import { ExternalConnectionStatus } from "./Types";
 
 export default class PortMessageAdapter implements IPortMessageAdapter 
 {
+    protected autoConnect : boolean = false;
     protected workerPort? : MessagePort | null;
     protected portMessageCallback? : PortMessageCallback | null;
 
@@ -13,18 +15,31 @@ export default class PortMessageAdapter implements IPortMessageAdapter
         this.portMessageHandler = this.portMessageHandler.bind(this);
     }
 
+
+    public getStatus(): ExternalConnectionStatus {
+        return {
+            serviceName : "controlPort",
+            status : (this.workerPort) ? "connected" : "disconnected",
+            details : {}
+        }
+    }
+
     public setPort(workerPort : MessagePort | null ) : void {
 
         if (this.workerPort) {
             this.closePort();
         }
 
+        this.workerPort = workerPort;
+
         if (workerPort !== null) {
             workerPort.addEventListener('message', this.portMessageHandler);
-            workerPort.start();
         }
 
-        this.workerPort = workerPort;
+        if (this.autoConnect === true) {
+            this.connect();
+        }
+
     }
 
     public setCallback(callback : PortMessageCallback | null) : void 
@@ -37,6 +52,19 @@ export default class PortMessageAdapter implements IPortMessageAdapter
     {
         this.workerPort?.close();
         this.workerPort?.removeEventListener('message', this.portMessageHandler);
+    }
+
+    public connect() : Promise<boolean>
+    {
+        if (this.workerPort) {
+            this.workerPort.start();
+            this.autoConnect = false;
+
+            return Promise.resolve(true);
+        }
+
+        this.autoConnect = true;
+        return Promise.resolve(false);
     }
 
     /**

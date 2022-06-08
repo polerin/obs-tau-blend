@@ -2,6 +2,6 @@ import IPortMessageAdapter from "./IPortMessageAdapter";
 
 export default interface IControlWorker extends IPortMessageAdapter
 {
-    connect() : void;
+    connect() : Promise<boolean>;
     disconnect() : void;
 }

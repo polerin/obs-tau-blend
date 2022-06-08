@@ -1,5 +1,5 @@
-import { ObsV4EventHandlersData, ObsV4EventNames } from "../Definitions/EventHandlersData";
-import { ObsMessages, AppMessageSet, SystemMessageNames } from "Shared/MessageHandling";
+import { ObsV4EventHandlersData } from "../Definitions/EventHandlersData";
+import { ObsMessages, AppMessageSet } from "Shared/MessageHandling";
 
 import IV4EventTransformer from "../Interfaces/IV4EventTransformer";
 

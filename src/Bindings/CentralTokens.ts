@@ -6,14 +6,14 @@ import IObsAdapter from "Infrastructure/Interfaces/IObsConnector";
 import CentralController from "Infrastructure/Controllers/CentralController";
 
 import { V4EventTransformerSet } from "Infrastructure/Adapters/ObsV4Connector/Definitions/Types";
-import ITauAdapter from "Infrastructure/Adapters/TauConnector/Interfaces/ITauConnector";
-import { TauEventTransformerSet } from "Infrastructure/Adapters/TauConnector/Definitions/Types";
+import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
+import { TauEventTransformerSet } from "Infrastructure/Adapters/TauAdapter/Definitions/Types";
 import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
 
 
 export const CENTRAL_TOKENS = {
     /// Service Adapters
-    serviceAdapters: token<IServiceAdapter<unknown>[]>("serviceAdapters"),
+    serviceAdapters: token<IServiceAdapter<unknown, unknown>[]>("serviceAdapters"),
     obsAdapter: token<IObsAdapter>("obsAdapter"),
     obsWebsocket: token<ObsWebsocket>("obsWebsocket"),
     obsV4EventTransformers: token<V4EventTransformerSet>("obsV4Transformers"),

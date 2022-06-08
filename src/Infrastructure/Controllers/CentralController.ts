@@ -12,7 +12,7 @@ import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
 
 export default class CentralController
 {
-    private serviceAdapters : IServiceAdapter<unknown>[];
+    private serviceAdapters : IServiceAdapter<unknown, AppMessageSet>[];
     private portMessageAdapter : PortMessageAdapter;
 
     protected defaultOptions : object = {
@@ -21,7 +21,7 @@ export default class CentralController
 
     protected options? : any;
 
-    constructor(serviceAdapters: IServiceAdapter<unknown>[], portMessageAdapter : PortMessageAdapter) 
+    constructor(serviceAdapters: IServiceAdapter<unknown, AppMessageSet>[], portMessageAdapter : PortMessageAdapter) 
     {
         this.serviceAdapters = serviceAdapters;
         this.portMessageAdapter = portMessageAdapter;

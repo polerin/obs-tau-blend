@@ -1,17 +1,19 @@
 import { CENTRAL_TOKENS, injected } from "Bindings";
-import Websocket from "ws";
+import Websocket from "isomorphic-ws";
 import { publish } from "pubsub-js";
 
-import ITauConnector from "Infrastructure/Adapters/TauConnector/Interfaces/ITauConnector";
+import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
 
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 import { AppMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
 import { TauEvents, TauEventNames } from "./Definitions/TauEvents";
 import { TauEventTransformer, TauEventTransformerSet } from "./Definitions/Types";
+import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
 
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
-export default class TauConnector implements ITauConnector
+export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCallback, AppMessageSet, TauEvents, TauEventNames, TauEventTransformer>
+    implements ITauAdapter
 {
 
     private defaultOptions = {
@@ -20,16 +22,14 @@ export default class TauConnector implements ITauConnector
 
     private options : any;
 
-    // @todo fix me, making sure we are constraining
-    private transformerRegistery : any = {};
-
     // only used during initialization
     private transformerSet : TauEventTransformerSet;
 
-    private callback? : SystemMessageCallback | null;
     private tauSocket? : Websocket;
 
     public constructor(transformers: TauEventTransformerSet, options : any = []) {
+        super();
+
         this.options = {...this.defaultOptions, ...options};
 
         this.handleConnectionComplete = this.handleConnectionComplete.bind(this);
@@ -47,6 +47,7 @@ export default class TauConnector implements ITauConnector
     public getStatus(): ExternalConnectionStatus {
 
         return {
+            serviceName: "tau",
             status : this.getSocketStatus(),
             details :  {}
         }
@@ -56,6 +57,9 @@ export default class TauConnector implements ITauConnector
         this.callback = callback;
     }
 
+    // public sendMessage<MessageName extends keyof AppMessageSet>(messageName: MessageName, message: AppMessageSet[MessageName]): void {
+    //     throw new Error("Method not implemented.");
+    // }
     public sendMessage<MessageName extends keyof AppMessageSet>(messageName: MessageName, message: AppMessageSet[MessageName]): void {
         throw new Error("Method not implemented.");
     }
