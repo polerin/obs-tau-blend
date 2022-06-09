@@ -86,6 +86,7 @@ class OverlayController {
 
     protected startControlWorker() : void
     {
+        console.debug("Control Worker starting");
         this.controlWorker.setCallback(this.portMessageHandler);
         this.controlWorker.connect();
     }

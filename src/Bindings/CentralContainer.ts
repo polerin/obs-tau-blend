@@ -53,6 +53,10 @@ centralContainer
     .inSingletonScope();
 
 centralContainer
+    .bind(CENTRAL_TOKENS.tauOptions)
+    .toConstant(conf_get('tauConnection', {}));
+
+centralContainer
     .bind(CENTRAL_TOKENS.serviceAdapters)
     .toInstance(() => {
         const adapters : IServiceAdapter<unknown, unknown>[] = [];

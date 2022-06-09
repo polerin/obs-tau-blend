@@ -52,7 +52,9 @@ export default class CentralController
 
     public onSharedWorkerConnect(message : MessageEvent<any>) : void 
     {
+        console.debug("Central controller port activated");
         this.portMessageAdapter.setPort(message.ports[0]);
+        this.portMessageAdapter.connect();
     }
 
     protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
@@ -118,7 +120,6 @@ export default class CentralController
 
     protected messageAppControlOverlayOnline(message : AppMessageSet[typeof AppOverlayMessages.OverlayOnline]) : boolean 
     {
-        console.log("yup we see the overlay online!");
         this.sendSystemStatusMessage();
 
         return false;

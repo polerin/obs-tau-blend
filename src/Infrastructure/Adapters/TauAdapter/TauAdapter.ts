@@ -18,6 +18,8 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
 
     private defaultOptions = {
         'websocketUri' : 'ws://localhost:8000/ws/twitch-events/',
+        'tauSecret' : false,
+        'connectTimeout' : 1000
     };
 
     private options : any;
@@ -27,21 +29,30 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
 
     private tauSocket? : Websocket;
 
-    public constructor(transformers: TauEventTransformerSet, options : any = []) {
+    public constructor(transformers: TauEventTransformerSet, options : any = {}) {
         super();
 
         this.options = {...this.defaultOptions, ...options};
 
-        this.handleConnectionComplete = this.handleConnectionComplete.bind(this);
+        this.handleConnectionOpened = this.handleConnectionOpened.bind(this);
+        this.handleWebsocketMessage = this.handleWebsocketMessage.bind(this);
+        
         this.transformerSet = transformers;
     }
 
     // Note that the first param of this is bound on constructor!
-    public connect(): Promise<boolean> {
-        this.tauSocket = new Websocket(this.options.websocktUri);
-        this.registerEventTransformers(this.transformerSet);
+    public async connect(): Promise<boolean> {
+        
+        try {
+            this.tauSocket = new Websocket(this.options.websocketUri);
+        } catch (e) {
+            console.error("Unable to connect to tau");
+            console.error(e);
 
-        return new Promise<boolean>(this.handleConnectionComplete);
+            return Promise.resolve(false);
+        }
+
+        return new Promise<boolean>(this.handleConnectionOpened);
     }
 
     public getStatus(): ExternalConnectionStatus {
@@ -57,9 +68,6 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         this.callback = callback;
     }
 
-    // public sendMessage<MessageName extends keyof AppMessageSet>(messageName: MessageName, message: AppMessageSet[MessageName]): void {
-    //     throw new Error("Method not implemented.");
-    // }
     public sendMessage<MessageName extends keyof AppMessageSet>(messageName: MessageName, message: AppMessageSet[MessageName]): void {
         throw new Error("Method not implemented.");
     }
@@ -72,14 +80,35 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         }
     }
 
-    protected handleConnectionComplete(resolve : Function, reject : Function) : void
+    protected handleConnectionOpened(resolve : Function, reject : Function) : void
     {
-        this.tauSocket?.once("connection", () => resolve(true));
-        this.tauSocket?.once("error", () => reject(false));
+        setTimeout(() => {
+            reject(false);
+        }, this.options.connectTimeout);
 
-        this.notifyListener
+        try {
+            this.tauSocket?.addEventListener("message", this.handleWebsocketMessage)
+            this.tauSocket?.addEventListener("open", this.buildAuthHandler(resolve));
+            this.tauSocket?.addEventListener("error", () => { console.info("connect failed?!?!"); reject(false)});
+        } catch (e) {
+            console.error("what the heckfart", e);
+        }
     }
 
+    protected buildAuthHandler(resolve : Function) : (event: Websocket.Event) => void
+    {
+        return function(this: TauAdapter, event: Websocket.Event) {
+            this.tauSocket?.send({token: this.options.tauSecret});
+
+            resolve(true);
+        }.bind(this);
+    }
+
+    protected handleWebsocketMessage(event : Websocket.MessageEvent) : void 
+    {
+        console.log("Tau Event", JSON.stringify(event.data));
+        const payload = event.data;
+    }
 
     protected notifyListener<EventType extends TauEventNames>(eventName : EventType, transformer : TauEventTransformer, eventData : TauEvents[EventType]) : void 
     {
@@ -107,3 +136,5 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         }
     }
 }
+
+injected(TauAdapter, CENTRAL_TOKENS.tauEventTransformers, CENTRAL_TOKENS.tauOptions.optional);

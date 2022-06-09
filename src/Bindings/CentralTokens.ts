@@ -17,7 +17,7 @@ export const CENTRAL_TOKENS = {
     obsAdapter: token<IObsAdapter>("obsAdapter"),
     obsWebsocket: token<ObsWebsocket>("obsWebsocket"),
     obsV4EventTransformers: token<V4EventTransformerSet>("obsV4Transformers"),
-    obsOptions: token<object>('obsOptions'),
+    obsOptions: token<any>('obsOptions'),
 
     tauAdapter: token<ITauAdapter>("tauAdapter"),
     tauEventTransformers: token<TauEventTransformerSet>("tauTransformers"),

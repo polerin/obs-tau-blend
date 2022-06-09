@@ -13,11 +13,10 @@ export default class ControlWorker extends PortMessageAdapter implements IContro
         this.sharedWorker = sharedWorker;
     }
 
-    public connect() 
+    public connect() : Promise<boolean>
     {
         this.setPort(this.sharedWorker.port);
-
-        return Promise.resolve(true);
+        return super.connect();
     }
 
     public disconnect()

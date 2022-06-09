@@ -23,11 +23,6 @@ export default abstract class AbstractServiceAdapter<
     public abstract sendMessage<MessageName extends keyof SystemMessageSet>(messageName: MessageName, message: SystemMessageSet[MessageName]): void;
 
 
-    public constructor()
-    {
-
-    }
-
     public setCallback(callback: CallbackType | null): void
     {
         this.callback = callback;

@@ -1,11 +1,13 @@
 import { ObsMessageSet, ObsMessages } from "./MessageMapping/ObsEvents";
 import { TwitchChatMessageSet, TwitchChatMessages } from "./MessageMapping/TwitchChat";
+import { TwitchEventMessageSet, TwitchEventMessages } from "./MessageMapping/TwitchEvents";
 import { AppControlMessageSet, AppControlMessages } from "./MessageMapping/AppControl";
 import { AppOverlayMessageSet, AppOverlayMessages } from "./MessageMapping/AppOverlay";
 
 export interface AppMessageSet extends 
     ObsMessageSet,
     TwitchChatMessageSet,
+    TwitchEventMessageSet,
     AppControlMessageSet,
     AppOverlayMessageSet
     {};
@@ -36,6 +38,7 @@ export type PortMessageCallback = <MessageName extends SystemMessageNames>(messa
 export {
     ObsMessages,
     TwitchChatMessages,
+    TwitchEventMessages,
     AppControlMessages,
     AppOverlayMessages
 };

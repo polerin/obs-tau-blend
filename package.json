@@ -46,7 +46,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tls-browserify": "^0.2.2",
-    "url": "^0.11.0",
-    "ws": "^8.7.0"
+    "url": "^0.11.0"
   }
 }
