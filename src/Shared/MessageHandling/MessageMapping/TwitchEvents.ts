@@ -5,5 +5,10 @@ export const TwitchEventMessages = {
 } as const;
 
 export interface TwitchEventMessageSet {
-    [TwitchEventMessages.ChannelFollow] : TwitchMessage;
+    [TwitchEventMessages.ChannelFollow] : TwitchMessage & {
+        user_id : string,
+        user_name : string,
+        user_login : string,
+        followed_at : string
+    };
 }

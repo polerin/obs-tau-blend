@@ -1,7 +1,7 @@
 import { html } from "lit";
 
-export default (subject: any) => html`
+export default (followName : String) => html`
 <div class="overlay-event overlay-event__follow">
-YEP
+    ${followName}
 </div>
 `;

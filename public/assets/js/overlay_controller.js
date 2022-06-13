@@ -124,7 +124,7 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"publish\": () => (/* binding */ publish)\n/* harmony export */ });\n/* unused harmony export subscribe */\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pubsub-js */ \"./node_modules/pubsub-js/src/pubsub.js\");\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_0__);\n\nfunction publish(messageName, message) {\n    return (0,pubsub_js__WEBPACK_IMPORTED_MODULE_0__.publish)(messageName, message);\n}\nfunction subscribe(messageName, listener) {\n    return (0,pubsub_js__WEBPACK_IMPORTED_MODULE_0__.subscribe)(messageName, (incomingName, data) => {\n        const name = incomingName;\n        if (!name || !data) {\n            return;\n        }\n        const message = data;\n        if (message.type) {\n            listener(messageName, message);\n        }\n    });\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Shared/TypedPubsub.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"publish\": () => (/* binding */ publish),\n/* harmony export */   \"subscribe\": () => (/* binding */ subscribe),\n/* harmony export */   \"unsubscribe\": () => (/* binding */ unsubscribe)\n/* harmony export */ });\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pubsub-js */ \"./node_modules/pubsub-js/src/pubsub.js\");\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_0__);\n\nfunction publish(messageName, message) {\n    return (0,pubsub_js__WEBPACK_IMPORTED_MODULE_0__.publish)(messageName, message);\n}\nfunction subscribe(messageName, listener) {\n    return (0,pubsub_js__WEBPACK_IMPORTED_MODULE_0__.subscribe)(messageName, (incomingName, data) => {\n        const name = incomingName;\n        if (!name || !data) {\n            return;\n        }\n        const message = data;\n        if (message.type) {\n            listener(messageName, message);\n        }\n    });\n}\nconst unsubscribe = pubsub_js__WEBPACK_IMPORTED_MODULE_0__.unsubscribe;\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Shared/TypedPubsub.ts?");
 
 /***/ }),
 
@@ -150,17 +150,6 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 
 /***/ }),
 
-/***/ "./src/Overlay/Components/FollowNotification/FollowNotification.template.ts":
-/*!**********************************************************************************!*\
-  !*** ./src/Overlay/Components/FollowNotification/FollowNotification.template.ts ***!
-  \**********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ \"./node_modules/lit/index.js\");\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((subject) => lit__WEBPACK_IMPORTED_MODULE_0__.html `\n<div class=\"overlay-event overlay-event__follow\">\nYEP\n</div>\n`);\n\n\n//# sourceURL=webpack://overlay/./src/Overlay/Components/FollowNotification/FollowNotification.template.ts?");
-
-/***/ }),
-
 /***/ "./src/Overlay/Components/FollowNotification/FollowNotification.ts":
 /*!*************************************************************************!*\
   !*** ./src/Overlay/Components/FollowNotification/FollowNotification.ts ***!
@@ -168,7 +157,29 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"FollowNotification\": () => (/* binding */ FollowNotification)\n/* harmony export */ });\n/* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ \"./node_modules/lit/index.js\");\n/* harmony import */ var lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lit/decorators.js */ \"./node_modules/lit/decorators.js\");\n/* harmony import */ var _FollowNotification_template__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FollowNotification.template */ \"./src/Overlay/Components/FollowNotification/FollowNotification.template.ts\");\nvar __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {\n    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") r = Reflect.decorate(decorators, target, key, desc);\n    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\n    return c > 3 && r && Object.defineProperty(target, key, r), r;\n};\n\n\n\nlet FollowNotification = class FollowNotification extends lit__WEBPACK_IMPORTED_MODULE_0__.LitElement {\n    render() {\n        return (0,_FollowNotification_template__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(this);\n    }\n};\nFollowNotification = __decorate([\n    (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)('follow-notification')\n], FollowNotification);\n\n\n\n//# sourceURL=webpack://overlay/./src/Overlay/Components/FollowNotification/FollowNotification.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"FollowNotification\": () => (/* binding */ FollowNotification)\n/* harmony export */ });\n/* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ \"./node_modules/lit/index.js\");\n/* harmony import */ var lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lit/decorators.js */ \"./node_modules/lit/decorators.js\");\n/* harmony import */ var Infrastructure_Shared_TypedPubsub__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! Infrastructure/Shared/TypedPubsub */ \"./src/Infrastructure/Shared/TypedPubsub.ts\");\n/* harmony import */ var Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! Shared/MessageHandling */ \"./src/Shared/MessageHandling/MessageMapping/TwitchEvents.ts\");\n/* harmony import */ var _SingleFollow_template__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SingleFollow.template */ \"./src/Overlay/Components/FollowNotification/SingleFollow.template.ts\");\n/* harmony import */ var _MultiFollow_template__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MultiFollow.template */ \"./src/Overlay/Components/FollowNotification/MultiFollow.template.ts\");\nvar __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {\n    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") r = Reflect.decorate(decorators, target, key, desc);\n    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\n    return c > 3 && r && Object.defineProperty(target, key, r), r;\n};\n\n\n\n\n\n\nlet FollowNotification = class FollowNotification extends lit__WEBPACK_IMPORTED_MODULE_0__.LitElement {\n    constructor() {\n        super();\n        this.canDisplay = false;\n        this.displayTime = 5;\n        this.multiFollowThreshold = 5;\n        this.followers = [];\n        this.handleFollowEvent = this.handleFollowEvent.bind(this);\n    }\n    render() {\n        if (!this.canDisplay || this.followers.length === 0) {\n            return \"\";\n        }\n        else if (this.followers.length > this.multiFollowThreshold) {\n            return (0,_MultiFollow_template__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(this.followers);\n        }\n        const nextFollow = this.followers.shift();\n        if (!nextFollow) {\n            return \"\";\n        }\n        return (0,_SingleFollow_template__WEBPACK_IMPORTED_MODULE_3__[\"default\"])(nextFollow);\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this.subscriptionToken = (0,Infrastructure_Shared_TypedPubsub__WEBPACK_IMPORTED_MODULE_4__.subscribe)(Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_5__.TwitchEventMessages.ChannelFollow, this.handleFollowEvent);\n    }\n    disconnectedCallback() {\n        if (this.subscriptionToken) {\n            (0,Infrastructure_Shared_TypedPubsub__WEBPACK_IMPORTED_MODULE_4__.unsubscribe)(this.subscriptionToken);\n            this.subscriptionToken = undefined;\n        }\n        super.disconnectedCallback();\n    }\n    handleFollowEvent(messageName, incomingEvent) {\n        const followEvent = incomingEvent;\n        if (followEvent.name !== Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_5__.TwitchEventMessages.ChannelFollow) {\n            // just being careful\n            return;\n        }\n        this.followers.push(followEvent.user_name);\n        this.canDisplay = true;\n        this.requestUpdate();\n    }\n};\n__decorate([\n    (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.state)()\n], FollowNotification.prototype, \"canDisplay\", void 0);\n__decorate([\n    (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({ 'attribute': \"display-time\", type: Number })\n], FollowNotification.prototype, \"displayTime\", void 0);\n__decorate([\n    (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({ 'attribute': \"multi-follow-threshold\", type: Number })\n], FollowNotification.prototype, \"multiFollowThreshold\", void 0);\nFollowNotification = __decorate([\n    (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)('follow-notification')\n], FollowNotification);\n\n\n\n//# sourceURL=webpack://overlay/./src/Overlay/Components/FollowNotification/FollowNotification.ts?");
+
+/***/ }),
+
+/***/ "./src/Overlay/Components/FollowNotification/MultiFollow.template.ts":
+/*!***************************************************************************!*\
+  !*** ./src/Overlay/Components/FollowNotification/MultiFollow.template.ts ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ \"./node_modules/lit/index.js\");\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((followers) => lit__WEBPACK_IMPORTED_MODULE_0__.html `\n<div class=\"overlay-event overlay-event__follow\">\n    multi-follow-here yup\n</div>\n`);\n\n\n//# sourceURL=webpack://overlay/./src/Overlay/Components/FollowNotification/MultiFollow.template.ts?");
+
+/***/ }),
+
+/***/ "./src/Overlay/Components/FollowNotification/SingleFollow.template.ts":
+/*!****************************************************************************!*\
+  !*** ./src/Overlay/Components/FollowNotification/SingleFollow.template.ts ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ \"./node_modules/lit/index.js\");\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((followName) => lit__WEBPACK_IMPORTED_MODULE_0__.html `\n<div class=\"overlay-event overlay-event__follow\">\n    ${followName}\n</div>\n`);\n\n\n//# sourceURL=webpack://overlay/./src/Overlay/Components/FollowNotification/SingleFollow.template.ts?");
 
 /***/ }),
 
@@ -202,6 +213,17 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 
 "use strict";
 eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"AppOverlayMessages\": () => (/* binding */ AppOverlayMessages)\n/* harmony export */ });\nconst AppOverlayMessages = {\n    OverlayOnline: \"app.control.overlay.online\",\n    OverlayClosing: \"app.control.overlay.closing\",\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/AppOverlay.ts?");
+
+/***/ }),
+
+/***/ "./src/Shared/MessageHandling/MessageMapping/TwitchEvents.ts":
+/*!*******************************************************************!*\
+  !*** ./src/Shared/MessageHandling/MessageMapping/TwitchEvents.ts ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"TwitchEventMessages\": () => (/* binding */ TwitchEventMessages)\n/* harmony export */ });\nconst TwitchEventMessages = {\n    ChannelFollow: \"twitch.event.channel.follow\"\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/TwitchEvents.ts?");
 
 /***/ }),
 

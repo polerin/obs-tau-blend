@@ -7,10 +7,13 @@ export type TauEventBase = {
     created : string
 };
 
+export const TauEventMap = {
+    ChannelFollow : "channel-follow"
+} as const;
 
 export interface TauEvents {
     // IrcConnected : {}, // placeholder for now
-    ChannelFollow : TauEventBase & {
+    [TauEventMap.ChannelFollow] : TauEventBase & {
         event_type: "channel-follow",
         event_data: {
             "user_id": string,
@@ -22,7 +25,7 @@ export interface TauEvents {
             "broadcaster_user_login": string
         }
     }
-
 }
 
+export type TauEvent = TauEvents[keyof TauEvents];
 export type TauEventNames = keyof TauEvents;

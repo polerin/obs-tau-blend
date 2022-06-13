@@ -271,5 +271,3 @@ export interface ObsV4EventHandlersData {
 
   StudioModeSwitched: Extract<Parameters<EventHandlerListener>[0], { "new-state": boolean }>;
 }
-
-// export type ObsV4EventNames = keyof ObsV4EventHandlersData;

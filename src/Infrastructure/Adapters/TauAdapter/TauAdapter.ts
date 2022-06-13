@@ -1,15 +1,13 @@
 import { CENTRAL_TOKENS, injected } from "Bindings";
 import Websocket from "isomorphic-ws";
-import { publish } from "pubsub-js";
 
 import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
 
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 import { AppMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
-import { TauEvents, TauEventNames } from "./Definitions/TauEvents";
+import { TauEvent, TauEvents, TauEventNames } from "./Definitions/TauEvents";
 import { TauEventTransformer, TauEventTransformerSet } from "./Definitions/Types";
 import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
-
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
 export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCallback, AppMessageSet, TauEvents, TauEventNames, TauEventTransformer>
@@ -24,9 +22,6 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
 
     private options : any;
 
-    // only used during initialization
-    private transformerSet : TauEventTransformerSet;
-
     private tauSocket? : Websocket;
 
     public constructor(transformers: TauEventTransformerSet, options : any = {}) {
@@ -37,7 +32,7 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         this.handleConnectionOpened = this.handleConnectionOpened.bind(this);
         this.handleWebsocketMessage = this.handleWebsocketMessage.bind(this);
         
-        this.transformerSet = transformers;
+        this.registerTransformers(transformers);
     }
 
     // Note that the first param of this is bound on constructor!
@@ -72,14 +67,6 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         throw new Error("Method not implemented.");
     }
 
-    protected registerEventTransformers(transformers : TauEventTransformerSet) : void 
-    {
-        for (const transformer of transformers) {
-            this.transformerRegistery[transformer.adapterEventType] = transformer;
-            this.tauSocket?.on(transformer.adapterEventType, this.notifyListener.bind(this, transformer.adapterEventType, transformer));
-        }
-    }
-
     protected handleConnectionOpened(resolve : Function, reject : Function) : void
     {
         setTimeout(() => {
@@ -106,8 +93,31 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
 
     protected handleWebsocketMessage(event : Websocket.MessageEvent) : void 
     {
-        console.log("Tau Event", JSON.stringify(event.data));
-        const payload = event.data;
+        try {
+            const tauEvent = this.parseSocketMessage(event);
+            const eventName : TauEventNames = (tauEvent.event_type as TauEventNames);
+
+            if (!(eventName)) {
+                throw {
+                    message: "Unsupported message type:",
+                    details: { message : event}
+                }
+            }
+
+            const transformer = this.transformerRegistery[tauEvent.event_type];
+
+            this.notifyListener(eventName, transformer, tauEvent);
+
+        } catch (e) {
+            console.warn("Unable to parse Tau message", {error: e, message: event});
+        }
+    }
+
+    protected parseSocketMessage(event :Websocket.MessageEvent) : TauEvent
+    {
+        const payload : TauEvent = JSON.parse(event.data as string); 
+
+        return payload;
     }
 
     protected notifyListener<EventType extends TauEventNames>(eventName : EventType, transformer : TauEventTransformer, eventData : TauEvents[EventType]) : void 

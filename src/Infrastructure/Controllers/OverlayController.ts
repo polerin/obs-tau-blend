@@ -8,7 +8,6 @@ import { SystemMessage, SystemMessageNames, AppMessageSet, AppOverlayMessages } 
 import * as Components from "Overlay/Components";
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
 import { publish } from "Infrastructure/Shared/TypedPubsub";
-import { DynamicMethodCall } from "Infrastructure/Shared/Mixins";
 
 
 // hack around for now.
