@@ -11,7 +11,8 @@ export class EventWebsocketAuthorized implements
     public readonly adapterEventType = "AuthenticationSuccess";
     public readonly systemMessageType = ObsMessages.WebsocketAuthorized;
 
-    public buildSystemMessage(obsMessage: ObsV4EventHandlersData["AuthenticationSuccess"]): AppMessageSet[typeof ObsMessages.WebsocketAuthorized] {
+    public buildSystemMessage(obsMessage: ObsV4EventHandlersData["AuthenticationSuccess"]): AppMessageSet[typeof ObsMessages.WebsocketAuthorized]
+    {
         return {
             type : "obsMessage",
             name : ObsMessages.WebsocketAuthorized
