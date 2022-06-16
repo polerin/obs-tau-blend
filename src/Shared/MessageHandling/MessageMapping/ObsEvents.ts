@@ -13,13 +13,25 @@ export const ObsMessages = {
 
 export interface ObsMessageSet {
     // Core
-    [ObsMessages.WebsocketConnected] : ObsMessage;
-    [ObsMessages.WebsocketDisconnected] : ObsMessage;
-    [ObsMessages.WebsocketAuthorized] : ObsMessage;
-    [ObsMessages.WebsocketAuthorizationFailure] : ObsMessage;
+    [ObsMessages.WebsocketConnected] : ObsMessage & {
+        name : typeof ObsMessages.WebsocketConnected;
+    };
+
+    [ObsMessages.WebsocketDisconnected] : ObsMessage & {
+        name : typeof ObsMessages.WebsocketDisconnected
+    };
+
+    [ObsMessages.WebsocketAuthorized] : ObsMessage & {
+        name : typeof ObsMessages.WebsocketAuthorized;
+    };
+
+    [ObsMessages.WebsocketAuthorizationFailure] : ObsMessage & {
+        name : typeof ObsMessages.WebsocketAuthorizationFailure;   
+    };
 
     // Scene
     [ObsMessages.SwitchScenes] : ObsMessage & {
+        name : typeof ObsMessages.SwitchScenes;
         sceneName : string;
     };
 }

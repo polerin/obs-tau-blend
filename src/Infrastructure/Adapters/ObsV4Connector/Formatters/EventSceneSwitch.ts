@@ -11,6 +11,10 @@ export class EventSceneSwitch implements
 
     public buildSystemMessage(obsMessage: ObsV4EventHandlersData["SwitchScenes"] | void): AppMessageSet[typeof ObsMessages.SwitchScenes] {
 
+        if (!obsMessage) {
+            throw "Invalid message format supplied";
+        }
+
         return {
             type : "obsMessage",
             name : ObsMessages.SwitchScenes,
