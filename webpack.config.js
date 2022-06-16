@@ -31,6 +31,7 @@ module.exports.module = {
 module.exports.resolve = {
     modules: ['src', 'node_modules'],
     extensions: ['.tsx', '.ts', '.js'],
+    exclude : ['*.test.ts'],
     fallback: {
       // "stream": require.resolve("stream-browserify"),
       // "crypto": require.resolve("crypto-browserify"),
