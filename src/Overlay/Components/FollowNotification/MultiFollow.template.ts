@@ -1,7 +1,10 @@
 import { html } from "lit";
 
-export default (followers : String[]) => html`
+export default (followers : string[], followMessage : string) => html`
 <div class="overlay-event overlay-event__follow">
-    multi-follow-here yup
+    <h1>${followMessage}</h1>
+    <ul class="follower_list">
+        ${followers.map((follower) => html`<li>${follower}</li>`)}
+    </ul>
 </div>
 `;
