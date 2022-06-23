@@ -1,4 +1,4 @@
-import { PersistantOverlayComponent, EventOverlayComponent } from "../../Overlay/Components/Shared/Types";
+import { PersistantOverlayComponent, EventOverlayComponent } from "../../Overlay/Shared/Types";
 
 export default interface IOverlayComponent
 {

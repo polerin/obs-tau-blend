@@ -1,4 +1,4 @@
-import { TwitchMessage } from "Shared/Types";
+import { TwitchMessage } from "Shared/Definitions/Types";
 
 export const TwitchChatMessages = {
     IrcConnected: "twitch.chat.connected",

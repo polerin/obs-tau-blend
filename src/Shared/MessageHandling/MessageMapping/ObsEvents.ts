@@ -1,4 +1,4 @@
-import { ObsMessage } from "Shared/Types";
+import { ObsMessage } from "Shared/Definitions/Types";
 
 export const ObsMessages = {
     // Core

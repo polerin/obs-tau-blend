@@ -1,4 +1,4 @@
-import { ObsRequest } from "Shared/Types";
+import { ObsRequest } from "Shared/Definitions/Types";
 
 export const ObsRequests = {
     // Scene

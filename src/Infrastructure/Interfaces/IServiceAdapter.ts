@@ -1,7 +1,7 @@
 import { SystemMessageNames, SystemMessageSet } from "Shared/MessageHandling";
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 
-export interface IServiceAdapter<CallbackType, MessageSet> 
+export default interface IServiceAdapter<CallbackType, MessageSet> 
 {
     connect() : Promise<boolean>;
 
