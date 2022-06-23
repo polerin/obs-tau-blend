@@ -3,7 +3,7 @@ import { LitElement, html} from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { subscribe, unsubscribe } from "Infrastructure/Shared/TypedPubsub";
 
-import { SystemMessageNames, AppMessageSet, TwitchEventMessages } from "Shared/MessageHandling";
+import { SystemMessageNames, SystemMessageSet, TwitchEventMessages } from "Shared/MessageHandling";
 
 import singleFollowTemplate from './SingleFollow.template';
 import multiFollowTemplate from "./MultiFollow.template";
@@ -97,9 +97,9 @@ export class FollowNotification extends LitElement {
         super.disconnectedCallback();
     }
 
-    protected handleFollowEvent<MessageName extends SystemMessageNames>(messageName : MessageName, incomingEvent : AppMessageSet[MessageName]) : void
+    protected handleFollowEvent<MessageName extends SystemMessageNames>(messageName : MessageName, incomingEvent : SystemMessageSet[MessageName]) : void
     {
-        const followEvent = incomingEvent as AppMessageSet[typeof TwitchEventMessages.ChannelFollow];
+        const followEvent = incomingEvent as SystemMessageSet[typeof TwitchEventMessages.ChannelFollow];
 
         if (followEvent.name !== TwitchEventMessages.ChannelFollow) {
             // just being careful

@@ -3,11 +3,13 @@ import _ from "lodash";
 import { injected, OVERLAY_TOKENS } from "Bindings";
 
 import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
-import { SystemMessage, SystemMessageNames, AppMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
+import { SystemMessage, SystemMessageNames, SystemMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
 
 import * as Components from "Overlay/Components";
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
 import { publish } from "Infrastructure/Shared/TypedPubsub";
+import { subscribe } from "pubsub-js";
+import { isSystemMessage, isSystemMessageName } from "Shared/Utility/Message";
 
 
 // hack around for now.
@@ -32,6 +34,7 @@ class OverlayController {
         this.controlWorker = controlWorker;
         this.portMessageHandler = this.portMessageHandler.bind(this);
         this.connectComponent = this.connectComponent.bind(this);
+        this.busMessageHandler = this.busMessageHandler.bind(this);
         
         this.startControlWorker();
     }
@@ -42,6 +45,9 @@ class OverlayController {
 
         this.locateElements();
         this.connectRequestedComponents();
+        
+        // Not using typed subscribe so we can say "gimmie everything"
+        subscribe('*', this.busMessageHandler);
 
         this.controlWorker.sendMessage(AppOverlayMessages.OverlayOnline, {
             type: "controlMessage",
@@ -90,10 +96,12 @@ class OverlayController {
         this.controlWorker.connect();
     }
 
-    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
+    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void
     {
         console.log("Received port message on overlay: ", message);
         this.debugContainer?.addMessage(message as SystemMessage);
+
+        message.source = "Port";
 
         // if message handler returns true or no handler, publish message
         if(this.callMessageHandler(messageName, message)) {
@@ -103,13 +111,30 @@ class OverlayController {
 
     // @todo move this to the DynamicMethodCall mixin/decorator
     // Also implement in CentralController
-    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : boolean 
+    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : boolean 
     {
         const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
 
         // @todo This is annoying, what is the right way to do this dynamic call in TS?
         // @ts-ignore
         return (typeof this[functName] == 'function') ? this[functName](message) : true;
+    }
+
+    /**
+     * Handler for all bus messages, 
+     */
+    protected busMessageHandler(messageName : string , message : any)
+    {
+        if (!isSystemMessage(message) || !isSystemMessageName(message.name)) {
+            return;
+        }
+        
+        if (message.source && message.source === "Port") {
+            // don't echo port messages back to the port
+            return;
+        }
+        
+        this.controlWorker.sendMessage(message.name, message);
     }
 
 

@@ -10,9 +10,10 @@ import CentralController from "Infrastructure/Controllers/CentralController";
 
 // @TODO Shift these to tagged bindings when implementing Obs websocket v5
 import ObsV4Connector from "Infrastructure/Adapters/ObsV4Connector/V4Connector";
-import { filterEventTransformers } from "Infrastructure/Adapters/ObsV4Connector/Utility";
-import { V4EventTransformer } from "Infrastructure/Adapters/ObsV4Connector/Definitions/Types";
-import * as ObsV4EventTransformers from "Infrastructure/Adapters/ObsV4Connector/Formatters";
+import { filterAdapterTransformers } from "Infrastructure/Shared/Utility";
+import { V4EventTransformer, V4RequestTransformer } from "Infrastructure/Adapters/ObsV4Connector/Definitions/Types";
+import * as ObsV4EventTransformers from "Infrastructure/Adapters/ObsV4Connector/Formatters/Events";
+import * as ObsV4RequestTransformers from "Infrastructure/Adapters/ObsV4Connector/Formatters/Requests";
 import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
 
 import TauAdapter from "Infrastructure/Adapters/TauAdapter/TauAdapter";
@@ -29,7 +30,12 @@ centralContainer
 
 centralContainer
     .bind(CENTRAL_TOKENS.obsV4EventTransformers)
-    .toInstance(() => filterEventTransformers<V4EventTransformer>(Object.values(ObsV4EventTransformers)))
+    .toInstance(() => filterAdapterTransformers<V4EventTransformer>(Object.values(ObsV4EventTransformers)))
+    .inSingletonScope();
+
+centralContainer
+    .bind(CENTRAL_TOKENS.obsV4RequestTransformers)
+    .toInstance(() => filterAdapterTransformers<V4RequestTransformer>(Object.values(ObsV4RequestTransformers)))
     .inSingletonScope();
 
 centralContainer
@@ -49,7 +55,7 @@ centralContainer
 
 centralContainer
     .bind(CENTRAL_TOKENS.tauEventTransformers)
-    .toInstance(() => filterEventTransformers<TauEventTransformer>(Object.values(TauEventTransformers)))
+    .toInstance(() => filterAdapterTransformers<TauEventTransformer>(Object.values(TauEventTransformers)))
     .inSingletonScope();
 
 centralContainer

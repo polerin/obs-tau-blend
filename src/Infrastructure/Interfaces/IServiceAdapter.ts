@@ -1,4 +1,4 @@
-import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageNames, SystemMessageSet } from "Shared/MessageHandling";
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 
 export interface IServiceAdapter<CallbackType, MessageSet> 

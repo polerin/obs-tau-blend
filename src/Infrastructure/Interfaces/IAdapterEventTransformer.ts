@@ -1,4 +1,4 @@
-import { AppMessageSet, SystemMessageNames } from "Shared/MessageHandling";
+import { SystemMessageSet, SystemMessageNames } from "Shared/MessageHandling";
 
 export default interface IAdapterEventTransformer<
     AdapterMessageDefinitions,
@@ -9,5 +9,5 @@ export default interface IAdapterEventTransformer<
     readonly adapterEventType : AdapterMessageName;
     readonly systemMessageType : SystemMessageName;
 
-    buildSystemMessage(adapterMessage : AdapterMessageDefinitions[AdapterMessageName]) : AppMessageSet[SystemMessageName]
+    buildSystemMessage(adapterMessage : AdapterMessageDefinitions[AdapterMessageName]) : SystemMessageSet[SystemMessageName]
 };

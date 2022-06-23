@@ -1,10 +1,9 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { AppMessageSet } from 'Shared/MessageHandling';
+import { SystemMessageSet } from 'Shared/MessageHandling';
 import { ObsMessages } from 'Shared/MessageHandling';
 import { ObsV4EventHandlersData } from '../../Definitions/EventHandlersData';
-import { EventSceneSwitch, EventWebsocketConnected } from '../../Formatters';
-import { EventWebsocketAuthorized } from "../../Formatters/EventWebsocketAuthorized";
+import { EventSceneSwitch, EventWebsocketConnected, EventWebsocketAuthorized } from '../../Formatters/Events';
 
 
 describe("ObsV4 EventWebsocketAuthorized formatter tests", () => {
@@ -32,7 +31,7 @@ describe("ObsV4 EventWebsocketAuthorized formatter tests", () => {
         const expected = {
             name : 'obs.websocket.authorized',
             type : "obsMessage"
-        } as AppMessageSet[typeof ObsMessages.WebsocketAuthorized];
+        } as SystemMessageSet[typeof ObsMessages.WebsocketAuthorized];
 
 
         expect(result).to.be.an('object');
@@ -66,7 +65,7 @@ describe("ObsV4 EventWebsocketConnected formatter tests", () => {
         const expected = {
             name : 'obs.websocket.connected',
             type : "obsMessage"
-        } as AppMessageSet[typeof ObsMessages.WebsocketConnected];
+        } as SystemMessageSet[typeof ObsMessages.WebsocketConnected];
 
         expect(result).to.be.an('object');
         expect(result).to.be.deep.equal(expected);
@@ -124,7 +123,7 @@ describe("ObsV4 EventWebsocketConnected formatter tests", () => {
             name : 'obs.scene.switched',
             type : "obsMessage",
             sceneName : "testScene"
-        } as AppMessageSet[typeof ObsMessages.SwitchScenes];
+        } as SystemMessageSet[typeof ObsMessages.SwitchScenes];
 
         expect(withSourceResult).to.be.an('object');
         expect(withSourceResult).to.be.deep.equal(expected, "with source data");

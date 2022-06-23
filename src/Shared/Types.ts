@@ -1,21 +1,29 @@
 export type MessageNameList = { [short : string] : string };
 
-export type ControlMessage = {
+export type SystemMessageBase = {
+    type : string,
+    name : string,
+    source? : "Port" | "Overlay" | "Controller"
+}
+
+export type ControlMessage = SystemMessageBase & {
     type : 'controlMessage';
-    name: string;
 };
 
-export type ObsMessage = {
+export type ObsMessage = SystemMessageBase & {
     type : 'obsMessage',
-    name: string ;
 };
 
-export type TwitchMessage = {
+
+export type ObsRequest = SystemMessageBase & {
+    type : 'obsRequest',
+};
+
+
+export type TwitchMessage = SystemMessageBase & {
     type : 'twitchMessage',
-    name: string;
 };
 
-export type ControlRequest = {
+export type ControlRequest = SystemMessageBase & {
     type : 'controlRequest',
-    name: string;
 };

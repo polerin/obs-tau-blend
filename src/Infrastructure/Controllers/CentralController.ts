@@ -5,14 +5,14 @@ import { CENTRAL_TOKENS , injected, SHARED_TOKENS} from "Bindings";
 import { publish } from "Infrastructure/Shared/TypedPubsub";
 
 import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
-import { SystemMessageNames, AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageNames, SystemMessageSet } from "Shared/MessageHandling";
 import { AppControlMessages, AppOverlayMessages } from "Shared/MessageHandling";
 import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
 
 
 export default class CentralController
 {
-    private serviceAdapters : IServiceAdapter<unknown, AppMessageSet>[];
+    private serviceAdapters : IServiceAdapter<unknown, SystemMessageSet>[];
     private portMessageAdapter : PortMessageAdapter;
 
     protected defaultOptions : object = {
@@ -21,13 +21,13 @@ export default class CentralController
 
     protected options? : any;
 
-    constructor(serviceAdapters: IServiceAdapter<unknown, AppMessageSet>[], portMessageAdapter : PortMessageAdapter) 
+    constructor(serviceAdapters: IServiceAdapter<unknown, SystemMessageSet>[], portMessageAdapter : PortMessageAdapter) 
     {
         this.serviceAdapters = serviceAdapters;
         this.portMessageAdapter = portMessageAdapter;
 
         this.portMessageHandler = this.portMessageHandler.bind(this);
-        this.serviceMessageHandler = this.serviceMessageHandler.bind(this);
+        this.adapterMessageHandler = this.adapterMessageHandler.bind(this);
         this.onSharedWorkerConnect = this.onSharedWorkerConnect.bind(this);
 
     }
@@ -57,22 +57,30 @@ export default class CentralController
         this.portMessageAdapter.connect();
     }
 
-    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
+    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void
     {
         console.debug("Port message received by central control", {
             messageName : messageName,
             message : message
         });
 
+        message.source = "Port";
+
         // if the message handler returns true (or no message handler) publish the message on the bus
         if (this.callMessageHandler(messageName, message)) {
+            console.log("Publishing port message", messageName, message);
             publish(messageName, message);
         }
     }
 
-    protected serviceMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void 
+    protected adapterMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void 
     {
         console.debug("Service message received by central control", message);      
+
+        if (message.source && message.source === "Port") {
+            // don't echo port messages back
+            return;
+        }
 
         // if the message handler returns true (or no message handler) publish the message on the bus
         if (this.callMessageHandler(messageName, message)) {
@@ -83,7 +91,7 @@ export default class CentralController
 
     // @todo move this to the DynamicMethodCall mixin/decorator
     // Also do this in the OverlayController
-    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : boolean 
+    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : boolean 
     {
         const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
 
@@ -96,9 +104,9 @@ export default class CentralController
     protected sendSystemStatusMessage() : void 
     {
         console.debug("Sending system status");
-        this.portMessageAdapter.sendMessage(AppControlMessages.SystemStaus, {
+        this.portMessageAdapter.sendMessage(AppControlMessages.SystemStatus, {
                 type : 'controlMessage',
-                name : AppControlMessages.SystemStaus,
+                name : AppControlMessages.SystemStatus,
                 serviceStatuses: this.serviceAdapters.map((adapter) => adapter.getStatus())
         });
     }
@@ -108,7 +116,7 @@ export default class CentralController
         this.portMessageAdapter.setCallback(this.portMessageHandler);
 
         for (const adapter of this.serviceAdapters) {
-            adapter.setCallback(this.serviceMessageHandler);
+            adapter.setCallback(this.adapterMessageHandler);
         }
     }
 
@@ -118,7 +126,7 @@ export default class CentralController
         this.serviceAdapters.forEach((adapter) => adapter.setCallback(null));
     }
 
-    protected messageAppControlOverlayOnline(message : AppMessageSet[typeof AppOverlayMessages.OverlayOnline]) : boolean 
+    protected messageAppControlOverlayOnline(message : SystemMessageSet[typeof AppOverlayMessages.OverlayOnline]) : boolean 
     {
         this.sendSystemStatusMessage();
 

@@ -4,13 +4,13 @@ import Websocket from "isomorphic-ws";
 import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
 
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
-import { AppMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
+import { SystemMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
 import { TauEvent, TauEvents, TauEventNames } from "./Definitions/TauEvents";
 import { TauEventTransformer, TauEventTransformerSet } from "./Definitions/Types";
 import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
-export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCallback, AppMessageSet, TauEvents, TauEventNames, TauEventTransformer>
+export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCallback, SystemMessageSet, TauEvents, TauEventNames, TauEventTransformer>
     implements ITauAdapter
 {
 
@@ -63,7 +63,7 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         this.callback = callback;
     }
 
-    public sendMessage<MessageName extends keyof AppMessageSet>(messageName: MessageName, message: AppMessageSet[MessageName]): void {
+    public sendMessage<MessageName extends keyof SystemMessageSet>(messageName: MessageName, message: SystemMessageSet[MessageName]): void {
         throw new Error("Method not implemented.");
     }
 

@@ -1,5 +1,5 @@
 import { TauEventNames, TauEvents } from "../Definitions/TauEvents";
-import { AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageSet } from "Shared/MessageHandling";
 
 import { TwitchChatMessages } from "Shared/MessageHandling";
 

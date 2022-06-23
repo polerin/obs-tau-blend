@@ -1,5 +1,5 @@
 import { PortMessage, PortMessageCallback, PortMessageOrEvent, SystemMessage, SystemMessageNames } from "Shared/MessageHandling";
-import { AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageSet } from "Shared/MessageHandling";
 
 import IPortMessageAdapter from "Infrastructure/Interfaces/IPortMessageAdapter";
 import { ExternalConnectionStatus } from "./Types";
@@ -70,7 +70,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter
     /**
      * Send a SystemMessage over the worker port
      */
-    public sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : void
+    public sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void
     {
         if (!this.workerPort) {
             console.warn('Attempting to send a worker port message before a port has been supplied', {
@@ -101,16 +101,16 @@ export default class PortMessageAdapter implements IPortMessageAdapter
         this.portMessageCallback(holder.name, this.castToSystemMessage(holder.name, holder.data));
     }
 
-    private castToSystemMessage<MessageName extends keyof AppMessageSet>(
+    private castToSystemMessage<MessageName extends keyof SystemMessageSet>(
         messageName : MessageName,
-        message : AppMessageSet[MessageName]
-    ) : AppMessageSet[MessageName]
+        message : SystemMessageSet[MessageName]
+    ) : SystemMessageSet[MessageName]
     {
         message.name = messageName;
         return message;
     }
 
-    private castToPortMessage<MessageName extends keyof AppMessageSet>(
+    private castToPortMessage<MessageName extends keyof SystemMessageSet>(
         messageName : MessageName,
         message : SystemMessage
     ) : PortMessage<MessageName>

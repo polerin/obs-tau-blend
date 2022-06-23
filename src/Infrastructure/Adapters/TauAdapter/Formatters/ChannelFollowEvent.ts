@@ -1,5 +1,5 @@
 import { TauEventNames, TauEvents, TauEventMap } from "../Definitions/TauEvents";
-import { AppMessageSet } from "Shared/MessageHandling";
+import { SystemMessageSet } from "Shared/MessageHandling";
 
 import { TwitchEventMessages } from "Shared/MessageHandling";
 
@@ -11,7 +11,7 @@ export class ChannelFollowEvent
     adapterEventType: TauEventNames = TauEventMap.ChannelFollow;
     systemMessageType = TwitchEventMessages.ChannelFollow;
 
-    buildSystemMessage(adapterMessage: TauEvents[typeof TauEventMap.ChannelFollow]): AppMessageSet[typeof TwitchEventMessages.ChannelFollow] {
+    buildSystemMessage(adapterMessage: TauEvents[typeof TauEventMap.ChannelFollow]): SystemMessageSet[typeof TwitchEventMessages.ChannelFollow] {
         return {
             type : "twitchMessage",
             name : TwitchEventMessages.ChannelFollow,

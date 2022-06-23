@@ -1,7 +1,7 @@
 import { publish as basePublish, subscribe as baseSubscribe, unsubscribe as baseUnsubscribe } from "pubsub-js";
-import { AppMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
+import { SystemMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
 
-export function publish<MessageName extends SystemMessageNames>(messageName : MessageName, message : AppMessageSet[MessageName]) : boolean
+export function publish<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : boolean
 {
     return basePublish(messageName, message);
 }
@@ -15,7 +15,7 @@ export function subscribe<MessageName extends SystemMessageNames>(messageName : 
             return;
         }
 
-        const message = data as AppMessageSet[MessageName];
+        const message = data as SystemMessageSet[MessageName];
 
         if (message.type) {
             listener(messageName, message)
