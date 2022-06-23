@@ -1,8 +1,11 @@
 import { ObsRequest } from "Shared/Types";
 
 export const ObsRequests = {
-    // Core
+    // Scene
     SetCurrentScene : "obs.request.scene.switch",
+
+    // Source
+    SetSourceFilterSettings : "obs.request.source.setFilterSettings"
 } as const;
 
 export interface ObsRequestSet {
@@ -13,4 +16,12 @@ export interface ObsRequestSet {
         name : typeof ObsRequests.SetCurrentScene;
         sceneName : string;
     };
+
+    // Source
+    [ObsRequests.SetSourceFilterSettings] : ObsRequest & {
+        name : typeof ObsRequests.SetSourceFilterSettings,
+        sourceName : string;
+        filterName : string;
+        settings : Record<string, any>;
+    }
 }

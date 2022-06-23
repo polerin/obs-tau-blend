@@ -284,7 +284,7 @@ eval("/* harmony import */ var Bindings__WEBPACK_IMPORTED_MODULE_0__ = __webpack
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"EventSceneSwitch\": () => (/* binding */ EventSceneSwitch)\n/* harmony export */ });\n/* harmony import */ var Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! Shared/MessageHandling */ \"./src/Shared/MessageHandling/MessageMapping/ObsEvents.ts\");\n\nclass EventSceneSwitch {\n    constructor() {\n        this.adapterEventType = \"SwitchScenes\";\n        this.systemMessageType = Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__.ObsMessages.SwitchScenes;\n    }\n    buildSystemMessage(obsMessage) {\n        if (!obsMessage) {\n            throw \"Invalid message format supplied\";\n        }\n        return {\n            type: \"obsMessage\",\n            name: Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__.ObsMessages.SwitchScenes,\n            sceneName: (obsMessage) ? obsMessage[\"scene-name\"] : \"unknown\"\n        };\n    }\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Events/EventSceneSwitch.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"EventSceneSwitch\": () => (/* binding */ EventSceneSwitch)\n/* harmony export */ });\n/* harmony import */ var Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! Shared/MessageHandling */ \"./src/Shared/MessageHandling/MessageMapping/ObsEvents.ts\");\n\nclass EventSceneSwitch {\n    constructor() {\n        this.adapterEventType = \"SwitchScenes\";\n        this.systemMessageType = Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__.ObsMessages.SwitchScenes;\n    }\n    buildSystemMessage(obsMessage) {\n        if (!obsMessage) {\n            // @todo have a exception format plskthx\n            throw \"Invalid message format supplied\";\n        }\n        return {\n            type: \"obsMessage\",\n            name: Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__.ObsMessages.SwitchScenes,\n            sceneName: (obsMessage) ? obsMessage[\"scene-name\"] : \"unknown\"\n        };\n    }\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Events/EventSceneSwitch.ts?");
 
 /***/ }),
 
@@ -332,6 +332,17 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 
 /***/ }),
 
+/***/ "./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetSourceFilterSettings.ts":
+/*!***************************************************************************************************!*\
+  !*** ./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetSourceFilterSettings.ts ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"SetSourceFilterSettings\": () => (/* binding */ SetSourceFilterSettings)\n/* harmony export */ });\n/* harmony import */ var Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! Shared/MessageHandling */ \"./src/Shared/MessageHandling/MessageMapping/ObsRequests.ts\");\n\nclass SetSourceFilterSettings {\n    constructor() {\n        this.adapterRequestType = \"SetSourceFilterSettings\";\n        this.systemMessageType = Shared_MessageHandling__WEBPACK_IMPORTED_MODULE_0__.ObsRequests.SetSourceFilterSettings;\n        this.voidReturn = false;\n        this.requiredFields = [\"sourceName\", \"filterName\"];\n    }\n    buildAdapterMessage(systemMessage) {\n        for (const fieldName of this.requiredFields) {\n            if (!systemMessage[fieldName] || systemMessage[fieldName]) {\n                throw \"Invalid message format, missing field \" + fieldName;\n            }\n        }\n        return {\n            sourceName: systemMessage.sourceName,\n            filterName: systemMessage.filterName,\n            filterSettings: systemMessage.settings\n        };\n    }\n}\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetSourceFilterSettings.ts?");
+
+/***/ }),
+
 /***/ "./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/index.ts":
 /*!*********************************************************************************!*\
   !*** ./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/index.ts ***!
@@ -339,7 +350,7 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"SetCurrentScene\": () => (/* reexport safe */ _SetCurrentScene__WEBPACK_IMPORTED_MODULE_0__.SetCurrentScene)\n/* harmony export */ });\n/* harmony import */ var _SetCurrentScene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetCurrentScene */ \"./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetCurrentScene.ts\");\n\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"SetCurrentScene\": () => (/* reexport safe */ _SetCurrentScene__WEBPACK_IMPORTED_MODULE_0__.SetCurrentScene),\n/* harmony export */   \"SetSourceFilterSettings\": () => (/* reexport safe */ _SetSourceFilterSettings__WEBPACK_IMPORTED_MODULE_1__.SetSourceFilterSettings)\n/* harmony export */ });\n/* harmony import */ var _SetCurrentScene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetCurrentScene */ \"./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetCurrentScene.ts\");\n/* harmony import */ var _SetSourceFilterSettings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SetSourceFilterSettings */ \"./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/SetSourceFilterSettings.ts\");\n\n\n\n\n//# sourceURL=webpack://overlay/./src/Infrastructure/Adapters/ObsV4Connector/Formatters/Requests/index.ts?");
 
 /***/ }),
 
@@ -493,7 +504,7 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ObsRequests\": () => (/* binding */ ObsRequests)\n/* harmony export */ });\nconst ObsRequests = {\n    // Core\n    SetCurrentScene: \"obs.request.scene.switch\",\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/ObsRequests.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ObsRequests\": () => (/* binding */ ObsRequests)\n/* harmony export */ });\nconst ObsRequests = {\n    // Scene\n    SetCurrentScene: \"obs.request.scene.switch\",\n    // Source\n    SetSourceFilterSettings: \"obs.request.source.setFilterSettings\"\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/ObsRequests.ts?");
 
 /***/ }),
 

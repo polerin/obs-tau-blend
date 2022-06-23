@@ -267,7 +267,7 @@ eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harm
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ObsRequests\": () => (/* binding */ ObsRequests)\n/* harmony export */ });\nconst ObsRequests = {\n    // Core\n    SetCurrentScene: \"obs.request.scene.switch\",\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/ObsRequests.ts?");
+eval("/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ObsRequests\": () => (/* binding */ ObsRequests)\n/* harmony export */ });\nconst ObsRequests = {\n    // Scene\n    SetCurrentScene: \"obs.request.scene.switch\",\n    // Source\n    SetSourceFilterSettings: \"obs.request.source.setFilterSettings\"\n};\n\n\n//# sourceURL=webpack://overlay/./src/Shared/MessageHandling/MessageMapping/ObsRequests.ts?");
 
 /***/ }),
 
