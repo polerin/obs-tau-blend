@@ -1,5 +1,5 @@
 import { PortMessageCallback, SystemMessageSet } from "Shared/MessageHandling";
-import { IServiceAdapter } from "./IServiceAdapter";
+import IServiceAdapter from "./IServiceAdapter";
 
 export default interface IPortMessageAdapter extends IServiceAdapter<PortMessageCallback, SystemMessageSet>
 {

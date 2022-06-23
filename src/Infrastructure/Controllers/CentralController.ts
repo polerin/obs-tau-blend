@@ -7,7 +7,7 @@ import { publish } from "Infrastructure/Shared/TypedPubsub";
 import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
 import { SystemMessageNames, SystemMessageSet } from "Shared/MessageHandling";
 import { AppControlMessages, AppOverlayMessages } from "Shared/MessageHandling";
-import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
+import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
 
 
 export default class CentralController

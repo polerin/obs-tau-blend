@@ -1,7 +1,7 @@
 import { DependencyModule } from "brandi";
 
 import { filterAdapterTransformers } from "Shared/Utility/Transformer";
-import { conf_get } from "Shared/AppConfig";
+import { conf_get } from "Shared/Utility/AppConfig";
 
 import { TAU_TOKENS } from "./TauTokens";
 import { CENTRAL_TOKENS } from "Bindings";

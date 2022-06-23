@@ -2,10 +2,10 @@ import { Container } from "brandi";
 
 import { container as parentContainer } from "./Container";
 import { CENTRAL_TOKENS } from "./CentralTokens";
-import { conf_get } from "Shared/AppConfig";
+import { conf_get } from "Shared/Utility/AppConfig";
 
 import CentralController from "Infrastructure/Controllers/CentralController";
-import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
+import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
 import { obsV4DependencyModule } from "Infrastructure/Adapters/ObsV4Connector/Bindings/ObsV4DependencyModule";
 import { tauDependencyModule } from "Infrastructure/Adapters/TauAdapter/Bindings/TauDependencyModule";
 

@@ -11,7 +11,7 @@ import ObsV4Connector from "../V4Connector";
 import { V4EventTransformer, V4RequestTransformer } from "../Definitions/Types";
 import * as ObsV4EventTransformers from "../Formatters/Events";
 import * as ObsV4RequestTransformers from "../Formatters/Requests";
-import { conf_get } from "Shared/AppConfig";
+import { conf_get } from "Shared/Utility/AppConfig";
 
 export const obsV4DependencyModule = new DependencyModule();
 

@@ -1,9 +1,9 @@
-import { TauEventNames, TauEvents } from "../Definitions/TauEvents";
+import { TauEventNames, TauEvents } from "../../Definitions/TauEvents";
 import { SystemMessageSet } from "Shared/MessageHandling";
 
 import { TwitchChatMessages } from "Shared/MessageHandling";
 
-import ITauEventTransformer from "../Interfaces/ITauEventTransformer";
+import ITauEventTransformer from "../../Interfaces/ITauEventTransformer";
 
 // export class IrcConnectedEventTranslator
 //     implements ITauEventTransformer<typeof TwitchChatMessages.IrcConnected, "IrcConnected"> 

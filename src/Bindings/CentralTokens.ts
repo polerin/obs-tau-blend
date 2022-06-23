@@ -3,7 +3,7 @@ import { token } from "brandi";
 
 
 import type CentralController from "Infrastructure/Controllers/CentralController";
-import { IServiceAdapter } from "Infrastructure/Interfaces/IServiceAdapter";
+import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
 
 import IObsAdapter from "Infrastructure/Interfaces/IObsConnector";
 import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";

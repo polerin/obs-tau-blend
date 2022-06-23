@@ -3,7 +3,7 @@ import { Container } from "brandi";
 import { container as parentContainer } from "./Container";
 import { OVERLAY_TOKENS } from "./OverlayTokens";
 
-import { conf_get } from "Shared/AppConfig";
+import { conf_get } from "Shared/Utility/AppConfig";
 
 import OverlayController from "Infrastructure/Controllers/OverlayController";
 import ControlWorker from "Infrastructure/Adapters/ControlWorker";
