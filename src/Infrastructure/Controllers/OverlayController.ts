@@ -1,15 +1,15 @@
 import _ from "lodash";
 
 import { injected, OVERLAY_TOKENS } from "Bindings";
-
-import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
-import { SystemMessage, SystemMessageNames, SystemMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
-
-import * as Components from "Overlay/Components";
-import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
 import { publish } from "Infrastructure/Shared/TypedPubsub";
 import { subscribe } from "pubsub-js";
+
+import { SystemMessage, SystemMessageNames, SystemMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
 import { isSystemMessage, isSystemMessageName } from "Shared/Utility/Message";
+
+import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
+import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
+import * as Components from "Overlay/Components";
 
 
 // hack around for now.

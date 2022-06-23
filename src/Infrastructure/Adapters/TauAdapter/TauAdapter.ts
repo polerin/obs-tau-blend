@@ -1,10 +1,11 @@
-import { CENTRAL_TOKENS, injected } from "Bindings";
+import { injected } from "brandi";
+import { TAU_TOKENS } from "./Bindings/TauTokens";
 import Websocket from "isomorphic-ws";
 
 import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
 
 import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
-import { SystemMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
+import { SystemMessageSet, SystemMessageCallback } from "Shared/MessageHandling";
 import { TauEvent, TauEvents, TauEventNames } from "./Definitions/TauEvents";
 import { TauEventTransformer, TauEventTransformerSet } from "./Definitions/Types";
 import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
@@ -147,4 +148,4 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
     }
 }
 
-injected(TauAdapter, CENTRAL_TOKENS.tauEventTransformers, CENTRAL_TOKENS.tauOptions.optional);
+injected(TauAdapter, TAU_TOKENS.tauEventTransformers, TAU_TOKENS.tauOptions.optional);

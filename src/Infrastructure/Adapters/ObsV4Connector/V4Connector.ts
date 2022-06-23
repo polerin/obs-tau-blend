@@ -1,5 +1,7 @@
-import { CENTRAL_TOKENS, injected } from "Bindings";
-import ObsWebsocket from "obs-websocket-js";
+import { injected } from "brandi";
+import { OBS_V4_TOKENS } from "./Bindings/ObsV4Tokens";
+
+import type ObsWebsocket from "obs-websocket-js";
 
 import IObsConnector from "Infrastructure/Interfaces/IObsConnector";
 
@@ -7,8 +9,9 @@ import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
 import { SystemMessageSet, SystemMessageCallback, SystemMessageNames } from "Shared/MessageHandling";
 
 import { ObsV4EventHandlersData, ObsV4EventNames } from "./Definitions/EventHandlersData";
-import { V4EventTransformer, V4EventTransformerSet, V4RequestTransformer, V4RequestTransformerSet } from "./Definitions/Types";
 import { ObsV4Requests } from "./Definitions/RequestMethodsArgs";
+
+import { V4EventTransformer, V4EventTransformerSet, V4RequestTransformer, V4RequestTransformerSet } from "./Definitions/Types";
 import { subscribe } from "Infrastructure/Shared/TypedPubsub";
 
 export default class ObsV4Connector implements IObsConnector
@@ -137,4 +140,4 @@ export default class ObsV4Connector implements IObsConnector
 
 }
 
-injected(ObsV4Connector, CENTRAL_TOKENS.obsWebsocket, CENTRAL_TOKENS.obsV4EventTransformers, CENTRAL_TOKENS.obsV4RequestTransformers, CENTRAL_TOKENS.obsOptions.optional);
+injected(ObsV4Connector, OBS_V4_TOKENS.obsWebsocket, OBS_V4_TOKENS.obsV4EventTransformers, OBS_V4_TOKENS.obsV4RequestTransformers, OBS_V4_TOKENS.obsV4Options.optional);

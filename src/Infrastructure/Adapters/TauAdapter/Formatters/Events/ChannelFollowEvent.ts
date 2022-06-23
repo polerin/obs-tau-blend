@@ -1,9 +1,9 @@
-import { TauEventNames, TauEvents, TauEventMap } from "../Definitions/TauEvents";
+import { TauEventNames, TauEvents, TauEventMap } from "../../Definitions/TauEvents";
 import { SystemMessageSet } from "Shared/MessageHandling";
 
 import { TwitchEventMessages } from "Shared/MessageHandling";
 
-import ITauEventTransformer from "../Interfaces/ITauEventTransformer";
+import ITauEventTransformer from "../../Interfaces/ITauEventTransformer";
 
 export class ChannelFollowEvent
     implements ITauEventTransformer<typeof TwitchEventMessages.ChannelFollow, typeof TauEventMap.ChannelFollow> 
