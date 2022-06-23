@@ -3,41 +3,35 @@
   "version": "0.1.0",
   "description": "Streaming overlay application framework, for powerful interactive overlays",
   "private": true,
-
   "scripts": {
     "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts'",
     "test-watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts' -w",
     "build": "npm run clean && npm run build:lib && npm run build:types",
     "build:lib": "node build.config.js",
     "build:types": "tsc -p ./tsconfig.types.json",
-    "clean" : "rm -rf ./lib/*"
+    "clean": "rm -rf ./lib/*"
   },
-
   "author": "Erin McCargar <polerin@eclexia.net>",
-
-  "main" : "./lib/obs-tau-blend.js",
-  "module" : "./lib/obs-tau-blend.mjs",
-  "esnext" : "./lib/obs-tau-blend.next.js",
-  "esnext:main" : "./lib/obs-tau-blend.next.js",
-  "esnext:module" : "./lib/obs-tau-blend.next.mjs",
-
-  "exports" : {
-    "import" : "./lib/obs-tau-blend.mjs",
-    "require" : "./lib/obs-tau-blend.js",
-    "default" : "./lib/obs-tau-blend.js"
+  "main": "./lib/obs-tau-blend.js",
+  "module": "./lib/obs-tau-blend.mjs",
+  "esnext": "./lib/obs-tau-blend.next.js",
+  "esnext:main": "./lib/obs-tau-blend.next.js",
+  "esnext:module": "./lib/obs-tau-blend.next.mjs",
+  "exports": {
+    "import": "./lib/obs-tau-blend.mjs",
+    "require": "./lib/obs-tau-blend.js",
+    "default": "./lib/obs-tau-blend.js"
   },
   "types": "./lib/types/index.d.ts",
-  "files" : ["lib"],
-
+  "files": [
+    "lib"
+  ],
   "license": "To be Determined",
-
-
-
-
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
     "chai": "^4.3.6",
+    "esbuild": "^0.14.47",
     "mocha": "^10.0.0",
     "ts-auto-mock": "^3.6.2",
     "ts-loader": "^9.3.0",
@@ -46,28 +40,28 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
-    "lit": "^2.2.3",
-    "brandi": "^4.0.2",
-    "lodash": "^4.17.21",
-    "pubsub-js": "^1.9.4",
-    "obs-websocket-js": "^4.0.3",
-    "url": "^0.11.0",
-    "assert": "^2.0.0",
-    "buffer": "^6.0.3",
-    "bufferutil": "^4.0.6",
-    "browserify-zlib": "^0.2.0",
-    "crypto-browserify": "^3.12.0",
-    "https-browserify": "^1.0.0",
-    "net-browserify": "^0.1.4",
-    "path-browserify": "^1.0.1",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "tls-browserify": "^0.2.2",
     "@types/lodash": "^4.14.182",
     "@types/obs-studio": "^2.17.0",
     "@types/pubsub-js": "^1.8.3",
     "@types/sharedworker": "^0.0.75",
-    "@types/ws": "^8.5.3"
+    "@types/ws": "^8.5.3",
+    "assert": "^2.0.0",
+    "brandi": "^4.0.2",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "bufferutil": "^4.0.6",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "lit": "^2.2.3",
+    "lodash": "^4.17.21",
+    "net-browserify": "^0.1.4",
+    "obs-websocket-js": "^4.0.3",
+    "path-browserify": "^1.0.1",
+    "pubsub-js": "^1.9.4",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tls-browserify": "^0.2.2",
+    "url": "^0.11.0"
   },
   "keywords": [
     "twitch",

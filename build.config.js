@@ -7,8 +7,9 @@ const pkg = require('./package.json');
 const commons = {
   entryPoints: ['./src/index.ts'],
   bundle: true,
-  platform: 'node',
+  platform: 'browser',
   sourcemap: true,
+  external: Object.keys(pkg.dependencies)
 };
 
 esbuild.build({

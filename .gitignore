@@ -31,3 +31,4 @@ Thumbs.db
 *.log
 *.zip
 .svn
+*.tsbuildinfo
