@@ -11,7 +11,7 @@
     "build:types": "tsc -p ./tsconfig.types.json"
   },
   "keywords": [],
-  "author": "",
+  "author": "Erin McCargar <polerin@eclexia.net>",
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.3.1",
