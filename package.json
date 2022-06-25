@@ -20,9 +20,9 @@
   "exports": {
     "import": "./lib/obs-tau-blend.mjs",
     "require": "./lib/obs-tau-blend.js",
-    "default": "./lib/obs-tau-blend.js"
+    "default": "./lib/obs-tau-blend.mjs"
   },
-  "types": "./lib/types/index.d.ts",
+  "types": "./lib/types/src/index.d.ts",
   "files": [
     "lib"
   ],

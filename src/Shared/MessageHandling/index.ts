@@ -1,9 +1,9 @@
-import { ObsMessageSet, ObsMessages } from "./MessageMapping/ObsEvents";
-import { ObsRequestSet, ObsRequests } from "./MessageMapping/ObsRequests";
-import { TwitchChatMessageSet, TwitchChatMessages } from "./MessageMapping/TwitchChat";
-import { TwitchEventMessageSet, TwitchEventMessages } from "./MessageMapping/TwitchEvents";
-import { AppControlMessageSet, AppControlMessages } from "./MessageMapping/AppControl";
-import { AppOverlayMessageSet, AppOverlayMessages } from "./MessageMapping/AppOverlay";
+import { ObsMessageSet, ObsMessages } from "./ObsEvents";
+import { ObsRequestSet, ObsRequests } from "./ObsRequests";
+import { TwitchChatMessageSet, TwitchChatMessages } from "./TwitchChat";
+import { TwitchEventMessageSet, TwitchEventMessages } from "./TwitchEvents";
+import { AppControlMessageSet, AppControlMessages } from "./AppControl";
+import { AppOverlayMessageSet, AppOverlayMessages } from "./AppOverlay";
 
 export interface SystemMessageSet extends 
     ObsMessageSet,
