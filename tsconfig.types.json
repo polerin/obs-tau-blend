@@ -1,11 +1,12 @@
 {
-    "extends" : "./tsconfig.base.json",
+    "extends" : "./tsconfig.json",
     "compilerOptions": {
         "removeComments": false,
         "declaration": true,
-        // "declarationDir" : "./lib/types",
+        "declarationDir" : "./lib/types",
+        "outDir": "./lib/types",
         "declarationMap": true,
         "emitDeclarationOnly": true,
     },
-
+    "exclude": ["*.test.ts"],
 }

@@ -7,24 +7,15 @@
     "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts'",
     "test-watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts' -w",
     "build": "npm run clean && npm run build:lib && npm run build:types",
-    "build:lib": "node build.config.js",
+    "build:lib": "tsc -p ./tsconfig.json",
     "build:types": "tsc -p ./tsconfig.types.json",
     "clean": "rm -rf ./lib/*"
   },
   "author": "Erin McCargar <polerin@eclexia.net>",
-  "main": "./lib/obs-tau-blend.js",
-  "module": "./lib/obs-tau-blend.mjs",
-  "esnext": "./lib/obs-tau-blend.next.js",
-  "esnext:main": "./lib/obs-tau-blend.next.js",
-  "esnext:module": "./lib/obs-tau-blend.next.mjs",
-  "exports": {
-    "import": "./lib/obs-tau-blend.mjs",
-    "require": "./lib/obs-tau-blend.js",
-    "default": "./lib/obs-tau-blend.mjs"
-  },
-  "types": "./lib/types/src/index.d.ts",
+  "main": "./lib/index.js",
+  "typings": "./lib/types/index.d.ts",
   "files": [
-    "lib"
+    "./lib"
   ],
   "license": "To be Determined",
   "devDependencies": {
