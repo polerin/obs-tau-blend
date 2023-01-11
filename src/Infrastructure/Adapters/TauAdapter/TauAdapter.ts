@@ -4,22 +4,34 @@ import Websocket from "isomorphic-ws";
 
 import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
 
-import { ExternalConnectionStatus } from "Infrastructure/Shared/Types";
-import { SystemMessageSet, SystemMessageCallback } from "Shared/MessageHandling";
+import { ExternalConnectionStatus, ServiceAdapterTransformerSet } from "Infrastructure/Shared/Types";
+import { FrameworkMessageSet, SystemMessageCallback } from "Shared/MessageHandling";
 import { TauEvent, TauEvents, TauEventNames } from "./Definitions/TauEvents";
 import { TauEventTransformer, TauEventTransformerSet } from "./Definitions/Types";
 import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
-export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCallback, SystemMessageSet, TauEvents, TauEventNames, TauEventTransformer>
+export default class TauAdapter extends AbstractServiceAdapter
     implements ITauAdapter
 {
+    protected registerTransformers(transformerSets: ServiceAdapterTransformerSet<any>): void {
+        throw new Error("Method not implemented.");
+    }
 
     private defaultOptions = {
         'websocketUri' : 'ws://localhost:8000/ws/twitch-events/',
         'tauSecret' : false,
         'connectTimeout' : 1000
     };
+
+    public get status(): ExternalConnectionStatus {
+
+        return {
+            serviceName: "tau",
+            status : this.getSocketStatus(),
+            details :  {}
+        }
+    }
 
     private options : any;
 
@@ -51,20 +63,13 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         return new Promise<boolean>(this.handleConnectionOpened);
     }
 
-    public getStatus(): ExternalConnectionStatus {
 
-        return {
-            serviceName: "tau",
-            status : this.getSocketStatus(),
-            details :  {}
-        }
-    }
 
     public setCallback(callback: SystemMessageCallback | null): void {
         this.callback = callback;
     }
 
-    public sendMessage<MessageName extends keyof SystemMessageSet>(messageName: MessageName, message: SystemMessageSet[MessageName]): void {
+    public sendMessage<MessageName extends keyof FrameworkMessageSet>(messageName: MessageName, message: FrameworkMessageSet[MessageName]): void {
         throw new Error("Method not implemented.");
     }
 
@@ -119,14 +124,6 @@ export default class TauAdapter extends AbstractServiceAdapter<SystemMessageCall
         const payload : TauEvent = JSON.parse(event.data as string); 
 
         return payload;
-    }
-
-    protected notifyListener<EventType extends TauEventNames>(eventName : EventType, transformer : TauEventTransformer, eventData : TauEvents[EventType]) : void 
-    {
-        if (this.callback) {
-            const message = transformer.buildSystemMessage(eventData);
-            this.callback(transformer.systemMessageType, message);
-        }
     }
 
     protected getSocketStatus() : ExternalConnectionStatus["status"]

@@ -1,10 +1,13 @@
-import { PortMessage, PortMessageCallback, PortMessageOrEvent, SystemMessage, SystemMessageNames } from "Shared/MessageHandling";
-import { SystemMessageSet } from "Shared/MessageHandling";
+import { PortMessage, PortMessageCallback, PortMessageOrEvent, FrameworkMessage, FrameworkMessageNames } from "Shared/MessageHandling";
 
-import IPortMessageAdapter from "Infrastructure/Interfaces/IPortMessageAdapter";
+import { IPortMessageAdapter } from "Infrastructure";
 import { ExternalConnectionStatus } from "./Types";
+import { CheckedDefinitionList } from "../../Shared";
 
-export default class PortMessageAdapter implements IPortMessageAdapter 
+export default class PortMessageAdapter<
+    MessageSet extends CheckedDefinitionList<any, any>,
+    MessageName extends keyof MessageSet = keyof MessageSet
+> implements IPortMessageAdapter<MessageSet>
 {
     protected autoConnect : boolean = false;
     protected workerPort? : MessagePort | null;
@@ -16,7 +19,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter
     }
 
 
-    public getStatus(): ExternalConnectionStatus {
+    public get status(): ExternalConnectionStatus {
         return {
             serviceName : "controlPort",
             status : (this.workerPort) ? "connected" : "disconnected",
@@ -70,7 +73,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter
     /**
      * Send a SystemMessage over the worker port
      */
-    public sendMessage<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void
+    public sendMessage(messageName : MessageName, message : MessageSet[typeof messageName]) : void
     {
         if (!this.workerPort) {
             console.warn('Attempting to send a worker port message before a port has been supplied', {
@@ -92,7 +95,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter
             return;
         }
         
-        const holder = portMessage.data as PortMessage<SystemMessageNames>;
+        const holder = portMessage.data as PortMessage<MessageName>;
 
         if (!holder.name) {
             return;
@@ -101,19 +104,19 @@ export default class PortMessageAdapter implements IPortMessageAdapter
         this.portMessageCallback(holder.name, this.castToSystemMessage(holder.name, holder.data));
     }
 
-    private castToSystemMessage<MessageName extends keyof SystemMessageSet>(
+    private castToSystemMessage(
         messageName : MessageName,
-        message : SystemMessageSet[MessageName]
-    ) : SystemMessageSet[MessageName]
+        message : MessageSet[typeof messageName]
+    ) : MessageSet[MessageName]
     {
         message.name = messageName;
         return message;
     }
 
-    private castToPortMessage<MessageName extends keyof SystemMessageSet>(
+    private castToPortMessage(
         messageName : MessageName,
-        message : SystemMessage
-    ) : PortMessage<MessageName>
+        message : MessageSet[typeof messageName]
+    ) : PortMessage<typeof messageName>
     {
         return <PortMessage<MessageName>>{
             type: 'portMessage',

@@ -1,11 +1,13 @@
+import { FrameworkMessageSet } from "Shared";
+
 export default interface IAdapterRequestTransformer<
-    SystemMessageDefinitions,
     AdapterMessageDefinitions,
-    SystemMessageName extends keyof SystemMessageDefinitions,
-    AdapterMessageName extends keyof AdapterMessageDefinitions>
+    SystemMessageDefinitions = FrameworkMessageSet,
+    SystemMessageName extends keyof SystemMessageDefinitions = keyof SystemMessageDefinitions,
+    AdapterMessageName extends keyof AdapterMessageDefinitions = keyof AdapterMessageDefinitions>
 {
-    readonly adapterRequestType : AdapterMessageName;
-    readonly systemMessageType : SystemMessageName;
+    readonly adapterRequestName : AdapterMessageName;
+    readonly systemRequestName : SystemMessageName;
     // readonly voidReturn : AdapterMessageDefinitions[AdapterMessageName] extends void ? true : false;
 
     buildAdapterMessage(systemMessage : SystemMessageDefinitions[SystemMessageName]) : AdapterMessageDefinitions[AdapterMessageName]

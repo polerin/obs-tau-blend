@@ -6,8 +6,9 @@ import PortMessageAdapter from "./Shared/PortMessageAdapter";
 
 export * from "./Adapters/TauAdapter";
 export * from "./Adapters/ObsV4Connector";
+export * from "./Adapters/ObsV5Adapter";
 export * from "./Shared/Types";
-export * from "./Shared/TypedPubsub";
+export * from "./Shared/TypedPubsubBus";
 export * from "./Interfaces";
 
 

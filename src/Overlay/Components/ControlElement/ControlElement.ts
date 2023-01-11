@@ -1,7 +1,6 @@
 import { LitElement } from "lit";
-import {customElement} from 'lit/decorators.js';
-import { SystemMessageSet, ObsRequests } from "Shared/MessageHandling";
-import { publish } from "Infrastructure/Shared/TypedPubsub";
+import { customElement } from 'lit/decorators.js';
+import { FrameworkMessageSet, ObsRequests } from "Shared/MessageHandling";
 
 import elementTemplate from './ControlElement.template';
 
@@ -20,7 +19,7 @@ export class ControlElement extends LitElement
             name : ObsRequests.SetCurrentScene,
             type : "obsRequest",
             sceneName : "SHOW RIGHT FULL"
-        } as SystemMessageSet[typeof ObsRequests.SetCurrentScene]
+        } as FrameworkMessageSet[typeof ObsRequests.SetCurrentScene]
 
         console.log("dispatching!", request);
         publish(ObsRequests.SetCurrentScene, request);

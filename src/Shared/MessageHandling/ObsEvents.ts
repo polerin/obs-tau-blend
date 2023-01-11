@@ -1,37 +1,24 @@
-import { ObsMessage } from "Shared/Definitions/Types";
+import { ObsEvent, CheckedDefinitionList } from "Shared/Definitions/Types";
 
-export const ObsMessages = {
+export const ObsEvents = {
     // Core
     WebsocketConnected : "obs.websocket.connected",
     WebsocketDisconnected : "obs.websocket.disconnected",
-    WebsocketAuthorized : "obs.websocket.authorized",
-    WebsocketAuthorizationFailure: "obs.websocket.authorizationFailure",
 
     // Scene
     SwitchScenes : "obs.scene.switched",
 } as const;
 
-export interface ObsMessageSet {
+export type ObsEventSet = CheckedDefinitionList<typeof ObsEvents, {
     // Core
-    [ObsMessages.WebsocketConnected] : ObsMessage & {
-        name : typeof ObsMessages.WebsocketConnected;
+    [ObsEvents.WebsocketConnected] : ObsEvent & {
     };
 
-    [ObsMessages.WebsocketDisconnected] : ObsMessage & {
-        name : typeof ObsMessages.WebsocketDisconnected
-    };
-
-    [ObsMessages.WebsocketAuthorized] : ObsMessage & {
-        name : typeof ObsMessages.WebsocketAuthorized;
-    };
-
-    [ObsMessages.WebsocketAuthorizationFailure] : ObsMessage & {
-        name : typeof ObsMessages.WebsocketAuthorizationFailure;   
+    [ObsEvents.WebsocketDisconnected] : ObsEvent & {
     };
 
     // Scene
-    [ObsMessages.SwitchScenes] : ObsMessage & {
-        name : typeof ObsMessages.SwitchScenes;
+    [ObsEvents.SwitchScenes] : ObsEvent & {
         sceneName : string;
     };
-}
+}>;

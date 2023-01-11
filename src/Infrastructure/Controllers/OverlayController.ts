@@ -1,24 +1,20 @@
 import _ from "lodash";
 
-import { injected, OVERLAY_TOKENS } from "Bindings";
-import { publish } from "Infrastructure/Shared/TypedPubsub";
 import { subscribe } from "pubsub-js";
 
-import { SystemMessage, SystemMessageNames, SystemMessageSet, AppOverlayMessages } from "Shared/MessageHandling";
+import { AppOverlayMessages, FrameworkMessageSet, SystemMessageSet } from "Shared/MessageHandling";
 import { isSystemMessage, isSystemMessageName } from "Shared/Utility/Message";
 
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
-import IControlWorker from "Infrastructure/Interfaces/IControlWorker";
-import * as Components from "Overlay/Components";
+import { IControlWorker, FrameworkEventBus } from "../../Infrastructure";
+import { DebugContainer } from "Overlay/Components";
+import { AppOverlayMessageSet } from "Shared/MessageHandling/AppOverlay";
 
 
-// hack around for now.
-// This forces webpack to keep the web component instead of tree shaking it out
-Object.entries(Components).forEach(([k,v]) => v.prototype);
-
-class OverlayController {
-    private controlWorker : IControlWorker;
-
+export default abstract class OverlayController<
+    MessageSet extends FrameworkMessageSet = FrameworkMessageSet,
+    MessageNames extends keyof MessageSet = keyof MessageSet
+> {
     private defaultOptions : object = {
         'targetSelector': ".overlay-container",
         'debugSelector' : "debug-container",
@@ -27,11 +23,10 @@ class OverlayController {
 
     private options : any = {};
     private container?: HTMLElement;
-    private debugContainer? : Components.DebugContainer;
+    private debugContainer? : DebugContainer;
 
-    constructor(controlWorker: IControlWorker)
+    constructor(private controlWorker: IControlWorker<MessageSet>, private eventBus: FrameworkEventBus)
     {
-        this.controlWorker = controlWorker;
         this.portMessageHandler = this.portMessageHandler.bind(this);
         this.connectComponent = this.connectComponent.bind(this);
         this.busMessageHandler = this.busMessageHandler.bind(this);
@@ -49,6 +44,8 @@ class OverlayController {
         // Not using typed subscribe so we can say "gimmie everything"
         subscribe('*', this.busMessageHandler);
 
+        type foo = FrameworkMessageSet[typeof AppOverlayMessages.OverlayOnline];
+        
         this.controlWorker.sendMessage(AppOverlayMessages.OverlayOnline, {
             type: "controlMessage",
             name: AppOverlayMessages.OverlayOnline
@@ -96,22 +93,30 @@ class OverlayController {
         this.controlWorker.connect();
     }
 
-    protected portMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : void
+    protected portMessageHandler<MessageName extends MessageNames>(messageName : MessageName, message : MessageSet[MessageName]) : void
     {
+        if (!isSystemMessage<MessageSet>(message)) {
+            console.warn("Received non-system message on port", )
+            return;
+        }
+
         console.log("Received port message on overlay: ", message);
-        this.debugContainer?.addMessage(message as SystemMessage);
+        if (this.debugContainer) {
+            const debugMessage =`${message.type} : ${message.name} : ${JSON.stringify(message)}`;
+            this.debugContainer?.addMessage(debugMessage);
+        }
 
         message.source = "Port";
 
         // if message handler returns true or no handler, publish message
         if(this.callMessageHandler(messageName, message)) {
-            publish(messageName, message);
+            this.eventBus.publish(messageName, message);
         }
     }
 
     // @todo move this to the DynamicMethodCall mixin/decorator
     // Also implement in CentralController
-    protected callMessageHandler<MessageName extends SystemMessageNames>(messageName : MessageName, message : SystemMessageSet[MessageName]) : boolean 
+    protected callMessageHandler<MessageName extends MessageNames>(messageName : MessageName, message : MessageSet[MessageName]) : boolean 
     {
         const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
 
@@ -139,7 +144,3 @@ class OverlayController {
 
 
 }
-
-export default OverlayController;
-
-injected(OverlayController, OVERLAY_TOKENS.controlWorker);

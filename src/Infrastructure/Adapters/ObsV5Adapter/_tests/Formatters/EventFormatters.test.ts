@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { SystemMessageSet } from 'Shared/MessageHandling';
-import { ObsMessages } from 'Shared/MessageHandling';
-import { ObsV4EventHandlersData } from '../../Definitions/EventHandlersData';
+import { FrameworkMessageSet } from 'Shared/MessageHandling';
+import { ObsEvents } from 'Shared/MessageHandling';
+import { ObsV4EventHandlersData } from '../../Definitions/EventSchemas';
 import { EventSceneSwitch, EventWebsocketConnected, EventWebsocketAuthorized } from '../../Formatters/Events';
 
 
@@ -31,7 +31,7 @@ describe("ObsV4 EventWebsocketAuthorized formatter tests", () => {
         const expected = {
             name : 'obs.websocket.authorized',
             type : "obsMessage"
-        } as SystemMessageSet[typeof ObsMessages.WebsocketAuthorized];
+        } as FrameworkMessageSet[typeof ObsEvents.WebsocketAuthorized];
 
 
         expect(result).to.be.an('object');
@@ -64,8 +64,8 @@ describe("ObsV4 EventWebsocketConnected formatter tests", () => {
         
         const expected = {
             name : 'obs.websocket.connected',
-            type : "obsMessage"
-        } as SystemMessageSet[typeof ObsMessages.WebsocketConnected];
+            type : 'obsEvent'
+        } as FrameworkMessageSet[typeof ObsEvents.WebsocketConnected];
 
         expect(result).to.be.an('object');
         expect(result).to.be.deep.equal(expected);
@@ -80,8 +80,8 @@ describe("ObsV4 EventWebsocketConnected formatter tests", () => {
         const subject = buildSUT();
 
         expect(subject).to.be.a('object');
-        expect(subject.adapterEventType).to.be.equal("SwitchScenes");
-        expect(subject.systemMessageType).to.be.equal("obs.scene.switched");
+        expect(subject.adapterEventName).to.be.equal("SwitchScenes");
+        expect(subject.systemEventName).to.be.equal("obs.scene.switched");
     });
 
     it('should reject incorrect messages', () => {
@@ -120,10 +120,10 @@ describe("ObsV4 EventWebsocketConnected formatter tests", () => {
         const withSourceResult = subject.buildSystemMessage(testInput);
         
         const expected = {
-            name : 'obs.scene.switched',
-            type : "obsMessage",
+            name: "obs.scene.switched",
+            type: "obsEvent",
             sceneName : "testScene"
-        } as SystemMessageSet[typeof ObsMessages.SwitchScenes];
+        } as FrameworkMessageSet[typeof ObsEvents.SwitchScenes];
 
         expect(withSourceResult).to.be.an('object');
         expect(withSourceResult).to.be.deep.equal(expected, "with source data");

@@ -1,9 +1,9 @@
 import IV4RequestTransformer from "../../Interfaces/IV4RequestTransformer";
 import { ObsV4Requests } from "../../Definitions/RequestMethodsArgs";
-import { ObsRequests, SystemMessageSet } from "Shared/MessageHandling";
+import { ObsRequests, FrameworkMessageSet } from "Shared/MessageHandling";
 
 
-type  SourceFilterMessage = SystemMessageSet[typeof ObsRequests.SetSourceFilterSettings];
+type  SourceFilterMessage = FrameworkMessageSet[typeof ObsRequests.SetSourceFilterSettings];
 
 export class SetSourceFilterSettings implements 
     IV4RequestTransformer<typeof ObsRequests.SetSourceFilterSettings, "SetSourceFilterSettings"> 

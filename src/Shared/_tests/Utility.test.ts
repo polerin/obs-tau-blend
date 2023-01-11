@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { SystemMessageSet, SystemMessageNames, CollectedSystemMessageNames } from 'Shared/MessageHandling';
+import { FrameworkMessageSet, FrameworkMessageNames, CollectedSystemMessageNames } from 'Shared/MessageHandling';
 import { isSystemMessage, isSystemMessageName } from 'Shared/Utility/Message';
 
 

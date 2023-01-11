@@ -2,7 +2,7 @@ import IAdapterEventTransformer from "./IAdapterEventTransformer";
 import IAdapterRequestTransformer from "./IAdapterRequestTransformer";
 import IAdapterResponseTransformer from "./IAdapterResponseTransformer";
 import IControlWorker from "./IControlWorker";
-import IObsConnector from "./IObsConnector";
+import IObsAdapter from "./IObsAdapter";
 import IPortMessageAdapter from "./IPortMessageAdapter";
 import IServiceAdapter from "./IServiceAdapter";
 
@@ -11,7 +11,7 @@ export {
     IAdapterRequestTransformer,
     IAdapterResponseTransformer,
     IControlWorker,
-    IObsConnector,
+    IObsAdapter,
     IPortMessageAdapter,
     IServiceAdapter,
 }

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { SystemMessageNames, SystemMessageSet } from 'Shared/MessageHandling';
+import { FrameworkMessageNames, FrameworkMessageSet } from 'Shared/MessageHandling';
 import { ObsRequests } from 'Shared/MessageHandling';
 import { ObsV4Requests, ObsV4RequestNames} from '../../Definitions/RequestMethodsArgs';
 import * as Requests from '../../Formatters/Requests';
@@ -8,7 +8,7 @@ import * as Requests from '../../Formatters/Requests';
 
 describe("ObsV4 SetSourceFilterSettings formatter tests", () => {
     const buildSUT = () : Requests.SetSourceFilterSettings => new Requests.SetSourceFilterSettings();
-    const buildTestMessage = () : SystemMessageSet[typeof ObsRequests.SetSourceFilterSettings] => { 
+    const buildTestMessage = () : FrameworkMessageSet[typeof ObsRequests.SetSourceFilterSettings] => { 
         return {
             name : ObsRequests.SetSourceFilterSettings,
             type : "obsRequest",

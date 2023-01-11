@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { LitElement, html} from "lit";
+import { LitElement } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
-import { subscribe, unsubscribe } from "Infrastructure/Shared/TypedPubsub";
+import { subscribe, unsubscribe } from "Infrastructure/Shared/TypedPubsubBus";
 
-import { SystemMessageNames, SystemMessageSet, TwitchEventMessages } from "Shared/MessageHandling";
+import { FrameworkMessageNames, FrameworkMessageSet, TwitchEventMessages } from "Shared/MessageHandling";
 
 import singleFollowTemplate from './SingleFollow.template';
 import multiFollowTemplate from "./MultiFollow.template";
@@ -97,9 +97,9 @@ export class FollowNotification extends LitElement {
         super.disconnectedCallback();
     }
 
-    protected handleFollowEvent<MessageName extends SystemMessageNames>(messageName : MessageName, incomingEvent : SystemMessageSet[MessageName]) : void
+    protected handleFollowEvent<MessageName extends FrameworkMessageNames>(messageName : MessageName, incomingEvent : FrameworkMessageSet[MessageName]) : void
     {
-        const followEvent = incomingEvent as SystemMessageSet[typeof TwitchEventMessages.ChannelFollow];
+        const followEvent = incomingEvent as FrameworkMessageSet[typeof TwitchEventMessages.ChannelFollow];
 
         if (followEvent.name !== TwitchEventMessages.ChannelFollow) {
             // just being careful
