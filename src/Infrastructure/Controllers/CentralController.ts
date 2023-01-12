@@ -1,16 +1,9 @@
 import _ from "lodash";
 
-import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
-import { FrameworkMessageSet } from "Shared/MessageHandling";
-import { AppControlMessages, AppOverlayMessages } from "Shared/MessageHandling";
-import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
-import { FrameworkMessageNames } from "Shared";
-import { TypedPubSubBus } from "Infrastructure/Shared";
+import { IServiceAdapter, PortMessageAdapter, TypedPubSubBus } from "../../Infrastructure";
+import { SystemMessageNames, SystemMessageByName, coerceMessageType, AppOverlay, AppControl } from "../../Shared";
 
-export default abstract class CentralController<
-  MessageSet extends FrameworkMessageSet = FrameworkMessageSet,
-  MessageName extends keyof MessageSet = FrameworkMessageNames
-> {
+export default abstract class CentralController {
   protected defaultOptions: object = {
     messageHandlerPrefix: "message_",
   };
@@ -18,9 +11,9 @@ export default abstract class CentralController<
   protected options?: any;
 
   constructor(
-    private serviceAdapters: IServiceAdapter<any, any>[],
-    private portMessageAdapter: PortMessageAdapter<MessageSet>,
-    private eventBus: TypedPubSubBus<MessageSet>
+    private serviceAdapters: IServiceAdapter[],
+    private portMessageAdapter: PortMessageAdapter,
+    private eventBus: TypedPubSubBus
   ) {
     // @todo convert to arrow functions
     this.portMessageHandler = this.portMessageHandler.bind(this);
@@ -52,8 +45,8 @@ export default abstract class CentralController<
   }
 
   protected portMessageHandler(
-    messageName: MessageName,
-    message: MessageSet[typeof messageName]
+    messageName: SystemMessageNames,
+    message: SystemMessageByName<typeof messageName>
   ): void {
     console.debug("Port message received by central control", {
       messageName: messageName,
@@ -70,8 +63,8 @@ export default abstract class CentralController<
   }
 
   protected adapterMessageHandler(
-    messageName: MessageName,
-    message: MessageSet[MessageName]
+    messageName: SystemMessageNames,
+    message: SystemMessageByName<typeof messageName>
   ): void {
     console.debug("Service message received by central control", message);
 
@@ -80,35 +73,42 @@ export default abstract class CentralController<
       return;
     }
 
+    const coerced = coerceMessageType<typeof messageName>(messageName, message);
+
+    if (coerced === undefined) {
+      return;
+    }
+
     // if the message handler returns true (or no message handler) publish the message on the bus
     if (this.callMessageHandler(messageName, message)) {
-      this.eventBus.publish(messageName, message);
+      this.eventBus.publish(messageName, coerced);
       this.portMessageAdapter.sendMessage(messageName, message);
     }
   }
 
   // @todo move this to the DynamicMethodCall mixin/decorator
-  // Also do this in the OverlayController
+  // Also implement in CentralController
   protected callMessageHandler(
-    messageName: MessageName,
-    message: MessageSet[typeof messageName]
+    messageName: SystemMessageNames,
+    message: SystemMessageByName<typeof messageName>
   ): boolean {
     const functName = _.camelCase(
-      this.options?.messageHandlerPrefix + <string>messageName
+      this.options?.messageHandlerPrefix + messageName
     );
+    const funct = this[functName as keyof this];
 
-    // @todo This is annoying, what is the right way to do this dynamic call in TS?
-    // @ts-ignore
-    return typeof this[functName] == "function"
-      ? this[functName](message)
-      : true;
+    if (typeof funct !== "function") {
+      return true;
+    }
+
+    return funct(message);
   }
 
   protected sendSystemStatusMessage(): void {
     console.debug("Sending system status");
-    this.portMessageAdapter.sendMessage(AppControlMessages.SystemStatus, {
+    this.portMessageAdapter.sendMessage(AppControl.SystemStatus, {
       type: "controlMessage",
-      name: AppControlMessages.SystemStatus,
+      name: AppControl.SystemStatus,
       serviceStatuses: this.serviceAdapters.map((adapter) => adapter.status),
     });
   }
@@ -122,12 +122,12 @@ export default abstract class CentralController<
   }
 
   protected removeListeners() {
-    this.portMessageAdapter.setCallback(null);
-    this.serviceAdapters.forEach((adapter) => adapter.setCallback(null));
+    this.portMessageAdapter.setCallback(undefined);
+    this.serviceAdapters.forEach((adapter) => adapter.setCallback(undefined));
   }
 
   protected messageAppControlOverlayOnline(
-    message: FrameworkMessageSet[typeof AppOverlayMessages.OverlayOnline]
+    message: SystemMessageByName<typeof AppOverlay.OverlayOnline>
   ): boolean {
     this.sendSystemStatusMessage();
 

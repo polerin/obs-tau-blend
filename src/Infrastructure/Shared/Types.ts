@@ -5,8 +5,6 @@ import {
   IAdapterRequestTransformer,
   IAdapterResponseTransformer,
 } from "../Interfaces";
-import { FrameworkMessageSet, SystemMessageCallback, SystemMessageDefinitionList } from "Shared";
-import TypedPubSubBus from "./TypedPubsubBus";
 
 export type ExternalConnectionStatus = {
   serviceName: string;
@@ -14,36 +12,36 @@ export type ExternalConnectionStatus = {
   details: Record<string, string | number | boolean>;
 };
 
-export type ServiceCallback<MessageSet extends SystemMessageDefinitionList> =
-  SystemMessageCallback<MessageSet>
-  | never;
+export type ServiceAdapterTransformer =
+  | IAdapterEventTransformer<any, any, any>
+  | IAdapterRequestTransformer<any, any, any>
+  | IAdapterResponseTransformer<any, any, any>;
 
-export type ServiceAdapterTransformer<
-  AdapterMessages,
-  ServiceMessages extends SystemMessageDefinitionList
-> =
-  | IAdapterEventTransformer<any, any>
-  | IAdapterRequestTransformer<any, any>
-  | IAdapterResponseTransformer<any, any>;
-
-
-export type TransformerRegistry<SystemMessageSet extends SystemMessageDefinitionList, AdapterInterface extends ServiceAdapterTransformer<any, any>> = {
-  [msgName in keyof SystemMessageSet]: AdapterInterface; 
-};
-
-export type ServiceAdapterTransformerSet<MessageSet extends SystemMessageDefinitionList> = {
-  event?: TransformerRegistry<MessageSet, IAdapterEventTransformer<MessageSet, any>>;
-  request?: TransformerRegistry<MessageSet, IAdapterRequestTransformer<MessageSet, any>>;
-  response?: TransformerRegistry<MessageSet, IAdapterResponseTransformer<MessageSet, any>>;
-};
-
-export type TransformerClassifications<AdapterSet extends ServiceAdapterTransformerSet<any>> = keyof AdapterSet;
-
-export type MessageSetFromTransformerSet<Transformers extends ServiceAdapterTransformerSet<any>> = 
-  Transformers extends ServiceAdapterTransformerSet<infer ServiceMessages> ? ServiceMessages : never;
-
-export type InferMessageType<Name, MessageSet> = Name extends keyof MessageSet ? MessageSet[Name] 
-    : Name extends keyof MessageSet ? MessageSet[Name]
+export type TransformerInterfaceType<T extends TransformerClassifications> =
+  T extends "event"
+    ? IAdapterEventTransformer<any, any, any>
+    : T extends "request"
+    ? IAdapterRequestTransformer<any, any, any>
+    : T extends "response"
+    ? IAdapterResponseTransformer<any, any, any>
     : never;
 
-export type FrameworkEventBus = TypedPubSubBus<FrameworkMessageSet>; 
+export type TransformerRegistry<
+  TransformerType extends TransformerClassifications
+> = {
+  [msgName: string]: TransformerInterfaceType<TransformerType>;
+};
+
+export type ServiceAdapterTransformerSet = {
+  event?: TransformerRegistry<'event'>;
+  request?: TransformerRegistry<'request'>;
+  response?: TransformerRegistry<'response'>;
+};
+
+export type TransformerClassifications = keyof ServiceAdapterTransformerSet;
+
+export type InferMessageType<Name, MessageSet> = Name extends keyof MessageSet
+  ? MessageSet[Name]
+  : Name extends keyof MessageSet
+  ? MessageSet[Name]
+  : never;

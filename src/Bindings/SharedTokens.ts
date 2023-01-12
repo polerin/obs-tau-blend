@@ -1,8 +1,7 @@
 import { token } from "brandi";
-import { FrameworkEventBus } from "Infrastructure";
-import PortMessageAdapter from "Infrastructure/Shared/PortMessageAdapter";
+import { TypedPubSubBus, PortMessageAdapter } from "../Infrastructure";
 
 export const SHARED_TOKENS = {
-    portMessageAdapter : token<PortMessageAdapter<any>>("portMessageAdapter"),
-    frameworkEventBus: token<FrameworkEventBus>('eventBus'),
+    portMessageAdapter : token<PortMessageAdapter>("portMessageAdapter"),
+    frameworkEventBus: token<TypedPubSubBus>('eventBus'),
 };

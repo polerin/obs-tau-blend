@@ -1,18 +1,29 @@
-import IV4RequestTransformer from "../../Interfaces/IV4RequestTransformer";
-import { ObsV4Requests } from "../../Definitions/RequestMethodsArgs";
-import { ObsRequests, FrameworkMessageSet } from "Shared/MessageHandling";
+import IV5RequestTransformer from "../../Interfaces/IV5RequestTransformer";
+import { ObsRequest, ObsResponse, SystemMessageByName } from "../../../../../Shared/MessageHandling";
+import { ObsV5Requests, ObsV5Responses } from "../../Types";
 
-export class SetCurrentScene implements 
-    IV4RequestTransformer<typeof ObsRequests.SetCurrentScene, "SetCurrentScene"> 
-{        
-    public readonly adapterRequestType = "SetCurrentScene";
-    public readonly systemMessageType = ObsRequests.SetCurrentScene;
-    public readonly voidReturn: boolean = false;
 
-    public buildAdapterMessage(systemMessage : FrameworkMessageSet[typeof ObsRequests.SetCurrentScene]) : ObsV4Requests["SetCurrentScene"]
+type _adapterRequest = "SetCurrentProgramScene";
+type _adapterResponse = "SetCurrentProgramScene";
+type _systemRequest =  typeof ObsRequest.SetCurrentScene;
+type _systemResponse = typeof ObsResponse.SetCurrentScene;
+
+export default class SetCurrentScene implements 
+    IV5RequestTransformer<_adapterRequest, _adapterResponse, _systemRequest, _systemResponse> 
+{
+    public readonly adapterRequestName = "SetCurrentProgramScene";
+    public readonly adapterResponseName =  "SetCurrentProgramScene";
+    public readonly systemRequestName = ObsRequest.SetCurrentScene;
+    public readonly systemResponseName = ObsResponse.SetCurrentScene;
+    
+    public buildRequestMessage(systemMessage : SystemMessageByName<_systemRequest>) : ObsV5Requests[_adapterRequest]
     {
         return {
-            "scene-name" : systemMessage.sceneName
-        } as ObsV4Requests["SetCurrentScene"];
+            "sceneName" : systemMessage.sceneName
+        };
     }
+    
+    public buildResponseMessage(adapterResponse: ObsV5Responses[_adapterResponse]): SystemMessageByName<_systemResponse> {
+        throw new Error("Method not implemented.");
+    } 
 }

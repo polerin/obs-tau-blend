@@ -1,16 +1,18 @@
-import { OBSEventTypes } from "obs-websocket-js";
-import { ObsEvents, FrameworkMessageSet } from "Shared/MessageHandling";
+import { ObsV5Events } from "../../Types"; 
+import { ObsEvent, SystemMessageByName } from "../../../../../Shared/MessageHandling";
 
-import IV4EventTransformer from "../../Interfaces/IV5EventTransformer";
+import { IV5EventTransformer } from "../../Interfaces";
 
+type _adapterEvent = "CurrentProgramSceneChanged";
+type _systemEvent = typeof ObsEvent.SceneSwitched;
 
-export class EventSceneSwitch implements
-    IV4EventTransformer<typeof ObsEvents.SwitchScenes, 'SceneTransitionEnded'>
+export default class EventSceneSwitch implements
+    IV5EventTransformer<_adapterEvent, _systemEvent>
 {
-    public readonly adapterEventName = "SceneTransitionEnded";
-    public readonly systemEventName = ObsEvents.SwitchScenes;
+    public readonly adapterEventName = "CurrentProgramSceneChanged";
+    public readonly systemEventName = ObsEvent.SceneSwitched;
 
-    public buildSystemMessage(obsMessage: OBSEventTypes['SceneTransitionEnded'] | void): FrameworkMessageSet[typeof ObsEvents.SwitchScenes] {
+    public buildEventMessage(obsMessage: ObsV5Events[_adapterEvent] | void): SystemMessageByName<_systemEvent> {
 
         if (!obsMessage) {
             // @todo have a exception format plskthx
@@ -18,9 +20,9 @@ export class EventSceneSwitch implements
         }
 
         return {
-            type : "obsMessage",
-            name : ObsEvents.SwitchScenes,
-            sceneName: (obsMessage) ? obsMessage["scene-name"] : "unknown"
+            type : "obsEvent",
+            name : ObsEvent.SceneSwitched,
+            sceneName: (obsMessage) ? obsMessage.sceneName : "unknown"
         };
     }
 }

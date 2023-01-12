@@ -4,7 +4,7 @@ import elementTemplate from './DebugContainer.template';
 
 
 @customElement('debug-container')
-export class DebugContainer extends LitElement
+export default class DebugContainer extends LitElement
 {
     @state()
     protected messages : Array<string> = [];

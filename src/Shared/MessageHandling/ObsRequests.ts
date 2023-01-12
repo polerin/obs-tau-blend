@@ -1,6 +1,6 @@
-import { ObsRequest, CheckedDefinitionList } from "Shared/Definitions/Types";
+import { ObsRequestMessage } from "Shared/Definitions/Types";
 
-export const ObsRequests = {
+export const ObsRequest = {
     // Scene
     SetCurrentScene : "obs.request.scene.switch",
 
@@ -8,18 +8,18 @@ export const ObsRequests = {
     SetSourceFilterSettings : "obs.request.source.setFilterSettings",
 } as const;
 
-export type ObsRequestSet = CheckedDefinitionList<typeof ObsRequests, {
+export interface ObsRequestMessages {
     // Core
     
     // Scene
-    [ObsRequests.SetCurrentScene] : ObsRequest & {
+    [ObsRequest.SetCurrentScene] : ObsRequestMessage & {
         sceneName : string;
     };
 
     // Source
-    [ObsRequests.SetSourceFilterSettings] : ObsRequest & {
+    [ObsRequest.SetSourceFilterSettings] : ObsRequestMessage & {
         sourceName : string;
         filterName : string;
         settings : Record<string, any>;
     },
-}>;
+}

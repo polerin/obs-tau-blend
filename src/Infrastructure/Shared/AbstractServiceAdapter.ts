@@ -1,66 +1,82 @@
 import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
+import {
+  SystemMessage,
+  SystemMessageCallback,
+  SystemMessageNames,
+} from "Shared";
 import TypedPubSubBus from "./TypedPubsubBus";
 import {
   ExternalConnectionStatus,
-  FrameworkEventBus,
-  MessageSetFromTransformerSet,
   ServiceAdapterTransformerSet,
-  ServiceCallback,
   TransformerClassifications,
-  TransformerRegistry,
+  TransformerInterfaceType,
 } from "./Types";
 
-export default abstract class AbstractServiceAdapter<
-  TransformerSet extends ServiceAdapterTransformerSet<any> = ServiceAdapterTransformerSet<any>,
-  SystemMessageSet extends MessageSetFromTransformerSet<TransformerSet> = MessageSetFromTransformerSet<TransformerSet>,
-  CallbackType extends ServiceCallback<SystemMessageSet> = ServiceCallback<SystemMessageSet>,
-  TransformerClassification extends TransformerClassifications<TransformerSet> = TransformerClassifications<TransformerSet>,
-> implements IServiceAdapter<SystemMessageSet>
+export default abstract class AbstractServiceAdapter
+  implements IServiceAdapter
 {
-  protected _callback?: CallbackType | null;
-  public set callback(callback: CallbackType | null) {
+  protected _callback?: SystemMessageCallback;
+
+  public set callback(callback: SystemMessageCallback | undefined) {
     this._callback = callback;
-  };
-  
+  }
+
   public abstract get status(): ExternalConnectionStatus;
 
   public abstract connect(): Promise<boolean>;
-  public abstract sendMessage(messageName: keyof SystemMessageSet, message: SystemMessageSet[keyof SystemMessageSet]): void;
 
-  public constructor(protected transformers: TransformerSet, protected eventBus: FrameworkEventBus) {
-    Object.values(transformers).forEach((set) =>
-      this.registerTransformers(set)
-    );
+  public abstract sendMessage(
+    messageName: SystemMessageNames,
+    message: SystemMessage
+  ): void;
+
+  protected abstract registerTransformers(
+    transformerSets: ServiceAdapterTransformerSet
+  ): void;
+
+  public constructor(
+    protected transformers: ServiceAdapterTransformerSet,
+    protected eventBus: TypedPubSubBus
+  ) {
+    this.registerTransformers(this.transformers);
   }
 
-
-  public setCallback(callback: CallbackType): void {
+  public setCallback(callback: SystemMessageCallback): void {
     this._callback = callback;
   }
 
-  protected abstract registerTransformers(
-    transformerSets: ServiceAdapterTransformerSet<any>
-  ): void;
-
-  protected selectTransformer<MessageTypes extends TransformerSet[TransformerClassification]>(transformerType: TransformerClassification, messageName: keyof MessageTypes) {
-    if (transformerType === undefined || typeof messageName !== 'string' || this.transformers === undefined) { 
+  protected selectTransformer(
+    transformerType: TransformerClassifications,
+    messageName: string
+  ): TransformerInterfaceType<typeof transformerType> | undefined {
+    if (
+      transformerType === undefined ||
+      typeof messageName !== "string" ||
+      this.transformers === undefined
+    ) {
       return undefined;
     }
 
     // @todo this is fugly why are you like this
-    const group = this.transformers[transformerType] as TransformerRegistry<any, any>;
+    const group = this.transformers[transformerType];
 
-    if (group === undefined || group === null || !(messageName in group)) {
-      return undefined; 
+    if (group === undefined || group === null) {
+      return undefined;
     }
-    
+
+    if (!(messageName in group) || typeof group[messageName] === 'function') {
+      return undefined;
+    }
+
     return group[messageName];
-
   }
 
-  protected notifyListener = (message: SystemMessageSet[keyof SystemMessageSet]): void => {
+  protected notifyListener = (
+    messageName: SystemMessageNames,
+    message: SystemMessage
+  ): void => {
     if (this._callback) {
-      this._callback(message.name, message);
+      this._callback(messageName, message);
     }
-  }
+  };
 }

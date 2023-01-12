@@ -1,20 +1,15 @@
 import _ from "lodash";
 
-import { subscribe } from "pubsub-js";
-
-import { AppOverlayMessages, FrameworkMessageSet, SystemMessageSet } from "Shared/MessageHandling";
-import { isSystemMessage, isSystemMessageName } from "Shared/Utility/Message";
+import { SystemMessage, SystemMessageNames, SystemMessages, AppOverlay, SystemMessageByName } from "Shared/MessageHandling";
+import { isSystemMessage } from "Shared/Utility/Message";
 
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
-import { IControlWorker, FrameworkEventBus } from "../../Infrastructure";
+import { IControlWorker } from "../../Infrastructure";
 import { DebugContainer } from "Overlay/Components";
-import { AppOverlayMessageSet } from "Shared/MessageHandling/AppOverlay";
+import { TypedPubSubBus } from "Infrastructure/Shared";
 
 
-export default abstract class OverlayController<
-    MessageSet extends FrameworkMessageSet = FrameworkMessageSet,
-    MessageNames extends keyof MessageSet = keyof MessageSet
-> {
+export default abstract class OverlayController {
     private defaultOptions : object = {
         'targetSelector': ".overlay-container",
         'debugSelector' : "debug-container",
@@ -25,7 +20,7 @@ export default abstract class OverlayController<
     private container?: HTMLElement;
     private debugContainer? : DebugContainer;
 
-    constructor(private controlWorker: IControlWorker<MessageSet>, private eventBus: FrameworkEventBus)
+    constructor(private controlWorker: IControlWorker, private eventBus: TypedPubSubBus)
     {
         this.portMessageHandler = this.portMessageHandler.bind(this);
         this.connectComponent = this.connectComponent.bind(this);
@@ -42,13 +37,11 @@ export default abstract class OverlayController<
         this.connectRequestedComponents();
         
         // Not using typed subscribe so we can say "gimmie everything"
-        subscribe('*', this.busMessageHandler);
+        this.eventBus.subscribe('*', this.busMessageHandler);
 
-        type foo = FrameworkMessageSet[typeof AppOverlayMessages.OverlayOnline];
-        
-        this.controlWorker.sendMessage(AppOverlayMessages.OverlayOnline, {
+        this.controlWorker.sendMessage(AppOverlay.OverlayOnline, {
             type: "controlMessage",
-            name: AppOverlayMessages.OverlayOnline
+            name: AppOverlay.OverlayOnline
         });
     }
 
@@ -93,9 +86,9 @@ export default abstract class OverlayController<
         this.controlWorker.connect();
     }
 
-    protected portMessageHandler<MessageName extends MessageNames>(messageName : MessageName, message : MessageSet[MessageName]) : void
+    protected portMessageHandler(messageName : SystemMessageNames, message : SystemMessageByName<typeof messageName>) : void
     {
-        if (!isSystemMessage<MessageSet>(message)) {
+        if (!isSystemMessage(message)) {
             console.warn("Received non-system message on port", )
             return;
         }
@@ -116,30 +109,33 @@ export default abstract class OverlayController<
 
     // @todo move this to the DynamicMethodCall mixin/decorator
     // Also implement in CentralController
-    protected callMessageHandler<MessageName extends MessageNames>(messageName : MessageName, message : MessageSet[MessageName]) : boolean 
+    protected callMessageHandler(messageName : SystemMessageNames, message : SystemMessages[typeof messageName]) : boolean 
     {
         const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
+        const funct = this[functName as keyof this];
 
-        // @todo This is annoying, what is the right way to do this dynamic call in TS?
-        // @ts-ignore
-        return (typeof this[functName] == 'function') ? this[functName](message) : true;
+        if (typeof funct !== 'function') {
+            return true;
+        }
+
+        return funct(message);
     }
 
     /**
      * Handler for all bus messages, 
      */
-    protected busMessageHandler(messageName : string , message : any)
+    protected busMessageHandler(messageName : SystemMessageNames, message : SystemMessage)
     {
-        if (!isSystemMessage(message) || !isSystemMessageName(message.name)) {
+        if (!isSystemMessage(message) || message.name !== messageName) {
             return;
         }
-        
+
         if (message.source && message.source === "Port") {
             // don't echo port messages back to the port
             return;
         }
         
-        this.controlWorker.sendMessage(message.name, message);
+        this.controlWorker.sendMessage(messageName, message);
     }
 
 

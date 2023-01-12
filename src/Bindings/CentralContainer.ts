@@ -21,7 +21,7 @@ if (obsAdapterVersion === "v5") {
 centralContainer
     .bind(CENTRAL_TOKENS.serviceAdapters)
     .toInstance(() => {
-        const adapters : IServiceAdapter<any, any>[] = [];
+        const adapters : IServiceAdapter[] = [];
 
         adapters.push(centralContainer.get(CENTRAL_TOKENS.obsAdapter));
         adapters.push(centralContainer.get(CENTRAL_TOKENS.tauAdapter));

@@ -1,15 +1,26 @@
 import _ from 'lodash';
 import { LitElement } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
-import { subscribe, unsubscribe } from "Infrastructure/Shared/TypedPubsubBus";
 
-import { FrameworkMessageNames, FrameworkMessageSet, TwitchEventMessages } from "Shared/MessageHandling";
+import { SystemMessageByName, TwitchEvent } from "Shared/MessageHandling";
 
 import singleFollowTemplate from './SingleFollow.template';
 import multiFollowTemplate from "./MultiFollow.template";
+import IEventBusAwareComponent from 'Overlay/Shared/interfaces/IEventBusAwareComponent';
+import { TypedPubSubBus } from 'Infrastructure/Shared';
 
 @customElement('follow-notification')
-export class FollowNotification extends LitElement {
+export default class FollowNotification extends LitElement implements IEventBusAwareComponent {
+
+    protected _eventBus?: TypedPubSubBus;
+    public set eventBus(eventBus: TypedPubSubBus) {
+        if (this.eventBus) {
+            this.removeListeners();
+        }
+
+        this.eventBus = eventBus;
+    }
+    
     @property({'attribute' : "display-time", type: Number})
     public displayTime : number = 8000;
 
@@ -63,12 +74,14 @@ export class FollowNotification extends LitElement {
      */
     protected displayIntervalToken? : ReturnType<typeof setInterval> | null;
 
+
     public constructor() 
     {
         super();
         this.handleFollowEvent = this.handleFollowEvent.bind(this);
         this.displayTick = this.displayTick.bind(this);
     }
+
 
     public render() {
         if (!this.canDisplay || this.nextFollowersToDisplay.length === 0) {
@@ -84,29 +97,32 @@ export class FollowNotification extends LitElement {
 
     public connectedCallback(): void {
         super.connectedCallback();
-        
-        this.subscriptionToken = subscribe(TwitchEventMessages.ChannelFollow, this.handleFollowEvent);
+    
+        this.registerListeners();
     }
 
     public disconnectedCallback(): void {
-        if (this.subscriptionToken) {
-            unsubscribe(this.subscriptionToken);
-            this.subscriptionToken = undefined;
-        }
+        this.removeListeners();
 
         super.disconnectedCallback();
     }
 
-    protected handleFollowEvent<MessageName extends FrameworkMessageNames>(messageName : MessageName, incomingEvent : FrameworkMessageSet[MessageName]) : void
-    {
-        const followEvent = incomingEvent as FrameworkMessageSet[typeof TwitchEventMessages.ChannelFollow];
+    protected registerListeners() {
+        this.eventBus.subscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+    }
 
-        if (followEvent.name !== TwitchEventMessages.ChannelFollow) {
+    protected removeListeners(): void {
+        this.eventBus.unsubscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+    }
+
+    protected handleFollowEvent(incomingEvent : SystemMessageByName<typeof TwitchEvent.ChannelFollow>) : void
+    {
+        if (incomingEvent === undefined || incomingEvent.name !== TwitchEvent.ChannelFollow) {
             // just being careful
             return;
         }
 
-        this.newFollowBuffer.push(followEvent.user_name);
+        this.newFollowBuffer.push(incomingEvent.user_name);
 
         this.startDisplayCycle();
     }

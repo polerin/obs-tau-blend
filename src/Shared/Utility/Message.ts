@@ -1,23 +1,36 @@
-import { FrameworkMessage, FrameworkMessageNames, SystemMessageSet } from "Shared/MessageHandling";
+import { SystemMessage, SystemMessageByName, SystemMessageNames, SystemMessages } from 'Shared/MessageHandling';
 
 /**
  * Attempt to check if a message is one of the defined system messages
  * 
  * This is NOT a perfect typecheck
  */
-export function isSystemMessage<MessageSet extends SystemMessageSet>(message : unknown) : message is MessageSet[keyof MessageSet]
+export function isSystemMessage(subject : unknown) : subject is SystemMessage
 {
-    const name = (message as FrameworkMessage).name;
+    const message = subject as SystemMessage;
 
-    if (!isSystemMessageName(name)) { 
+    if (!(
+        'name' in message
+        && typeof message['name'] === 'string'
+        && 'type' in message
+        && typeof message['type'] === 'string'
+        && 'source' in message
+        && typeof message['source'] === 'string'
+    )) { 
         return false;
     }
 
     // good as we can get for now boo typescript
-    return (typeof (message as MessageSet[typeof name]).type === "string");
+    return true;
 }
 
-export function isSystemMessageName<MessageSet extends SystemMessageSet>(name : any, MessageNames : (keyof MessageSet)[]) : name is keyof FrameworkMessageNames
-{
-    return ((typeof name === "string") && MessageNames.includes(name));
+
+export function coerceMessageType<MessageName extends SystemMessageNames>(messageName: SystemMessageNames, subject: unknown): SystemMessages[MessageName] | undefined{
+    const message = subject as SystemMessageByName<MessageName>;
+
+    if (message.name !== messageName) {
+        return undefined;
+    }
+
+    return message;
 }

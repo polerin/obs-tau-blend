@@ -1,9 +1,7 @@
 import { token } from "brandi";
-
-import { TauEventTransformerSet } from "../Definitions/Types";
-
+import { ServiceAdapterTransformerSet } from "Infrastructure/Shared";
 
 export const TAU_TOKENS = {
-    tauEventTransformers: token<TauEventTransformerSet>("tauTransformers"),
+    tauEventTransformers: token<ServiceAdapterTransformerSet>("tauTransformers"),
     tauOptions: token<object>('tauOptions'),
 };

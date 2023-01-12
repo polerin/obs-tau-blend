@@ -1,19 +1,21 @@
-import { ObsResponse, CheckedDefinitionList } from "Shared/Definitions/Types";
+import { ObsResponseMessage, CheckedDefinitionList } from "Shared/Definitions/Types";
 
-export const ObsResponses = {
+export const ObsResponse = {
   // Core
   WebsocketAuthorized: "obs.websocket.authorized",
   WebsocketAuthorizationFailure: "obs.websocket.authorizationFailure",
+  SetCurrentScene: "obs.scene.setCurrent",
+  SetSourceFilterSettings: "obs.source.filter.setttings.set",
 } as const;
 
-export type ObsResponseSet = CheckedDefinitionList<
-  typeof ObsResponses,
-  {
+export interface ObsResponseMessages {
     // Core
-    [ObsResponses.WebsocketAuthorized]: ObsResponse & {
-    };
+    [ObsResponse.WebsocketAuthorized]: ObsResponseMessage & {};
 
-    [ObsResponses.WebsocketAuthorizationFailure]: ObsResponse & {
-    };
-  }
->;
+    [ObsResponse.WebsocketAuthorizationFailure]: ObsResponseMessage & {};
+
+    [ObsResponse.SetCurrentScene]: ObsResponseMessage & {};
+
+    [ObsResponse.SetSourceFilterSettings] : ObsResponseMessage & {}
+
+}

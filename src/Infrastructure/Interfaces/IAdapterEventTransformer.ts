@@ -1,13 +1,12 @@
-import { FrameworkMessageSet, SystemMessageDefinitionList } from "Shared";
+import { SystemMessage, SystemMessageNames, SystemMessages } from "Shared";
 
 export default interface IAdapterEventTransformer<
     AdapterMessageDefinitions,
-    SystemMessageDefinitions extends SystemMessageDefinitionList = FrameworkMessageSet,
-    SystemMessageName extends keyof SystemMessageDefinitions = keyof SystemMessageDefinitions,
-    AdapterMessageName extends keyof AdapterMessageDefinitions = keyof AdapterMessageDefinitions>
+    AdapterEventName extends keyof AdapterMessageDefinitions,
+    SystemEventName extends SystemMessageNames>
 {
-    readonly adapterEventName : AdapterMessageName;
-    readonly systemEventName : SystemMessageName;
+    readonly adapterEventName: AdapterEventName;
+    readonly systemEventName: SystemMessageNames;
 
-    buildSystemMessage(adapterMessage : AdapterMessageDefinitions[AdapterMessageName]) : SystemMessageDefinitions[SystemMessageName]
+    buildEventMessage(adapterMessage : AdapterMessageDefinitions[AdapterEventName]) : SystemMessages[SystemEventName]
 };

@@ -1,2 +1,7 @@
-export { SetCurrentScene } from "./SetCurrentScene";
-export { SetSourceFilterSettings } from "./SetSourceFilterSettings";
+import SetCurrentScene from "./SetCurrentScene";
+import SetSourceFilterSettings from "./SetSourceFilterSettings";
+
+export {
+    SetCurrentScene,
+    SetSourceFilterSettings,
+}

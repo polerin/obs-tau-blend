@@ -7,7 +7,6 @@ import { TAU_TOKENS } from "./TauTokens";
 import { CENTRAL_TOKENS } from "Bindings";
 
 import TauAdapter from "../TauAdapter";
-import { TauEventTransformer } from "../Definitions/Types";
 import * as TauEventTransformers from "../Formatters/Events";
 
 
@@ -20,7 +19,7 @@ tauDependencyModule
 
 tauDependencyModule
     .bind(TAU_TOKENS.tauEventTransformers)
-    .toInstance(() => filterAdapterTransformers<TauEventTransformer>(Object.values(TauEventTransformers)))
+    .toInstance(() => filterAdapterTransformers<>(Object.values(TauEventTransformers)))
     .inSingletonScope();
 
 tauDependencyModule

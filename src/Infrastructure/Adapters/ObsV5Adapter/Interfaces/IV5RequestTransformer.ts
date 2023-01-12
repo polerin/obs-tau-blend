@@ -2,7 +2,7 @@ import {
   IAdapterRequestTransformer,
   IAdapterResponseTransformer,
 } from "Infrastructure/Interfaces";
-import { ObsRequestSet, ObsResponseSet } from "../../../../Shared/MessageHandling";
+import { SystemMessageNames } from "Shared";
 import {
   ObsV5Requests,
   ObsV5RequestName,
@@ -11,19 +11,17 @@ import {
 } from "../Types";
 
 export default interface IV5RequestTransformer<
-  SystemRequestMessageName extends keyof ObsRequestSet,
-  SystemResponseMessageName extends keyof ObsResponseSet,
   RequestName extends ObsV5RequestName,
-  ResponseMessageName extends ObsV5ResponseName
+  ResponseName extends ObsV5ResponseName,
+  SystemRequestName extends SystemMessageNames,
+  SystemResponseName extends SystemMessageNames
 > extends IAdapterRequestTransformer<
       ObsV5Requests,
-      ObsRequestSet,
-      SystemRequestMessageName,
-      RequestName
+      RequestName,
+      SystemRequestName
     >,
     IAdapterResponseTransformer<
-      ObsResponseSet,
       ObsV5Responses,
-      SystemResponseMessageName,
-      ResponseMessageName
+      ResponseName,
+      SystemResponseName
     > {}

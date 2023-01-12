@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { ControlElement } from "./ControlElement";
+import ControlElement from "./ControlElement";
 
 export default (subject : ControlElement) => html`
     <div class="overlay-persistant overlay-persistant__control">

@@ -5,9 +5,6 @@ export type CheckedDefinitionList<
   [MsgName in keyof Definitions]: Definitions[MsgName] & {name: MsgName};
 };
 
-export type SystemMessageDefinitionList = CheckedDefinitionList<any, any>;
-export type SystemMessageNames<MessageSet extends SystemMessageDefinitionList> = keyof MessageSet & string;
-
 export type SystemMessageBase = {
   type: string;
   name: string;
@@ -18,22 +15,22 @@ export type ControlMessage = SystemMessageBase & {
   type: "controlMessage";
 };
 
-export type ObsEvent = SystemMessageBase & {
+export type ObsEventMessage = SystemMessageBase & {
   type: "obsEvent";
 };
 
-export type ObsRequest = SystemMessageBase & {
+export type ObsRequestMessage = SystemMessageBase & {
   type: "obsRequest";
 };
 
-export type ObsResponse = SystemMessageBase & {
+export type ObsResponseMessage = SystemMessageBase & {
   type: "obsResponse";
 };
 
-export type TwitchMessage = SystemMessageBase & {
+export type TwitchMessageBase = SystemMessageBase & {
   type: "twitchMessage";
 };
 
-export type ControlRequest = SystemMessageBase & {
+export type ControlRequestMessage = SystemMessageBase & {
   type: "controlRequest";
 };

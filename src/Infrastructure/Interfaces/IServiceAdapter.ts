@@ -1,16 +1,12 @@
-import { ExternalConnectionStatus, ServiceCallback } from "../../Infrastructure/Shared/Types";
-import { FrameworkMessageSet, SystemMessageDefinitionList } from "../../Shared";
+import { ExternalConnectionStatus } from "../../Infrastructure/Shared/Types";
+import { SystemMessage, SystemMessageCallback, SystemMessageNames } from "../../Shared";
 
-export default interface IServiceAdapter<
-    MessageSet extends FrameworkMessageSet = FrameworkMessageSet,
-    MessageName extends keyof MessageSet = keyof MessageSet,
-    CallbackType extends ServiceCallback<MessageSet> = ServiceCallback<MessageSet>
-> {
-    connect() : Promise<boolean>;
+export default interface IServiceAdapter {
+  connect(): Promise<boolean>;
 
-    get status() : ExternalConnectionStatus;
+  get status(): ExternalConnectionStatus;
 
-    setCallback(callback: CallbackType) : void;
+  setCallback(callback: SystemMessageCallback | undefined): void;
 
-    sendMessage(messageName : MessageName, message : MessageSet[MessageName]) : void;
+  sendMessage(messageName: SystemMessageNames, message: SystemMessage): void;
 }

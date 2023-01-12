@@ -1,24 +1,13 @@
-import { ObsEvent, CheckedDefinitionList } from "Shared/Definitions/Types";
+import { ObsEventMessage } from "Shared/Definitions/Types";
 
-export const ObsEvents = {
-    // Core
-    WebsocketConnected : "obs.websocket.connected",
-    WebsocketDisconnected : "obs.websocket.disconnected",
-
+export const ObsEvent = {
     // Scene
-    SwitchScenes : "obs.scene.switched",
+    SceneSwitched : "obs.scene.switched",
 } as const;
 
-export type ObsEventSet = CheckedDefinitionList<typeof ObsEvents, {
-    // Core
-    [ObsEvents.WebsocketConnected] : ObsEvent & {
-    };
-
-    [ObsEvents.WebsocketDisconnected] : ObsEvent & {
-    };
-
+export interface ObsEventMessages {
     // Scene
-    [ObsEvents.SwitchScenes] : ObsEvent & {
+    [ObsEvent.SceneSwitched] : ObsEventMessage & {
         sceneName : string;
     };
-}>;
+}

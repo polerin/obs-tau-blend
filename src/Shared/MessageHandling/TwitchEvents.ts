@@ -1,11 +1,11 @@
-import { TwitchMessage } from "Shared/Definitions/Types";
+import { TwitchMessageBase } from "Shared/Definitions/Types";
 
-export const TwitchEventMessages = {
+export const TwitchEvent = {
     ChannelFollow : "twitch.event.channel.follow"
 } as const;
 
-export interface TwitchEventMessageSet {
-    [TwitchEventMessages.ChannelFollow] : TwitchMessage & {
+export interface TwitchEventMessages {
+    [TwitchEvent.ChannelFollow] : TwitchMessageBase & {
         user_id : string,
         user_name : string,
         user_login : string,

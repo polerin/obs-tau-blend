@@ -5,29 +5,29 @@ import type ObsWebsocket from "obs-websocket-js";
 
 import { IObsAdapter } from "../../Interfaces";
 
-import { AbstractServiceAdapter, ExternalConnectionStatus, FrameworkEventBus, InferMessageType, MessageSetFromTransformerSet, ServiceAdapterTransformerSet, TypedPubSubBus } from "../../Shared";
 import {
-  FrameworkMessageNames,
-  FrameworkMessageSet,
-  ObsResponses,
+  AbstractServiceAdapter,
+  ExternalConnectionStatus,
+  ServiceAdapterTransformerSet,
+  TypedPubSubBus,
+} from "../../Shared";
+import {
+  ObsResponse,
+  SystemMessage,
+  SystemMessageNames,
 } from "../../../Shared";
 
 import type {
   ObsV5EventTransformerSet,
-  ObsV5MessageName,
-  ObsV5Messages,
   ObsV5RequestTransformerSet,
-  ObsV5TransformerSet,
 } from "./Types";
 import { OBSEventTypes } from "obs-websocket-js";
 import { SHARED_TOKENS } from "Bindings";
 
 export default class ObsV5Adapter
-  extends AbstractServiceAdapter<ObsV5TransformerSet>
-  // implements IObsAdapter
+  extends AbstractServiceAdapter
+  implements IObsAdapter
 {
-
-
   private defaultOptions = {
     websocketPort: 4444,
     websocketPassword: "",
@@ -48,8 +48,8 @@ export default class ObsV5Adapter
 
   constructor(
     private websocket: ObsWebsocket,
-    transformerSet: ObsV5TransformerSet,
-    eventBus: FrameworkEventBus,
+    transformerSet: ServiceAdapterTransformerSet,
+    eventBus: TypedPubSubBus,
     options: object = {}
   ) {
     super(transformerSet, eventBus);
@@ -65,14 +65,16 @@ export default class ObsV5Adapter
     this.options = { ...this.defaultOptions, ...options };
   }
 
-  public sendMessage = async(
-    messageName: FrameworkMessageNames,
-    message: InferMessageType<FrameworkMessageNames, FrameworkMessageSet>
+  public sendMessage = async (
+    messageName: SystemMessageNames,
+    message: SystemMessage
   ): Promise<void> => {
+    const transformer = this.selectTransformer("request", messageName);
 
-    const transformer =  this.selectTransformer('request', messageName);
-
-    if (!transformer) {
+    if (
+      !transformer ||
+      typeof transformer["buildRequestMessage"] !== "function"
+    ) {
       console.warn(
         "Unable to select transformer for system message",
         messageName,
@@ -81,7 +83,7 @@ export default class ObsV5Adapter
       return;
     }
 
-    const request = transformer.buildAdapterMessage(message);
+    const request = transformer.buildRequestMessage(message);
 
     let response: ReturnType<typeof transformer.buildResponseMessage>;
 
@@ -90,14 +92,15 @@ export default class ObsV5Adapter
         transformer.adapterRequestName,
         request
       );
+
       response = transformer.buildResponseMessage(result);
     } else {
       const result = await this.websocket.call(transformer.adapterRequestName);
       response = transformer.buildResponseMessage(result);
     }
 
-    this.notifyListener(response);
-  }
+    this.notifyListener(response.name, response);
+  };
 
   public async connect(): Promise<boolean> {
     try {
@@ -109,11 +112,11 @@ export default class ObsV5Adapter
       );
 
       this.markActive();
-      this.sendMessage(ObsResponses.WebsocketAuthorized, {
+      this.sendMessage(ObsResponse.WebsocketAuthorized, {
         type: "obsResponse",
-        name: ObsResponses.WebsocketAuthorized,
+        name: ObsResponse.WebsocketAuthorized,
       });
-      
+
       return true;
     } catch (error) {
       console.error("Unable to connect to obs websocket", {
@@ -123,10 +126,12 @@ export default class ObsV5Adapter
     }
   }
 
-  protected registerTransformers(transformerSets: ServiceAdapterTransformerSet<any>): void {
-      throw new Error("Method not implemented.");
+  protected registerTransformers(
+    transformerSets: ServiceAdapterTransformerSet
+  ): void {
+    throw new Error("Method not implemented.");
   }
-  
+
   protected registerListeners(): void {
     this.websocket.on("ConnectionClosed", this.markInactive);
   }
@@ -135,7 +140,9 @@ export default class ObsV5Adapter
     transformers: ObsV5EventTransformerSet
   ): void {
     for (const transformer of transformers) {
-      this.websocket.on(transformer.adapterEventName, (...eventData) => this.handleEvent(transformer.adapterEventName, eventData[0]));
+      this.websocket.on(transformer.adapterEventName, (...eventData) =>
+        this.handleEvent(transformer.adapterEventName, eventData[0])
+      );
     }
   }
 
@@ -147,14 +154,14 @@ export default class ObsV5Adapter
     }
   }
 
-
-  protected handleEvent<EventType extends keyof OBSEventTypes>(event: EventType, eventData: OBSEventTypes[EventType]): void {
-
-  }
+  protected handleEvent<EventType extends keyof OBSEventTypes>(
+    event: EventType,
+    eventData: OBSEventTypes[EventType]
+  ): void {}
 
   protected markActive = (): void => {
     this.websocketConnected = true;
-  }
+  };
 
   protected markInactive(): void {
     this.websocketConnected = false;

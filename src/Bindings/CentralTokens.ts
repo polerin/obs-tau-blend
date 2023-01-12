@@ -7,7 +7,7 @@ import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConne
 
 export const CENTRAL_TOKENS = {
     /// Service Adapters
-    serviceAdapters: token<IServiceAdapter<any>[]>("serviceAdapters"),
+    serviceAdapters: token<IServiceAdapter[]>("serviceAdapters"),
     obsAdapter: token<IObsAdapter>("obsAdapter"),
     tauAdapter: token<ITauAdapter>("tauAdapter"),
 };

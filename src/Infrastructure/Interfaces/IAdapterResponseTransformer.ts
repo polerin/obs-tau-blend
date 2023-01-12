@@ -1,12 +1,14 @@
-export default interface IAdapterResponseTransformer<
-    SystemMessageDefinitions,
-    AdapterMessageDefinitions,
-    SystemMessageName extends keyof SystemMessageDefinitions = keyof SystemMessageDefinitions,
-    AdapterMessageName extends keyof AdapterMessageDefinitions = keyof AdapterMessageDefinitions>
-{
-    readonly adapterResponseName : AdapterMessageName;
-    readonly systemResponseName : SystemMessageName;
-    // readonly voidReturn : AdapterMessageDefinitions[AdapterMessageName] extends void ? true : false;
+import { SystemMessageNames, SystemMessages } from "Shared";
 
-    buildResponseMessage(adapterResponse: AdapterMessageDefinitions[AdapterMessageName]) : SystemMessageDefinitions[SystemMessageName]
-};
+export default interface IAdapterResponseTransformer<
+  AdapterMessageDefinitions,
+  AdapterMessageName extends keyof AdapterMessageDefinitions,
+  SystemResponseName extends SystemMessageNames
+> {
+  readonly adapterResponseName: AdapterMessageName;
+  readonly systemResponseName: SystemResponseName;
+
+  buildResponseMessage(
+    adapterResponse: AdapterMessageDefinitions[AdapterMessageName]
+  ): SystemMessages[SystemResponseName];
+}

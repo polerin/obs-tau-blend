@@ -1,32 +1,31 @@
-import IV4RequestTransformer from "../../Interfaces/IV4RequestTransformer";
-import { ObsV4Requests } from "../../Definitions/RequestMethodsArgs";
-import { ObsRequests, FrameworkMessageSet } from "Shared/MessageHandling";
+import IV5RequestTransformer from "../../Interfaces/IV5RequestTransformer";
+import { ObsRequest, ObsResponse, SystemMessageByName } from "../../../../../Shared/MessageHandling";
+import { ObsV5Requests, ObsV5Responses } from "../../Types";
 
 
-type  SourceFilterMessage = FrameworkMessageSet[typeof ObsRequests.SetSourceFilterSettings];
+type _adapterRequest = "SetSourceFilterSettings";
+type _adapterResponse = "SetSourceFilterSettings";
+type _systemRequest =  typeof ObsRequest.SetSourceFilterSettings;
+type _systemResponse = typeof ObsResponse.SetSourceFilterSettings;
 
-export class SetSourceFilterSettings implements 
-    IV4RequestTransformer<typeof ObsRequests.SetSourceFilterSettings, "SetSourceFilterSettings"> 
-{        
-    public readonly adapterRequestType = "SetSourceFilterSettings";
-    public readonly systemMessageType = ObsRequests.SetSourceFilterSettings;
-    public readonly voidReturn: boolean = false;
-
-    private requiredFields : (keyof SourceFilterMessage)[] = ["sourceName", "filterName"];
-
-    public buildAdapterMessage(systemMessage : SourceFilterMessage) : ObsV4Requests["SetSourceFilterSettings"]
+export default class SetSourceFilterSettings implements 
+    IV5RequestTransformer<_adapterRequest, _adapterResponse, _systemRequest, _systemResponse> 
+{
+    public readonly adapterRequestName = "SetSourceFilterSettings";
+    public readonly adapterResponseName =  "SetSourceFilterSettings";
+    public readonly systemRequestName = ObsRequest.SetSourceFilterSettings;
+    public readonly systemResponseName = ObsResponse.SetSourceFilterSettings;
+    
+    public buildRequestMessage(systemMessage : SystemMessageByName<_systemRequest>) : ObsV5Requests[_adapterRequest]
     {
-        for (const fieldName of this.requiredFields) {
-            if (!systemMessage[fieldName] || systemMessage[fieldName]) {
-
-                throw "Invalid message format, missing field " + fieldName;
-            }
-        }
-
         return {
             sourceName : systemMessage.sourceName,
             filterName : systemMessage.filterName,
             filterSettings : systemMessage.settings
-        } as ObsV4Requests["SetSourceFilterSettings"];
+        };
     }
+    
+    public buildResponseMessage(adapterResponse: ObsV5Responses[_adapterResponse]): SystemMessageByName<_systemResponse> {
+        throw new Error("Method not implemented.");
+    }   
 }

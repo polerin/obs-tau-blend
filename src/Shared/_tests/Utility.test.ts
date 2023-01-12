@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { FrameworkMessageSet, FrameworkMessageNames, CollectedSystemMessageNames } from 'Shared/MessageHandling';
-import { isSystemMessage, isSystemMessageName } from 'Shared/Utility/Message';
+import { isSystemMessage } from 'Shared/Utility/Message';
 
 
 describe("Utility/Messages isSystemMessage() tests", () => {
@@ -31,33 +30,4 @@ describe("Utility/Messages isSystemMessage() tests", () => {
 
         expect(result).to.be.true;
     });
-});
-
-
-describe("Utility/Messages isSystemMessageName() tests", () => {
-
-    it('reject empty/non string params', () => {
-        const resultNull = isSystemMessageName(null);
-        const resultUndefined = isSystemMessageName(undefined);
-        const resultNumber = isSystemMessageName(4);
-        const resultArray = isSystemMessageName(["foo"]);
-
-        expect(resultNull).to.be.false;
-        expect(resultUndefined).to.be.false;
-        expect(resultNumber).to.be.false;
-        expect(resultArray).to.be.false;
-    });
-
-    it('reject non-system message objects', () => {
-        const result = isSystemMessageName("bar");
-        
-        expect(result).to.be.false;
-    });
-
-    it('accepts all valid names', () => {
-        for (const name of CollectedSystemMessageNames) {
-            const result = isSystemMessageName(name);
-            expect(result).to.be.true;
-        }
-    })
 });

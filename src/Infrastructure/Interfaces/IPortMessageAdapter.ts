@@ -1,8 +1,7 @@
-import { CheckedDefinitionList, FrameworkMessageSet } from "Shared";
 import IServiceAdapter from "./IServiceAdapter";
 
-export default interface IPortMessageAdapter<MessageSet extends FrameworkMessageSet = FrameworkMessageSet> extends IServiceAdapter<MessageSet>
+export default interface IPortMessageAdapter extends IServiceAdapter
 {
-    setPort(workerPort : MessagePort | null) : void;
+    setPort(workerPort : MessagePort | undefined) : void;
     closePort() : void;
 }

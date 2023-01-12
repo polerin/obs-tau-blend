@@ -1,6 +1,6 @@
-import { TwitchMessage } from "Shared/Definitions/Types";
+import { TwitchMessageBase } from "Shared/Definitions/Types";
 
-export const TwitchChatMessages = {
+export const TwitchChat = {
     IrcConnected: "twitch.chat.connected",
     IrcDisconnected: "twitch.chat.disconnected",
     JoinedChannel: "twitch.chat.joinedChannel",
@@ -8,13 +8,13 @@ export const TwitchChatMessages = {
     ChatMessage : "twitch.chat.message"
 } as const;
 
-export interface TwitchChatMessageSet {
-    [TwitchChatMessages.IrcConnected] : TwitchMessage;
-    [TwitchChatMessages.IrcDisconnected] : TwitchMessage;
-    [TwitchChatMessages.JoinedChannel] : TwitchMessage;
-    [TwitchChatMessages.LeftChannel] : TwitchMessage;
+export interface TwitchChatMessages {
+    [TwitchChat.IrcConnected] : TwitchMessageBase;
+    [TwitchChat.IrcDisconnected] : TwitchMessageBase;
+    [TwitchChat.JoinedChannel] : TwitchMessageBase;
+    [TwitchChat.LeftChannel] : TwitchMessageBase;
 
-    [TwitchChatMessages.ChatMessage] : TwitchMessage & {
+    [TwitchChat.ChatMessage] : TwitchMessageBase & {
         channelName : string,
         fromUser: string
     };
