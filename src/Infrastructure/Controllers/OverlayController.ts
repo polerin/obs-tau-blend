@@ -9,7 +9,7 @@ import { DebugContainer } from "Overlay/Components";
 import { TypedPubSubBus } from "Infrastructure/Shared";
 
 
-export default abstract class OverlayController {
+export default class OverlayController {
     private defaultOptions : object = {
         'targetSelector': ".overlay-container",
         'debugSelector' : "debug-container",
