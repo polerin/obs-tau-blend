@@ -8,8 +8,11 @@ import { AppOverlay, AppOverlayMessages } from "./AppOverlay";
 
 export interface SystemMessages extends ObsEventMessages,  ObsRequestMessages, ObsResponseMessages, TwitchChatMessages, TwitchEventMessages, AppControlMessages, AppOverlayMessages {};
 
-export type SystemMessage = SystemMessages[keyof SystemMessages] & { name: SystemMessageNames };
+export type SystemMessage = SystemMessages[keyof SystemMessages];
 export type SystemMessageNames = keyof SystemMessages;
+export type SystemBusMessages = {
+  [messageName in keyof SystemMessages]: [message: SystemMessages[messageName]];
+};
 export type SystemMessageByName<Name extends SystemMessageNames> = SystemMessages[Name];
 export type SystemMessageCallback = (messageName: SystemMessageNames, message: SystemMessages[typeof messageName]) => void;
 

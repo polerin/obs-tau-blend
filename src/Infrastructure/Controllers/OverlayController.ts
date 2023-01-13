@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { SystemMessage, SystemMessageNames, SystemMessages, AppOverlay, SystemMessageByName } from "Shared/MessageHandling";
+import { SystemMessage, SystemMessageNames, SystemMessages, AppOverlay, SystemMessageByName, SystemBusMessages } from "Shared/MessageHandling";
 import { isSystemMessage } from "Shared/Utility/Message";
 
 import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
@@ -86,7 +86,7 @@ export default class OverlayController {
         this.controlWorker.connect();
     }
 
-    protected portMessageHandler(messageName : SystemMessageNames, message : SystemMessageByName<typeof messageName>) : void
+    protected portMessageHandler(_messageName : SystemMessageNames, message : SystemMessage) : void
     {
         if (!isSystemMessage(message)) {
             console.warn("Received non-system message on port", )
@@ -101,15 +101,16 @@ export default class OverlayController {
 
         message.source = "Port";
 
+
         // if message handler returns true or no handler, publish message
-        if(this.callMessageHandler(messageName, message)) {
-            this.eventBus.publish(messageName, message);
+        if(this.callMessageHandler(message.name, message)) {
+            this.eventBus.publish(message.name, message);
         }
     }
 
     // @todo move this to the DynamicMethodCall mixin/decorator
     // Also implement in CentralController
-    protected callMessageHandler(messageName : SystemMessageNames, message : SystemMessages[typeof messageName]) : boolean 
+    protected callMessageHandler(messageName : SystemMessageNames, message : SystemMessage) : boolean 
     {
         const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
         const funct = this[functName as keyof this];
@@ -137,6 +138,4 @@ export default class OverlayController {
         
         this.controlWorker.sendMessage(messageName, message);
     }
-
-
 }

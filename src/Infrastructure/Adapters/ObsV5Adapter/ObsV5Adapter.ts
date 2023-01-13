@@ -12,6 +12,8 @@ import {
   TypedPubSubBus,
 } from "../../Shared";
 import {
+  isRequestTransformer,
+  isResponseTransformer,
   ObsResponse,
   SystemMessage,
   SystemMessageNames,
@@ -71,10 +73,7 @@ export default class ObsV5Adapter
   ): Promise<void> => {
     const transformer = this.selectTransformer("request", messageName);
 
-    if (
-      !transformer ||
-      typeof transformer["buildRequestMessage"] !== "function"
-    ) {
+    if (!isRequestTransformer(transformer)) {
       console.warn(
         "Unable to select transformer for system message",
         messageName,
@@ -85,20 +84,15 @@ export default class ObsV5Adapter
 
     const request = transformer.buildRequestMessage(message);
 
-    let response: ReturnType<typeof transformer.buildResponseMessage>;
 
-    if (request) {
-      const result = await this.websocket.call(
-        transformer.adapterRequestName,
-        request
-      );
+    const result = await this.websocket.call(transformer.adapterRequestName, request ?? undefined);
 
-      response = transformer.buildResponseMessage(result);
-    } else {
-      const result = await this.websocket.call(transformer.adapterRequestName);
-      response = transformer.buildResponseMessage(result);
+    if (!isResponseTransformer(transformer)) {
+      return;
     }
 
+    const response = transformer.buildResponseMessage(result);
+    
     this.notifyListener(response.name, response);
   };
 

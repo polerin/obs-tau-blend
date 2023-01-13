@@ -8,11 +8,12 @@ import {
   ExternalConnectionStatus,
   ServiceAdapterTransformerSet,
 } from "Infrastructure/Shared/Types";
-import { SystemMessageByName, SystemMessageCallback, SystemMessageNames } from "../../../Shared";
+import { isEventTransformer, SystemMessageByName, SystemMessageCallback, SystemMessageNames } from "../../../Shared";
 import { TauEvent, TauEventNames } from "./Definitions/TauEvents";
 import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
 import { TypedPubSubBus } from "Infrastructure/Shared";
 import { SHARED_TOKENS } from "Bindings";
+import ITauEventTransformer from "./Interfaces/ITauEventTransformer";
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
 export default class TauAdapter
@@ -120,6 +121,10 @@ export default class TauAdapter
 
       const transformer = this.selectTransformer("event", tauEvent.event_type);
 
+      if (!isEventTransformer(transformer)) {
+        throw new Error("Unable to locate transformer for message: " + tauEvent.event_type);
+      }
+
       const message = transformer.buildEventMessage(tauEvent);
 
       this.notifyListener(message.name, message);
@@ -154,7 +159,7 @@ export default class TauAdapter
 
 injected(
   TauAdapter,
-  TAU_TOKENS.tauEventTransformers,
+  TAU_TOKENS.tauTransformers,
   SHARED_TOKENS.frameworkEventBus,
   TAU_TOKENS.tauOptions.optional
 );

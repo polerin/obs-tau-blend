@@ -1,6 +1,4 @@
-import {
-  ControlMessage,
-} from "Shared/Definitions/Types";
+import { ControlMessage } from "Shared/Definitions/Types";
 
 export const AppOverlay = {
   OverlayOnline: "app.control.overlay.online",
@@ -8,6 +6,10 @@ export const AppOverlay = {
 } as const;
 
 export interface AppOverlayMessages {
-  [AppOverlay.OverlayOnline]: ControlMessage;
-  [AppOverlay.OverlayClosing]: ControlMessage;
+  [AppOverlay.OverlayOnline]: ControlMessage & {
+    name: typeof AppOverlay.OverlayOnline;
+  };
+  [AppOverlay.OverlayClosing]: ControlMessage & {
+    name: typeof AppOverlay.OverlayClosing;
+  };
 }

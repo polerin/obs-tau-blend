@@ -7,6 +7,7 @@ import {
 import TypedPubSubBus from "./TypedPubsubBus";
 import {
   ExternalConnectionStatus,
+  ServiceAdapterTransformer,
   ServiceAdapterTransformerSet,
   TransformerClassifications,
   TransformerInterfaceType,
@@ -48,7 +49,7 @@ export default abstract class AbstractServiceAdapter
   protected selectTransformer(
     transformerType: TransformerClassifications,
     messageName: string
-  ): TransformerInterfaceType<typeof transformerType> | undefined {
+  ): ServiceAdapterTransformer | undefined {
     if (
       transformerType === undefined ||
       typeof messageName !== "string" ||

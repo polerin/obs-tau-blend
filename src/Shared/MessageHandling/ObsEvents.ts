@@ -1,13 +1,14 @@
 import { ObsEventMessage } from "Shared/Definitions/Types";
 
 export const ObsEvent = {
-    // Scene
-    SceneSwitched : "obs.scene.switched",
+  // Scene
+  SceneSwitched: "obs.scene.switched",
 } as const;
 
 export interface ObsEventMessages {
-    // Scene
-    [ObsEvent.SceneSwitched] : ObsEventMessage & {
-        sceneName : string;
-    };
+  // Scene
+  [ObsEvent.SceneSwitched]: ObsEventMessage & {
+    name: typeof ObsEvent.SceneSwitched;
+    sceneName: string;
+  };
 }

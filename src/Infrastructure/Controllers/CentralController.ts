@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { IServiceAdapter, PortMessageAdapter, TypedPubSubBus } from "../../Infrastructure";
-import { SystemMessageNames, SystemMessageByName, coerceMessageType, AppOverlay, AppControl } from "../../Shared";
+import { SystemMessageNames, SystemMessageByName, coerceMessageType, AppOverlay, AppControl, SystemMessage } from "../../Shared";
 
 export default abstract class CentralController {
   protected defaultOptions: object = {
@@ -46,7 +46,7 @@ export default abstract class CentralController {
 
   protected portMessageHandler(
     messageName: SystemMessageNames,
-    message: SystemMessageByName<typeof messageName>
+    message: SystemMessage
   ): void {
     console.debug("Port message received by central control", {
       messageName: messageName,
@@ -64,7 +64,7 @@ export default abstract class CentralController {
 
   protected adapterMessageHandler(
     messageName: SystemMessageNames,
-    message: SystemMessageByName<typeof messageName>
+    message: SystemMessage
   ): void {
     console.debug("Service message received by central control", message);
 
@@ -90,7 +90,7 @@ export default abstract class CentralController {
   // Also implement in CentralController
   protected callMessageHandler(
     messageName: SystemMessageNames,
-    message: SystemMessageByName<typeof messageName>
+    message: SystemMessage
   ): boolean {
     const functName = _.camelCase(
       this.options?.messageHandlerPrefix + messageName

@@ -2,12 +2,13 @@ import _ from 'lodash';
 import { LitElement } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 
-import { SystemMessageByName, TwitchEvent } from "Shared/MessageHandling";
+import { SystemMessageNames, SystemMessage, TwitchEvent } from "Shared/MessageHandling";
 
 import singleFollowTemplate from './SingleFollow.template';
 import multiFollowTemplate from "./MultiFollow.template";
 import IEventBusAwareComponent from 'Overlay/Shared/interfaces/IEventBusAwareComponent';
 import { TypedPubSubBus } from 'Infrastructure/Shared';
+
 
 @customElement('follow-notification')
 export default class FollowNotification extends LitElement implements IEventBusAwareComponent {
@@ -65,7 +66,7 @@ export default class FollowNotification extends LitElement implements IEventBusA
     /**
      * Subscription token for the pubsub event we are listening to
      */
-    protected subscriptionToken? : PubSubJS.Token;
+    protected subscriptionTokens : PubSubJS.Token[] = [];
 
     /**
      * Interval token used if we are currently displaying, null otherwise
@@ -108,14 +109,15 @@ export default class FollowNotification extends LitElement implements IEventBusA
     }
 
     protected registerListeners() {
-        this.eventBus.subscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+        this.subscriptionTokens.push(this.eventBus.subscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent));
     }
 
     protected removeListeners(): void {
-        this.eventBus.unsubscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+        this.subscriptionTokens.forEach(this.eventBus.unsubscribe);
+        this.subscriptionTokens = [];
     }
 
-    protected handleFollowEvent(incomingEvent : SystemMessageByName<typeof TwitchEvent.ChannelFollow>) : void
+    protected handleFollowEvent(messageName: SystemMessageNames, incomingEvent : SystemMessage) : void
     {
         if (incomingEvent === undefined || incomingEvent.name !== TwitchEvent.ChannelFollow) {
             // just being careful
