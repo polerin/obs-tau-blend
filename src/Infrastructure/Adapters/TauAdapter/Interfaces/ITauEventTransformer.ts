@@ -1,6 +1,6 @@
-import IAdapterEventTransformer from "Infrastructure/Interfaces/IAdapterEventTransformer";
-import { TauEvents, TauEventNames } from "../Definitions/TauEvents";
-import { SystemMessageNames } from "Shared/MessageHandling";
+import { SystemMessageNames } from "../../../../Shared";
+import { IAdapterEventTransformer } from "../../../Interfaces";
+import { TauEventNames, TauEvents } from "../Definitions/TauEvents";
 
 
 export default interface ITauEventTransformer<TauEventName extends TauEventNames, SystemEventName extends SystemMessageNames>

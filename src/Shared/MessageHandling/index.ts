@@ -11,7 +11,7 @@ export interface SystemMessages extends ObsEventMessages,  ObsRequestMessages, O
 export type SystemMessage = SystemMessages[keyof SystemMessages];
 export type SystemMessageNames = keyof SystemMessages;
 export type SystemBusMessages = {
-  [messageName in keyof SystemMessages]: [message: SystemMessages[messageName]];
+  [messageName in keyof SystemMessages]: [SystemMessages[messageName]];
 };
 export type SystemMessageByName<Name extends SystemMessageNames> = SystemMessages[Name];
 export type SystemMessageCallback = (messageName: SystemMessageNames, message: SystemMessages[typeof messageName]) => void;

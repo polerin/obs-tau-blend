@@ -1,14 +1,13 @@
 import { DependencyModule } from "brandi";
 
-import { buildTransformerRegistry } from "Shared/Utility/Transformer";
-import { conf_get } from "Shared/Utility/AppConfig";
+import { conf_get, buildTransformerRegistry } from "../../../../Shared/";
 
 import { TAU_TOKENS } from "./TauTokens";
-import { CENTRAL_TOKENS } from "Bindings";
+import { CENTRAL_TOKENS } from "../../../../Bindings";
 
 import TauAdapter from "../TauAdapter";
 import * as TauEventTransformers from "../Formatters/Events";
-import { ServiceAdapterTransformerSet } from "Infrastructure/Shared";
+import { ServiceAdapterTransformerSet } from "../../../Shared";
 
 export const tauDependencyModule = new DependencyModule();
 

@@ -1,8 +1,8 @@
+import { SystemMessageNames } from "../../../../Shared";
 import {
   IAdapterRequestTransformer,
   IAdapterResponseTransformer,
-} from "Infrastructure/Interfaces";
-import { SystemMessageNames } from "Shared";
+} from "../../../Interfaces";
 import {
   ObsV5Requests,
   ObsV5RequestName,

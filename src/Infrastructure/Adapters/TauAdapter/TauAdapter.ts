@@ -1,19 +1,13 @@
-import { injected } from "brandi";
-import { TAU_TOKENS } from "./Bindings/TauTokens";
 import Websocket from "isomorphic-ws";
 
-import ITauAdapter from "Infrastructure/Adapters/TauAdapter/Interfaces/ITauConnector";
-
-import {
-  ExternalConnectionStatus,
-  ServiceAdapterTransformerSet,
-} from "Infrastructure/Shared/Types";
-import { isEventTransformer, SystemMessageByName, SystemMessageCallback, SystemMessageNames } from "../../../Shared";
-import { TauEvent, TauEventNames } from "./Definitions/TauEvents";
-import AbstractServiceAdapter from "Infrastructure/Shared/AbstractServiceAdapter";
-import { TypedPubSubBus } from "Infrastructure/Shared";
-import { SHARED_TOKENS } from "Bindings";
-import ITauEventTransformer from "./Interfaces/ITauEventTransformer";
+import { injected } from "brandi";
+import { TypedPubSubBus } from "../..";
+import { SHARED_TOKENS } from "../../../Bindings";
+import { SystemMessageCallback, SystemMessageNames, SystemMessageByName, isEventTransformer } from "../../../Shared";
+import { AbstractServiceAdapter, ExternalConnectionStatus, ServiceAdapterTransformerSet } from "../../Shared";
+import { TAU_TOKENS } from "./Bindings/TauTokens";
+import { TauEventNames, TauEvent } from "./Definitions/TauEvents";
+import ITauAdapter from "./Interfaces/ITauConnector";
 
 // @Todo Refactor along with V4Connector.  Lots of dupes
 export default class TauAdapter

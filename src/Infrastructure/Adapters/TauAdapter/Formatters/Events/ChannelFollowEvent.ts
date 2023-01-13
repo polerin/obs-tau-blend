@@ -1,7 +1,5 @@
-import { TauEvents, TauEventMap, TauEventBase } from "../../Definitions/TauEvents";
-import { SystemMessageByName } from "../../../../../Shared/MessageHandling";
-
-import { TwitchEvent } from "Shared/MessageHandling";
+import { TauEvents, TauEventMap } from "../../Definitions/TauEvents";
+import { SystemMessageByName, TwitchEvent } from "../../../../../Shared/MessageHandling";
 
 import ITauEventTransformer from "../../Interfaces/ITauEventTransformer";
 

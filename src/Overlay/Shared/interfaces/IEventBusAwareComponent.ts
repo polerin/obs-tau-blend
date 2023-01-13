@@ -1,4 +1,4 @@
-import { TypedPubSubBus } from "Infrastructure/Shared";
+import { TypedPubSubBus } from "../../../Infrastructure";
 
 export default interface IEventBusAwareComponent extends HTMLElement {
     set eventBus(eventBus: TypedPubSubBus);

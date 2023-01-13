@@ -1,16 +1,15 @@
-import IServiceAdapter from "Infrastructure/Interfaces/IServiceAdapter";
 import {
-  SystemMessage,
   SystemMessageCallback,
   SystemMessageNames,
-} from "Shared";
+  SystemMessage,
+} from "../../Shared";
+import { IServiceAdapter } from "../Interfaces";
 import TypedPubSubBus from "./TypedPubsubBus";
 import {
   ExternalConnectionStatus,
-  ServiceAdapterTransformer,
   ServiceAdapterTransformerSet,
   TransformerClassifications,
-  TransformerInterfaceType,
+  ServiceAdapterTransformer,
 } from "./Types";
 
 export default abstract class AbstractServiceAdapter
@@ -65,7 +64,7 @@ export default abstract class AbstractServiceAdapter
       return undefined;
     }
 
-    if (!(messageName in group) || typeof group[messageName] === 'function') {
+    if (!(messageName in group) || typeof group[messageName] === "function") {
       return undefined;
     }
 

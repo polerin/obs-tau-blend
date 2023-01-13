@@ -3,10 +3,7 @@ import {
   subscribe,
   unsubscribe,
 } from "pubsub-js";
-import { isSystemMessage, SystemMessageCallback } from "Shared";
-import {
-  SystemMessageNames, SystemMessages,
-} from "Shared/MessageHandling";
+import { isSystemMessage, SystemMessageCallback, SystemMessageNames, SystemMessages } from "../../Shared";
 
 /**
  * Singleton facade to enforce typing for pubsub.js calls

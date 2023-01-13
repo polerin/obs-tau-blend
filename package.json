@@ -17,6 +17,9 @@
   "files": [
     "./lib"
   ],
+  "exports": [
+    "./lib"
+  ],
   "license": "To be Determined",
   "devDependencies": {
     "@types/chai": "^4.3.1",

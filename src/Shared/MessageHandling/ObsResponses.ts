@@ -1,4 +1,4 @@
-import { ObsResponseMessage } from "Shared/Definitions/Types";
+import { ObsResponseMessage } from "../Definitions/Types";
 
 export const ObsResponse = {
   // Core

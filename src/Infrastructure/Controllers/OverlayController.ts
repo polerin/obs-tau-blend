@@ -1,141 +1,151 @@
 import _ from "lodash";
-
-import { SystemMessage, SystemMessageNames, SystemMessages, AppOverlay, SystemMessageByName, SystemBusMessages } from "Shared/MessageHandling";
-import { isSystemMessage } from "Shared/Utility/Message";
-
-import IOverlayComponent from "Shared/Interfaces/IOverlayCompoenent";
-import { IControlWorker } from "../../Infrastructure";
-import { DebugContainer } from "Overlay/Components";
-import { TypedPubSubBus } from "Infrastructure/Shared";
-
+import { DebugContainer } from "../../Overlay/Components";
+import {
+  AppOverlay,
+  IOverlayComponent,
+  SystemMessageNames,
+  SystemMessage,
+  isSystemMessage,
+} from "../../Shared";
+import { IControlWorker } from "../Interfaces";
+import { TypedPubSubBus } from "../Shared";
 
 export default class OverlayController {
-    private defaultOptions : object = {
-        'targetSelector': ".overlay-container",
-        'debugSelector' : "debug-container",
-        'componentMaps' : {}
-    };
+  private defaultOptions: object = {
+    targetSelector: ".overlay-container",
+    debugSelector: "debug-container",
+    componentMaps: {},
+  };
 
-    private options : any = {};
-    private container?: HTMLElement;
-    private debugContainer? : DebugContainer;
+  private options: any = {};
+  private container?: HTMLElement;
+  private debugContainer?: DebugContainer;
 
-    constructor(private controlWorker: IControlWorker, private eventBus: TypedPubSubBus)
-    {
-        this.portMessageHandler = this.portMessageHandler.bind(this);
-        this.connectComponent = this.connectComponent.bind(this);
-        this.busMessageHandler = this.busMessageHandler.bind(this);
-        
-        this.startControlWorker();
+  constructor(
+    private controlWorker: IControlWorker,
+    private eventBus: TypedPubSubBus
+  ) {
+    this.portMessageHandler = this.portMessageHandler.bind(this);
+    this.connectComponent = this.connectComponent.bind(this);
+    this.busMessageHandler = this.busMessageHandler.bind(this);
+
+    this.startControlWorker();
+  }
+
+  public async init(options: object = {}) {
+    this.options = { ...this.defaultOptions, ...options };
+
+    this.locateElements();
+    this.connectRequestedComponents();
+
+    // Not using typed subscribe so we can say "gimmie everything"
+    this.eventBus.subscribe("*", this.busMessageHandler);
+
+    this.controlWorker.sendMessage(AppOverlay.OverlayOnline, {
+      type: "controlMessage",
+      name: AppOverlay.OverlayOnline,
+    });
+  }
+
+  protected locateElements() {
+    this.container = window.document.querySelector(this.options.targetSelector);
+    this.debugContainer = window.document.querySelector(
+      this.options.debugSelector
+    );
+  }
+
+  protected connectRequestedComponents(): void {
+    const componentMaps = this.options?.componentMaps || {};
+
+    if (!componentMaps) {
+      return;
     }
 
-    public async init(options: object = {})
-    {
-        this.options = {...this.defaultOptions, ...options};
+    const query = Object.keys(componentMaps).join(", ");
+    const elements = this.container?.querySelectorAll(query) || false;
 
-        this.locateElements();
-        this.connectRequestedComponents();
-        
-        // Not using typed subscribe so we can say "gimmie everything"
-        this.eventBus.subscribe('*', this.busMessageHandler);
-
-        this.controlWorker.sendMessage(AppOverlay.OverlayOnline, {
-            type: "controlMessage",
-            name: AppOverlay.OverlayOnline
-        });
+    if (!elements) {
+      return;
     }
 
-    protected locateElements()
-    {
-        this.container = window.document.querySelector(this.options.targetSelector);
-        this.debugContainer = window.document.querySelector(this.options.debugSelector); 
+    elements.forEach(this.connectComponent);
+  }
+
+  protected connectComponent(component: Element) {
+    const overlayComponent = (<unknown>component) as IOverlayComponent;
+    if (!overlayComponent.componentType) {
+      return;
     }
 
-    protected connectRequestedComponents() : void
-    {
-        const componentMaps = this.options?.componentMaps || {};
+    overlayComponent.registerCallbacks(this.eventBus);
+  }
 
-        if (!componentMaps) {
-            return;
-        }
+  protected startControlWorker(): void {
+    console.debug("Control Worker starting");
 
-        const query = Object.keys(componentMaps).join(", ");
-        const elements = this.container?.querySelectorAll(query) || false;
+    this.controlWorker.setCallback(this.portMessageHandler);
+    this.controlWorker.connect();
+  }
 
-        if (!elements) {
-            return;
-        }
-
-        elements.forEach(this.connectComponent);
+  protected portMessageHandler(
+    _messageName: SystemMessageNames,
+    message: SystemMessage
+  ): void {
+    if (!isSystemMessage(message)) {
+      console.warn("Received non-system message on port");
+      return;
     }
 
-    protected connectComponent(component : Element)
-    {
-        const overlayComponent = <unknown>component as IOverlayComponent;
-        if (!overlayComponent.componentType) {
-            return;
-        }
-
-        overlayComponent.registerCallbacks();
+    console.log("Received port message on overlay: ", message);
+    if (this.debugContainer) {
+      const debugMessage = `${message.type} : ${
+        message.name
+      } : ${JSON.stringify(message)}`;
+      this.debugContainer?.addMessage(debugMessage);
     }
 
-    protected startControlWorker() : void
-    {
-        console.debug("Control Worker starting");
-        this.controlWorker.setCallback(this.portMessageHandler);
-        this.controlWorker.connect();
+    message.source = "Port";
+
+    // if message handler returns true or no handler, publish message
+    if (this.callMessageHandler(message.name, message)) {
+      this.eventBus.publish(message.name, message);
+    }
+  }
+
+  // @todo move this to the DynamicMethodCall mixin/decorator
+  // Also implement in CentralController
+  protected callMessageHandler(
+    messageName: SystemMessageNames,
+    message: SystemMessage
+  ): boolean {
+    const functName = _.camelCase(
+      this.options?.messageHandlerPrefix + messageName
+    );
+    const funct = this[functName as keyof this];
+
+    if (typeof funct !== "function") {
+      return true;
     }
 
-    protected portMessageHandler(_messageName : SystemMessageNames, message : SystemMessage) : void
-    {
-        if (!isSystemMessage(message)) {
-            console.warn("Received non-system message on port", )
-            return;
-        }
+    return funct(message);
+  }
 
-        console.log("Received port message on overlay: ", message);
-        if (this.debugContainer) {
-            const debugMessage =`${message.type} : ${message.name} : ${JSON.stringify(message)}`;
-            this.debugContainer?.addMessage(debugMessage);
-        }
-
-        message.source = "Port";
-
-
-        // if message handler returns true or no handler, publish message
-        if(this.callMessageHandler(message.name, message)) {
-            this.eventBus.publish(message.name, message);
-        }
+  /**
+   * Handler for all bus messages,
+   */
+  protected busMessageHandler(
+    messageName: SystemMessageNames,
+    message: SystemMessage
+  ) {
+    if (!isSystemMessage(message) || message.name !== messageName) {
+      return;
     }
 
-    // @todo move this to the DynamicMethodCall mixin/decorator
-    // Also implement in CentralController
-    protected callMessageHandler(messageName : SystemMessageNames, message : SystemMessage) : boolean 
-    {
-        const functName = _.camelCase(this.options?.messageHandlerPrefix + messageName);
-        const funct = this[functName as keyof this];
-
-        if (typeof funct !== 'function') {
-            return true;
-        }
-
-        return funct(message);
+    if (message.source && message.source === "Port") {
+      // don't echo port messages back to the port
+      return;
     }
 
-    /**
-     * Handler for all bus messages, 
-     */
-    protected busMessageHandler(messageName : SystemMessageNames, message : SystemMessage)
-    {
-        if (!isSystemMessage(message) || message.name !== messageName) {
-            return;
-        }
-
-        if (message.source && message.source === "Port") {
-            // don't echo port messages back to the port
-            return;
-        }
-        
-        this.controlWorker.sendMessage(messageName, message);
-    }
+    this.controlWorker.sendMessage(messageName, message);
+  }
 }

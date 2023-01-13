@@ -1,4 +1,4 @@
-import { TwitchMessageBase } from "Shared/Definitions/Types";
+import { TwitchMessageBase } from "../../Shared/Definitions/Types";
 
 export const TwitchEvent = {
   ChannelFollow: "twitch.event.channel.follow",

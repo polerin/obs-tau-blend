@@ -24,7 +24,7 @@ import type {
   ObsV5RequestTransformerSet,
 } from "./Types";
 import { OBSEventTypes } from "obs-websocket-js";
-import { SHARED_TOKENS } from "Bindings";
+import { SHARED_TOKENS } from "../../../Bindings";
 
 export default class ObsV5Adapter
   extends AbstractServiceAdapter
