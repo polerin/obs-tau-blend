@@ -150,10 +150,3 @@ export default class TauAdapter
     }
   }
 }
-
-injected(
-  TauAdapter,
-  TAU_TOKENS.tauTransformers,
-  SHARED_TOKENS.frameworkEventBus,
-  TAU_TOKENS.tauOptions.optional
-);

@@ -1,6 +1,3 @@
-import { injected } from "brandi";
-import OBS_V5_TOKENS from "./ObsV5Tokens";
-
 import type ObsWebsocket from "obs-websocket-js";
 
 import { IObsAdapter } from "../../Interfaces";
@@ -24,7 +21,6 @@ import type {
   ObsV5RequestTransformerSet,
 } from "./Types";
 import { OBSEventTypes } from "obs-websocket-js";
-import { SHARED_TOKENS } from "../../../Bindings";
 
 export default class ObsV5Adapter
   extends AbstractServiceAdapter
@@ -161,11 +157,3 @@ export default class ObsV5Adapter
     this.websocketConnected = false;
   }
 }
-
-injected(
-  ObsV5Adapter,
-  OBS_V5_TOKENS.obsWebsocket,
-  OBS_V5_TOKENS.obsTransformerSet,
-  SHARED_TOKENS.frameworkEventBus,
-  OBS_V5_TOKENS.obsV5Options.optional
-);

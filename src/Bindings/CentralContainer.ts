@@ -1,10 +1,10 @@
-import { Container } from "brandi";
+import { Container, injected } from "brandi";
 
 import { container as parentContainer } from "./Container";
 import { CENTRAL_TOKENS } from "./CentralTokens";
 import { conf_get } from "../Shared/Utility/AppConfig";
 
-import { tauDependencyModule, IServiceAdapter, ObsV5DependencyModule } from "../Infrastructure";
+import { tauDependencyModule, IServiceAdapter, ObsV5DependencyModule, TAU_TOKENS } from "../Infrastructure";
 
 const obsAdapterVersion : string = conf_get('obs.adapterVersion', "");
 

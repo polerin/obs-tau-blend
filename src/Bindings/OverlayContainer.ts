@@ -1,4 +1,4 @@
-import { Container } from "brandi";
+import { Container, injected } from "brandi";
 
 import { container as parentContainer } from "./Container";
 import { OVERLAY_TOKENS } from "./OverlayTokens";
@@ -8,6 +8,7 @@ import { conf_get } from "../Shared/Utility/AppConfig";
 import OverlayController from "../Infrastructure/Controllers/OverlayController";
 import ControlWorker from "../Infrastructure/Adapters/ControlWorker";
 
+injected(ControlWorker, OVERLAY_TOKENS.controlSharedWorker);
 
 export const overlayContainer = new Container().extend(parentContainer);
 

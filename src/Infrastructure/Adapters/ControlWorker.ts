@@ -24,5 +24,3 @@ export default class ControlWorker extends PortMessageAdapter implements IContro
     }
 
 }
-
-injected(ControlWorker, OVERLAY_TOKENS.controlSharedWorker);
