@@ -32,7 +32,8 @@ obsV5DependencyModule
 
 obsV5DependencyModule
   .bind(OBS_V5_TOKENS.obsV5Options)
-  .toConstant(conf_get("obs.options", {}));
+  .toInstance(() => conf_get("adapters.obs", {}))
+  .inTransientScope();
 
 obsV5DependencyModule
   .bind(OBS_V5_TOKENS.obsWebsocket)

@@ -3,8 +3,8 @@
     "compilerOptions": {
         "removeComments": false,
         "declaration": true,
-        "declarationDir" : "./lib/types",
-        "outDir": "./lib/types",
+        // "declarationDir" : "./lib/types",
+        // "outDir": "./lib/types",
         "declarationMap": true,
         "emitDeclarationOnly": true,
     },

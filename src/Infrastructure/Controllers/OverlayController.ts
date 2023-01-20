@@ -9,8 +9,9 @@ import {
 } from "../../Shared";
 import { IControlWorker } from "../Interfaces";
 import { TypedPubSubBus } from "../Shared";
+import AbstractController from "./AbstractController";
 
-export default class OverlayController {
+export default class OverlayController extends AbstractController {
   private defaultOptions: object = {
     targetSelector: ".overlay-container",
     debugSelector: "debug-container",
@@ -23,11 +24,9 @@ export default class OverlayController {
 
   constructor(
     private controlWorker: IControlWorker,
-    private eventBus: TypedPubSubBus
+    eventBus: TypedPubSubBus
   ) {
-    this.portMessageHandler = this.portMessageHandler.bind(this);
-    this.connectComponent = this.connectComponent.bind(this);
-    this.busMessageHandler = this.busMessageHandler.bind(this);
+    super(eventBus);
 
     this.startControlWorker();
   }
@@ -36,7 +35,7 @@ export default class OverlayController {
     this.options = { ...this.defaultOptions, ...options };
 
     this.locateElements();
-    this.connectRequestedComponents();
+    this.connectContainerComponents(this.container);
 
     // Not using typed subscribe so we can say "gimmie everything"
     this.eventBus.subscribe("*", this.busMessageHandler);
@@ -54,26 +53,19 @@ export default class OverlayController {
     );
   }
 
-  protected connectRequestedComponents(): void {
-    const componentMaps = this.options?.componentMaps || {};
+  protected connectContainerComponents(container: HTMLElement | undefined | null): void {
 
-    if (!componentMaps) {
+    if (container === undefined || container === null) {
+      console.warn("attempting to connect a container while it is undefined or null");
       return;
     }
 
-    const query = Object.keys(componentMaps).join(", ");
-    const elements = this.container?.querySelectorAll(query) || false;
-
-    if (!elements) {
-      return;
-    }
-
-    elements.forEach(this.connectComponent);
+    container.childNodes.forEach(this.connectComponent);
   }
 
-  protected connectComponent(component: Element) {
+  protected connectComponent = (component: ChildNode) : void => {
     const overlayComponent = (<unknown>component) as IOverlayComponent;
-    if (!overlayComponent.componentType) {
+    if (!overlayComponent.componentType || !overlayComponent.registerCallbacks) {
       return;
     }
 
@@ -87,56 +79,13 @@ export default class OverlayController {
     this.controlWorker.connect();
   }
 
-  protected portMessageHandler(
-    _messageName: SystemMessageNames,
-    message: SystemMessage
-  ): void {
-    if (!isSystemMessage(message)) {
-      console.warn("Received non-system message on port");
-      return;
-    }
-
-    console.log("Received port message on overlay: ", message);
-    if (this.debugContainer) {
-      const debugMessage = `${message.type} : ${
-        message.name
-      } : ${JSON.stringify(message)}`;
-      this.debugContainer?.addMessage(debugMessage);
-    }
-
-    message.source = "Port";
-
-    // if message handler returns true or no handler, publish message
-    if (this.callMessageHandler(message.name, message)) {
-      this.eventBus.publish(message.name, message);
-    }
-  }
-
-  // @todo move this to the DynamicMethodCall mixin/decorator
-  // Also implement in CentralController
-  protected callMessageHandler(
-    messageName: SystemMessageNames,
-    message: SystemMessage
-  ): boolean {
-    const functName = _.camelCase(
-      this.options?.messageHandlerPrefix + messageName
-    );
-    const funct = this[functName as keyof this];
-
-    if (typeof funct !== "function") {
-      return true;
-    }
-
-    return funct(message);
-  }
-
   /**
    * Handler for all bus messages,
    */
-  protected busMessageHandler(
+  protected busMessageHandler = (
     messageName: SystemMessageNames,
     message: SystemMessage
-  ) {
+  ): void => {
     if (!isSystemMessage(message) || message.name !== messageName) {
       return;
     }

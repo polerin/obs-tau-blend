@@ -16,10 +16,6 @@ import {
   SystemMessageNames,
 } from "../../../Shared";
 
-import type {
-  ObsV5EventTransformerSet,
-  ObsV5RequestTransformerSet,
-} from "./Types";
 import { OBSEventTypes } from "obs-websocket-js";
 
 export default class ObsV5Adapter
@@ -27,16 +23,16 @@ export default class ObsV5Adapter
   implements IObsAdapter
 {
   private defaultOptions = {
-    websocketPort: 4444,
-    websocketPassword: "",
-    websocketHost: "127.0.0.1",
+    socketPort: 4444,
+    socketPassword: "",
+    socketHost: "127.0.0.1",
   };
 
   private options: any;
 
   public get status(): ExternalConnectionStatus {
     return {
-      serviceName: "obsV4Websocket",
+      serviceName: "obsV5Websocket",
       status: this.websocketConnected ? "connected" : "disconnected",
       details: {},
     };
@@ -52,12 +48,8 @@ export default class ObsV5Adapter
   ) {
     super(transformerSet, eventBus);
 
-    this.markActive = this.markActive.bind(this);
-    this.markInactive = this.markInactive.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
-
-    // this.registerEventTransformers(eventTransformers);
-    // this.registerRequestTransformers(requestTransformers);
+    this.options = {...this.defaultOptions, ...options};
+    this.registerTransformers(this.transformers);
     this.registerListeners();
 
     this.options = { ...this.defaultOptions, ...options };
@@ -80,25 +72,28 @@ export default class ObsV5Adapter
 
     const request = transformer.buildRequestMessage(message);
 
-
-    const result = await this.websocket.call(transformer.adapterRequestName, request ?? undefined);
+    const result = await this.websocket.call(
+      transformer.adapterRequestName,
+      request ?? undefined
+    );
 
     if (!isResponseTransformer(transformer)) {
       return;
     }
 
     const response = transformer.buildResponseMessage(result);
-    
+
     this.notifyListener(response.name, response);
   };
 
   public async connect(): Promise<boolean> {
+    debugger;
     try {
-      const websocketHost = `ws://${this.options.websocketHost}:${this.options.websocketPort}`;
+      const websocketHost = `ws://${this.options.socketHost}:${this.options.socketPort}`;
       await this.websocket.connect(
         websocketHost,
-        this.options.websocketPassword,
-        { rpcVersion: this.options.rpcVersion }
+        this.options.socketPassword,
+        {}
       );
 
       this.markActive();
@@ -116,20 +111,20 @@ export default class ObsV5Adapter
     }
   }
 
-  protected registerTransformers(
-    transformerSets: ServiceAdapterTransformerSet
-  ): void {
-    throw new Error("Method not implemented.");
-  }
+
 
   protected registerListeners(): void {
     this.websocket.on("ConnectionClosed", this.markInactive);
   }
 
   protected registerEventTransformers(
-    transformers: ObsV5EventTransformerSet
+    transformers: ServiceAdapterTransformerSet
   ): void {
-    for (const transformer of transformers) {
+    if (!transformers.event) {
+      return;
+    }
+
+    for (const transformer of Object.values(transformers.event)) {
       this.websocket.on(transformer.adapterEventName, (...eventData) =>
         this.handleEvent(transformer.adapterEventName, eventData[0])
       );
@@ -137,11 +132,19 @@ export default class ObsV5Adapter
   }
 
   protected registerRequestTransformers(
-    transformers: ObsV5RequestTransformerSet
+    transformers: ServiceAdapterTransformerSet
   ): void {
-    for (const transformer of transformers) {
+    if (!transformers.request) {
+      return;
+    }
+
+    for (const transformer of Object.values(transformers.request)) {
       this.eventBus.subscribe(transformer.systemRequestName, this.sendMessage);
     }
+  }
+
+  protected registerResponseTransformers(transformerSets: ServiceAdapterTransformerSet): void {
+    // intentional no-op
   }
 
   protected handleEvent<EventType extends keyof OBSEventTypes>(
@@ -153,7 +156,7 @@ export default class ObsV5Adapter
     this.websocketConnected = true;
   };
 
-  protected markInactive(): void {
+  protected markInactive = (): void => {
     this.websocketConnected = false;
   }
 }

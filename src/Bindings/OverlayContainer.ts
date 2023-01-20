@@ -15,7 +15,7 @@ export const overlayContainer = new Container().extend(parentContainer);
 // control worker related binds
 overlayContainer
     .bind(OVERLAY_TOKENS.controlSharedWorker)
-    .toInstance(() => new SharedWorker(conf_get("controlWorkerPath", "/assets/js/control_worker.js")))
+    .toInstance(() => new SharedWorker(conf_get("controlWorkerPath", `//${document.location.host}/assets/js/control_worker.js`)))
     .inSingletonScope();
 
 overlayContainer

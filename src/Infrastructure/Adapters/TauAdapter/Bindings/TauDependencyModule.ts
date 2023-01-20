@@ -38,4 +38,5 @@ tauDependencyModule
 
 tauDependencyModule
   .bind(TAU_TOKENS.tauOptions)
-  .toConstant(conf_get("tauConnection", {}));
+  .toInstance(() => conf_get("adapters.tau", {}))
+  .inTransientScope();

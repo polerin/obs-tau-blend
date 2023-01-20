@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "description": "Streaming overlay application framework, for powerful interactive overlays",
   "private": true,
+  "type": "module",
   "scripts": {
     "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts'",
     "test-watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts' -w",
     "build": "npm run clean && npm run build:lib && npm run build:types",
+    "build:watch": "tsc -w -p ./tsconfig.json",
     "build:lib": "tsc -p ./tsconfig.json",
     "build:types": "tsc -p ./tsconfig.types.json",
     "clean": "rm -rf ./lib/*"
@@ -17,9 +19,16 @@
   "files": [
     "./lib"
   ],
-  "exports": [
-    "./lib"
-  ],
+  "exports": {
+    ".": {
+      "types": "./lib/types",
+      "import": "./lib/"
+    },
+    "./Entry/*": {
+      "types": "./lib/types/Entry/",
+      "import": "./lib/Entry/*.js"
+    }
+  },
   "license": "To be Determined",
   "devDependencies": {
     "@types/chai": "^4.3.1",
@@ -31,7 +40,7 @@
     "ts-loader": "^9.3.0",
     "ts-node": "^10.8.1",
     "tsconfig-paths": "^4.0.0",
-    "typescript": "^4.6.4",
+    "typescript": "^4.9.0",
     "eslint": "^8.31.0",
     "prettier": "^2.8.2"
   },

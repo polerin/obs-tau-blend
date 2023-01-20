@@ -3,6 +3,16 @@ import { get, set }  from "lodash";
 
 let localConfig : any = {};
 
+export async function conf_fetch(uri: string): Promise<unknown> {
+    const request = await fetch(uri);
+
+    if (request.status !== 200) {
+        throw new Error(`Unable to retrieve config from uri: ${uri}`);
+    }
+
+    return await request.json();
+}
+
 /**
  * Load a full object for later use
  */

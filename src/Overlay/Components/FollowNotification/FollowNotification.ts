@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import singleFollowTemplate from "./SingleFollow.template";
@@ -9,22 +8,14 @@ import {
   TwitchEvent,
   SystemMessageNames,
   SystemMessage,
+  IOverlayComponent,
 } from "../../../Shared";
-import IEventBusAwareComponent from "../../Shared/interfaces/IEventBusAwareComponent";
+import { OverlayComponentType } from "../../Shared/Types";
+import AbstractOverlayComponent from "../AbstractOverlayComponent";
 
 @customElement("follow-notification")
-export default class FollowNotification
-  extends LitElement
-  implements IEventBusAwareComponent
+export default class FollowNotification extends AbstractOverlayComponent
 {
-  protected _eventBus?: TypedPubSubBus;
-  public set eventBus(eventBus: TypedPubSubBus) {
-    if (this.eventBus) {
-      this.removeListeners();
-    }
-
-    this.eventBus = eventBus;
-  }
 
   @property({ attribute: "display-time", type: Number })
   public displayTime: number = 8000;
@@ -46,6 +37,8 @@ export default class FollowNotification
 
   @state()
   protected canDisplay: boolean = false;
+
+  public componentType: OverlayComponentType = "persistant";
 
   /**
    * Buffer of new followers that are witing to be displayed
@@ -75,7 +68,13 @@ export default class FollowNotification
     this.handleFollowEvent = this.handleFollowEvent.bind(this);
     this.displayTick = this.displayTick.bind(this);
   }
+  
+  public registerCallbacks(eventBus: TypedPubSubBus): void {
+    super.registerCallbacks(eventBus);
 
+    this.registerCallback(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+  }
+  
   public render() {
     if (!this.canDisplay || this.nextFollowersToDisplay.length === 0) {
       return "";
@@ -88,28 +87,12 @@ export default class FollowNotification
     return this.displayMultiFollow();
   }
 
-  public connectedCallback(): void {
-    super.connectedCallback();
-
-    this.registerListeners();
-  }
-
   public disconnectedCallback(): void {
-    this.removeListeners();
+    this.unregisterCallbacks();
 
     super.disconnectedCallback();
   }
 
-  protected registerListeners() {
-    this.subscriptionTokens.push(
-      this.eventBus.subscribe(TwitchEvent.ChannelFollow, this.handleFollowEvent)
-    );
-  }
-
-  protected removeListeners(): void {
-    this.subscriptionTokens.forEach(this.eventBus.unsubscribe);
-    this.subscriptionTokens = [];
-  }
 
   protected handleFollowEvent(
     messageName: SystemMessageNames,

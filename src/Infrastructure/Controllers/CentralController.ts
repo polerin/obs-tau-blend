@@ -1,11 +1,22 @@
 import _ from "lodash";
 
-import { IServiceAdapter, PortMessageAdapter, TypedPubSubBus } from "../../Infrastructure";
-import { SystemMessageNames, SystemMessageByName, coerceMessageType, AppOverlay, AppControl, SystemMessage } from "../../Shared";
+import {
+  IServiceAdapter,
+  PortMessageAdapter,
+  TypedPubSubBus,
+} from "../../Infrastructure";
+import {
+  SystemMessageNames,
+  SystemMessageByName,
+  coerceMessageType,
+  AppOverlay,
+  AppControl,
+  SystemMessage,
+} from "../../Shared";
+import AbsstractController from "./AbstractController";
 
-export default abstract class CentralController {
+export default class CentralController extends AbsstractController {
   protected defaultOptions: object = {
-    messageHandlerPrefix: "message_",
   };
 
   protected options?: any;
@@ -13,12 +24,9 @@ export default abstract class CentralController {
   constructor(
     private serviceAdapters: IServiceAdapter[],
     private portMessageAdapter: PortMessageAdapter,
-    private eventBus: TypedPubSubBus
+    eventBus: TypedPubSubBus
   ) {
-    // @todo convert to arrow functions
-    this.portMessageHandler = this.portMessageHandler.bind(this);
-    this.adapterMessageHandler = this.adapterMessageHandler.bind(this);
-    this.onSharedWorkerConnect = this.onSharedWorkerConnect.bind(this);
+    super(eventBus);
   }
 
   public async init(options: object): Promise<void> {
@@ -38,34 +46,16 @@ export default abstract class CentralController {
     return Promise.all(connectionPromises);
   }
 
-  public onSharedWorkerConnect(message: MessageEvent<any>): void {
+  public onSharedWorkerConnect = (message: MessageEvent<any>): void => {
     console.debug("Central controller port activated");
     this.portMessageAdapter.setPort(message.ports[0]);
     this.portMessageAdapter.connect();
-  }
+  };
 
-  protected portMessageHandler(
+  protected adapterMessageHandler = (
     messageName: SystemMessageNames,
     message: SystemMessage
-  ): void {
-    console.debug("Port message received by central control", {
-      messageName: messageName,
-      message: message,
-    });
-
-    message.source = "Port";
-
-    // if the message handler returns true (or no message handler) publish the message on the bus
-    if (this.callMessageHandler(messageName, message)) {
-      console.log("Publishing port message", messageName, message);
-      this.eventBus.publish(messageName, message);
-    }
-  }
-
-  protected adapterMessageHandler(
-    messageName: SystemMessageNames,
-    message: SystemMessage
-  ): void {
+  ): void => {
     console.debug("Service message received by central control", message);
 
     if (message.source && message.source === "Port") {
@@ -84,25 +74,7 @@ export default abstract class CentralController {
       this.eventBus.publish(messageName, coerced);
       this.portMessageAdapter.sendMessage(messageName, message);
     }
-  }
-
-  // @todo move this to the DynamicMethodCall mixin/decorator
-  // Also implement in CentralController
-  protected callMessageHandler(
-    messageName: SystemMessageNames,
-    message: SystemMessage
-  ): boolean {
-    const functName = _.camelCase(
-      this.options?.messageHandlerPrefix + messageName
-    );
-    const funct = this[functName as keyof this];
-
-    if (typeof funct !== "function") {
-      return true;
-    }
-
-    return funct(message);
-  }
+  };
 
   protected sendSystemStatusMessage(): void {
     console.debug("Sending system status");

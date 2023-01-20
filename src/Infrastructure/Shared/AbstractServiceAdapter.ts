@@ -30,20 +30,28 @@ export default abstract class AbstractServiceAdapter
     message: SystemMessage
   ): void;
 
-  protected abstract registerTransformers(
-    transformerSets: ServiceAdapterTransformerSet
-  ): void;
+
 
   public constructor(
     protected transformers: ServiceAdapterTransformerSet,
     protected eventBus: TypedPubSubBus
   ) {
-    this.registerTransformers(this.transformers);
   }
 
   public setCallback(callback: SystemMessageCallback): void {
     this._callback = callback;
   }
+
+  protected registerTransformers(
+    transformerSets: ServiceAdapterTransformerSet
+  ): void {
+    this.registerEventTransformers(transformerSets);
+    this.registerRequestTransformers(transformerSets);
+  }
+
+  protected abstract registerEventTransformers(transformerSets: ServiceAdapterTransformerSet): void;
+  protected abstract registerRequestTransformers(transformerSets: ServiceAdapterTransformerSet): void;
+  protected abstract registerResponseTransformers(transformerSets: ServiceAdapterTransformerSet): void;
 
   protected selectTransformer(
     transformerType: TransformerClassifications,
