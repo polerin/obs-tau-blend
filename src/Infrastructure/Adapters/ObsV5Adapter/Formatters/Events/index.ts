@@ -1,5 +1,5 @@
 // Scene Related
-import EventSceneSwitch from "./EventSceneSwitch";
+import EventSceneSwitch from "./EventSceneSwitch.js";
 
 export {
     EventSceneSwitch,

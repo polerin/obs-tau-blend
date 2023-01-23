@@ -1,6 +1,6 @@
 import { Container } from "brandi";
-import { PortMessageAdapter, TypedPubSubBus } from "../Infrastructure";
-import { SHARED_TOKENS } from "./SharedTokens";
+import { PortMessageAdapter, TypedPubSubBus } from "@/Infrastructure";
+import { SHARED_TOKENS } from "@/Bindings/SharedTokens";
 
 export const container = new Container();
 

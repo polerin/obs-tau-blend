@@ -1,12 +1,12 @@
 export { injected, Container } from "brandi";
 
-export { container } from "./Container";
-export { SHARED_TOKENS } from "./SharedTokens";
+export { container } from "@/Bindings/Container";
+export { SHARED_TOKENS } from "@/Bindings/SharedTokens";
 
-export { overlayContainer } from "./OverlayContainer";
-export { OVERLAY_TOKENS } from "./OverlayTokens";
+export { overlayContainer } from "@/Bindings/OverlayContainer";
+export { OVERLAY_TOKENS } from "@/Bindings/OverlayTokens";
 
-export { centralContainer } from "./CentralContainer";
-export { CENTRAL_TOKENS } from "./CentralTokens";
+export { centralContainer } from "@/Bindings/CentralContainer";
+export { CENTRAL_TOKENS } from "@/Bindings/CentralTokens";
 
 export const TestExportThing = "TestExportTying";

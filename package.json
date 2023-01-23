@@ -15,18 +15,21 @@
   },
   "author": "Erin McCargar <polerin@eclexia.net>",
   "main": "./lib/index.js",
-  "typings": "./lib/types/index.d.ts",
   "files": [
     "./lib"
   ],
   "exports": {
     ".": {
       "types": "./lib/types",
-      "import": "./lib/"
+      "import": "./lib/index.js"
     },
-    "./Entry/*": {
-      "types": "./lib/types/Entry/",
-      "import": "./lib/Entry/*.js"
+    "./Entry/Central": {
+      "types": "./lib/types/Entry/Central.d.ts",
+      "import": "./lib/Entry/Central.js"
+    },
+    "./Entry/Overlay": {
+      "types": "./lib/types/Entry/Central.d.ts",
+      "import": "./lib/Entry/Central.js"
     }
   },
   "license": "To be Determined",

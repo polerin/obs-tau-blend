@@ -1,8 +1,8 @@
 // Overlay entry point, this may be called individually if you know what you're doing
 // but should probably fed into obs via an html page (for now?)
-import { OVERLAY_TOKENS} from "../Bindings/OverlayTokens";
+import { OVERLAY_TOKENS} from "@/Bindings/OverlayTokens";
 import type { Container } from "brandi";
-import { conf_get } from "../Shared/Utility/AppConfig";
+import { conf_get } from "@/Shared/Utility/AppConfig";
 import { ControlElement, DebugContainer, FollowNotification } from "../Overlay/Components";
 
 

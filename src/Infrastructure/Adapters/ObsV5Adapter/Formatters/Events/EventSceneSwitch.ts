@@ -1,7 +1,5 @@
-import { ObsV5Events } from "../../Types"; 
-import { ObsEvent, SystemMessageByName } from "../../../../../Shared/MessageHandling";
-
-import { IV5EventTransformer } from "../../Interfaces";
+import { ObsV5Events, IV5EventTransformer } from "@/Infrastructure/Adapters/ObsV5Adapter"; 
+import { ObsEvent, SystemMessageByName } from "@/Shared/MessageHandling";
 
 type _adapterEvent = "CurrentProgramSceneChanged";
 type _systemEvent = typeof ObsEvent.SceneSwitched;

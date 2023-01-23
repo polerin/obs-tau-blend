@@ -1,7 +1,7 @@
 import { token } from "brandi";
 
-import IControlWorker from "../Infrastructure/Interfaces/IControlWorker";
-import OverlayController from "../Infrastructure/Controllers/OverlayController";
+import IControlWorker from "@/Infrastructure/Interfaces/IControlWorker";
+import OverlayController from "@/Infrastructure/Controllers/OverlayController";
 
 export const OVERLAY_TOKENS = {
     // Service adapter

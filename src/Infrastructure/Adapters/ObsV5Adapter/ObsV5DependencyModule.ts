@@ -4,16 +4,15 @@ import ObsWebsocket from "obs-websocket-js";
 
 import OBS_V5_TOKENS from "./ObsV5Tokens";
 
-import { CENTRAL_TOKENS } from "../../../Bindings/CentralTokens";
-import { SHARED_TOKENS } from "../../../Bindings/SharedTokens";
+import { CENTRAL_TOKENS } from "@/Bindings/CentralTokens";
+import { SHARED_TOKENS } from "@/Bindings/SharedTokens";
 
-import ObsV5Adapter from "./ObsV5Adapter";
-import { conf_get } from "../../../Shared/Utility/AppConfig";
-import { ServiceAdapterTransformerSet } from "../../Shared";
-import { buildTransformerRegistry } from "../../../Shared";
+import ObsV5Adapter from "@/Infrastructure/Adapters/ObsV5Adapter/ObsV5Adapter";
+import { ServiceAdapterTransformerSet } from "@/Infrastructure/Shared";
+import { buildTransformerRegistry, conf_get } from "@/Shared";
 
-import * as EventTransformers from "./Formatters/Events";
-import * as RequestTransformers from "./Formatters/Requests";
+import * as EventTransformers from "@/Infrastructure/Adapters/ObsV5Adapter/Formatters/Events";
+import * as RequestTransformers from "@/Infrastructure/Adapters/ObsV5Adapter/Formatters/Requests";
 
 injected(
   ObsV5Adapter,

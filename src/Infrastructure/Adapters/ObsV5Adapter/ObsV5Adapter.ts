@@ -1,6 +1,6 @@
 import type ObsWebsocket from "obs-websocket-js";
 
-import { IObsAdapter } from "../../Interfaces";
+import { IObsAdapter } from "@/Infrastructure";
 
 import {
   AbstractServiceAdapter,
@@ -88,6 +88,7 @@ export default class ObsV5Adapter
 
   public async connect(): Promise<boolean> {
     debugger;
+    console.log("shared worker obs connect");
     try {
       const websocketHost = `ws://${this.options.socketHost}:${this.options.socketPort}`;
       await this.websocket.connect(
@@ -96,6 +97,7 @@ export default class ObsV5Adapter
         {}
       );
 
+      console.log("after auth message");
       this.markActive();
       this.sendMessage(ObsResponse.WebsocketAuthorized, {
         type: "obsResponse",
