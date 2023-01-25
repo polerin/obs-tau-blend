@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import {  ObsRequest, SystemMessageByName } from '../../../../../Shared/MessageHandling';
-import * as Requests from '../../Formatters/Requests';
+import { ObsRequest, SystemMessageByName } from '#shared';
+import * as Requests from '#adapters/ObsV5Adapter/Formatters/Requests/index';
 
 
 describe("ObsV5 SetSourceFilterSettings formatter tests", () => {

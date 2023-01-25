@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { SystemMessage, SystemMessageNames } from "../../Shared";
-import { TypedPubSubBus } from "../Shared";
+import { SystemMessage, SystemMessageNames } from "#shared";
+import { TypedPubSubBus } from "#infra/Shared/index";
 
 export default abstract class AbstractController {
 

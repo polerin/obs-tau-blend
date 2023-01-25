@@ -1,10 +1,10 @@
-import ObsV5DependencyModule from "@/Infrastructure/Adapters/ObsV5Adapter/ObsV5DependencyModule";
-import OBS_V5_TOKENS from "@/Infrastructure/Adapters/ObsV5Adapter/ObsV5Tokens";
-import ObsV5Adapter from '@/Infrastructure/Adapters/ObsV5Adapter/ObsV5Adapter';
+import ObsV5DependencyModule from "#adapters/ObsV5Adapter/ObsV5DependencyModule";
+import OBS_V5_TOKENS from "#adapters/ObsV5Adapter/ObsV5Tokens";
+import ObsV5Adapter from '#adapters/ObsV5Adapter/ObsV5Adapter';
 
 
-export * from '@/Infrastructure/Adapters/ObsV5Adapter/Types';
-export * from '@/Infrastructure/Adapters/ObsV5Adapter/Interfaces';
+export * from '#adapters/ObsV5Adapter/Types';
+export * from '#adapters/ObsV5Adapter/Interfaces/index';
 
 export {
     ObsV5Adapter,

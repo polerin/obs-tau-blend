@@ -1,14 +1,14 @@
 import { DependencyModule, injected } from "brandi";
 
-import { conf_get, buildTransformerRegistry } from "../../../../Shared/";
+import { conf_get, buildTransformerRegistry } from "#shared";
 
-import { TAU_TOKENS } from "./TauTokens";
-import { CENTRAL_TOKENS } from "../../../../Bindings/CentralTokens";
+import { TAU_TOKENS } from "#adapters/TauAdapter/Bindings/TauTokens";
+import { CENTRAL_TOKENS } from "#root/Bindings/CentralTokens";
 
-import TauAdapter from "../TauAdapter";
-import * as TauEventTransformers from "../Formatters/Events";
-import { ServiceAdapterTransformerSet } from "../../../Shared";
-import { SHARED_TOKENS } from "../../../../Bindings/SharedTokens";
+import TauAdapter from "#adapters/TauAdapter/TauAdapter";
+import * as TauEventTransformers from "#adapters/TauAdapter/Formatters/Events/index";
+import { ServiceAdapterTransformerSet } from "#infra/Shared/index";
+import { SHARED_TOKENS } from "#root/Bindings/SharedTokens";
 
 injected(
   TauAdapter,

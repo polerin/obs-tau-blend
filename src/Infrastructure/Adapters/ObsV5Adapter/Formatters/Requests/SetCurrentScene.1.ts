@@ -1,6 +1,6 @@
-import IV5RequestTransformer from "../../Interfaces/IV5RequestTransformer";
-import { ObsRequest, ObsResponse, SystemMessageByName } from "../../../../../Shared/MessageHandling";
-import { ObsV5Requests, ObsV5Responses } from "../../Types";
+import IV5RequestTransformer from "#adapters/ObsV5Adapter/Interfaces/IV5RequestTransformer";
+import { ObsRequest, ObsResponse, SystemMessageByName } from "#shared";
+import { ObsV5Requests, ObsV5Responses } from "#adapters/ObsV5Adapter/Types";
 
 
 type _adapterRequest = "SetCurrentProgramScene";

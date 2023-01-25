@@ -1,7 +1,7 @@
 import { token } from "brandi";
 
 import type ObsWebsocket from "obs-websocket-js";
-import { ServiceAdapterTransformerSet } from "../../Shared";
+import { ServiceAdapterTransformerSet } from "#infra/Shared/index";
 
 const OBS_V5_TOKENS = {
     obsWebsocket: token<ObsWebsocket>("obsWebsocket"),

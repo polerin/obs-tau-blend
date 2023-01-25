@@ -1,10 +1,14 @@
 import _ from "lodash";
 
 import {
-  IServiceAdapter,
+  IServiceAdapter
+} from "#infra/Interfaces/index";
+
+import {
   PortMessageAdapter,
   TypedPubSubBus,
-} from "../../Infrastructure";
+} from "#infra/Shared/index";
+
 import {
   SystemMessageNames,
   SystemMessageByName,
@@ -12,8 +16,9 @@ import {
   AppOverlay,
   AppControl,
   SystemMessage,
-} from "../../Shared";
-import AbsstractController from "./AbstractController";
+} from "#shared";
+
+import AbsstractController from "#infra/Controllers/AbstractController";
 
 export default class CentralController extends AbsstractController {
   protected defaultOptions: object = {

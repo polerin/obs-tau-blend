@@ -1,4 +1,4 @@
-import IOverlayComponent from "./IOverlayCompoenent";
+import IOverlayComponent from "#shared/Interfaces/IOverlayCompoenent";
 
 export {
     IOverlayComponent

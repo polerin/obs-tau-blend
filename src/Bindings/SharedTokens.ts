@@ -1,5 +1,5 @@
 import { token } from "brandi";
-import { TypedPubSubBus, PortMessageAdapter } from "@/Infrastructure";
+import type { TypedPubSubBus, PortMessageAdapter } from "#infra";
 
 export const SHARED_TOKENS = {
     portMessageAdapter : token<PortMessageAdapter>("portMessageAdapter"),

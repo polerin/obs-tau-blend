@@ -32,6 +32,17 @@
       "import": "./lib/Entry/Central.js"
     }
   },
+  "imports": {
+    "#root": "./src/index.js",
+    "#root/*": "./src/*.js",
+    "#shared": "./src/Shared/index.js",
+    "#shared/*": "./src/Shared/*.js",
+    "#infra": "./src/Infrastructure/index.js",
+    "#infra/*": "./src/Infrastructure/*.js",
+    "#adapters/*": "./src/Infrastructure/Adapters/*.js",
+    "#overlay": "./src/Overlay/index.js",
+    "#overlay/*": "./src/Overlay/*.js"
+  },
   "license": "To be Determined",
   "devDependencies": {
     "@types/chai": "^4.3.1",

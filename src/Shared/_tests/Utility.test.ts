@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { isSystemMessage } from 'Shared/Utility/Message';
+import { isSystemMessage } from '#shared/Utility/Message';
 
 
 describe("Utility/Messages isSystemMessage() tests", () => {

@@ -1,5 +1,5 @@
-import { ExternalConnectionStatus } from "../../Infrastructure/Shared/Types";
-import { SystemMessage, SystemMessageCallback, SystemMessageNames } from "../../Shared";
+import { ExternalConnectionStatus } from "#infra/Shared/Types";
+import { SystemMessage, SystemMessageCallback, SystemMessageNames } from "#shared";
 
 export default interface IServiceAdapter {
   connect(): Promise<boolean>;

@@ -1,12 +1,12 @@
-import { ExternalConnectionStatus } from "./Types";
+import { ExternalConnectionStatus } from "#infra/Shared/Types";
 import {
   isSystemMessage,
   PortMessageOrEvent,
   SystemMessageCallback,
   SystemMessageNames,
   SystemMessages,
-} from "../../Shared";
-import { IPortMessageAdapter } from "../Interfaces";
+} from "#shared";
+import { IPortMessageAdapter } from "#infra/Interfaces/index";
 
 export default class PortMessageAdapter implements IPortMessageAdapter {
   protected autoConnect: boolean = false;

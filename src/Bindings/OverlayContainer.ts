@@ -1,12 +1,11 @@
 import { Container, injected } from "brandi";
 
-import { container as parentContainer } from "@/Bindings/Container";
-import { OVERLAY_TOKENS } from "@/Bindings/OverlayTokens";
+import { container as parentContainer } from "#root/Bindings/Container";
+import { OVERLAY_TOKENS } from "#root/Bindings/OverlayTokens";
 
-import { conf_get } from "@/Shared/Utility/AppConfig";
+import { conf_get } from "#shared";
 
-import OverlayController from "@/Infrastructure/Controllers/OverlayController";
-import ControlWorker from "@/Infrastructure/Adapters/ControlWorker";
+import { OverlayController, ControlWorker} from "#infra";
 
 injected(ControlWorker, OVERLAY_TOKENS.controlSharedWorker);
 

@@ -1,6 +1,6 @@
-import {CENTRAL_TOKENS } from "@/Bindings/CentralTokens";
+import {CENTRAL_TOKENS } from "#root/Bindings/CentralTokens";
 import type { Container } from "brandi";
-import { conf_fetch, conf_get, conf_load } from "@/Shared/Utility/AppConfig";
+import { conf_fetch, conf_get, conf_load } from "#shared";
 
 
 export const initCentral = async (container: Container, configUri: string): Promise<void> => {

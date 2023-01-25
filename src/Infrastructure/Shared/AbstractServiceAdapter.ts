@@ -2,15 +2,15 @@ import {
   SystemMessageCallback,
   SystemMessageNames,
   SystemMessage,
-} from "../../Shared";
-import { IServiceAdapter } from "../Interfaces";
-import TypedPubSubBus from "./TypedPubsubBus";
+} from "#shared";
+import { IServiceAdapter } from "#infra/Interfaces/index";
+import TypedPubSubBus from "#infra/Shared/TypedPubsubBus";
 import {
   ExternalConnectionStatus,
   ServiceAdapterTransformerSet,
   TransformerClassifications,
   ServiceAdapterTransformer,
-} from "./Types";
+} from "#infra/Shared/Types";
 
 export default abstract class AbstractServiceAdapter
   implements IServiceAdapter

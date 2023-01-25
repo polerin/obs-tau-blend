@@ -1,4 +1,4 @@
-import { SystemMessage, SystemMessageNames, SystemMessages, SystemMessageByName } from "../MessageHandling";
+import { SystemMessage, SystemMessageNames, SystemMessages, SystemMessageByName } from "#shared";
 
 /**
  * Attempt to check if a message is one of the defined system messages

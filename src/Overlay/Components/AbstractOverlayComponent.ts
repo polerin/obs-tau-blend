@@ -1,7 +1,7 @@
 import { LitElement } from "lit";
-import { TypedPubSubBus } from "../../Infrastructure";
-import { IOverlayComponent, SystemMessageCallback, SystemMessageNames } from "../../Shared";
-import { OverlayComponentType } from "../Shared/Types";
+import { TypedPubSubBus } from "#infra";
+import { IOverlayComponent, SystemMessageCallback, SystemMessageNames } from "#shared";
+import { OverlayComponentType } from "#overlay/Shared/Types";
 
 export default abstract class AbstractOverlayComponent extends LitElement implements IOverlayComponent {
     public abstract readonly componentType: OverlayComponentType;

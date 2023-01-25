@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
-import { SystemMessageByName, ObsEvent } from '../../../../../Shared/MessageHandling';
+import { SystemMessageByName, ObsEvent } from '#shared';
 
-import { EventSceneSwitch, } from '../../Formatters/Events';
-import { ObsV5Events } from '../../Types';
+import { EventSceneSwitch, } from '#adapters/ObsV5Adapter/Formatters/Events/index';
+import { ObsV5Events } from '#adapters/ObsV5Adapter/Types';
 
 
 describe("ObsV5 EventSceneSwitch formatter tests", () => {

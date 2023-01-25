@@ -1,5 +1,5 @@
-import SetCurrentScene from "./SetCurrentScene";
-import SetSourceFilterSettings from "./SetSourceFilterSettings";
+import SetCurrentScene from "#adapters/ObsV5Adapter/Formatters/Requests/SetCurrentScene";
+import SetSourceFilterSettings from "#adapters/ObsV5Adapter/Formatters/Requests/SetSourceFilterSettings";
 
 export {
     SetCurrentScene,

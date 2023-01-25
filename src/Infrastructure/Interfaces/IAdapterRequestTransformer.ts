@@ -1,4 +1,4 @@
-import { SystemMessageNames, SystemMessages } from "../../Shared";
+import { SystemMessageNames, SystemMessages } from "#shared";
 
 export default interface IAdapterRequestTransformer<
   AdapterMessageDefinitions,

@@ -1,19 +1,17 @@
 import Websocket from "isomorphic-ws";
 
-import { TypedPubSubBus } from "../..";
-import { isEventTransformer, SystemMessageByName, SystemMessageCallback, SystemMessageNames } from "../../../Shared";
 import {
-  AbstractServiceAdapter,
+  TypedPubSubBus, AbstractServiceAdapter,
   ExternalConnectionStatus,
   ServiceAdapterTransformerSet,
-} from "../../Shared";
-import { TauEventNames, TauEvent } from "./Definitions/TauEvents";
-import ITauAdapter from "./Interfaces/ITauConnector";
+} from "#infra/Shared/index";
+import { isEventTransformer, SystemMessageByName, SystemMessageCallback, SystemMessageNames } from "#shared";
+import { TauEventNames, TauEvent } from "#adapters/TauAdapter/Definitions/TauEvents";
+import ITauAdapter from "#adapters/TauAdapter/Interfaces/ITauConnector";
 
 export default class TauAdapter
   extends AbstractServiceAdapter
-  implements ITauAdapter
-{
+  implements ITauAdapter {
   private defaultOptions = {
     socketProtocol: "ws://",
     socketPort: "8000",
@@ -41,7 +39,7 @@ export default class TauAdapter
     options: any = {}
   ) {
     super(transformers, eventBus);
-    
+
     this.registerTransformers(this.transformers);
     this.options = { ...this.defaultOptions, ...options };
 

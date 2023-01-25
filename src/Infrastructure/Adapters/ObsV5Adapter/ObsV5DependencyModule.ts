@@ -2,17 +2,17 @@ import { DependencyModule, injected } from "brandi";
 
 import ObsWebsocket from "obs-websocket-js";
 
-import OBS_V5_TOKENS from "./ObsV5Tokens";
+import OBS_V5_TOKENS from "#adapters/ObsV5Adapter/ObsV5Tokens";
 
-import { CENTRAL_TOKENS } from "@/Bindings/CentralTokens";
-import { SHARED_TOKENS } from "@/Bindings/SharedTokens";
+import { CENTRAL_TOKENS } from "#root/Bindings/CentralTokens";
+import { SHARED_TOKENS } from "#root/Bindings/SharedTokens";
 
-import ObsV5Adapter from "@/Infrastructure/Adapters/ObsV5Adapter/ObsV5Adapter";
-import { ServiceAdapterTransformerSet } from "@/Infrastructure/Shared";
-import { buildTransformerRegistry, conf_get } from "@/Shared";
+import ObsV5Adapter from "#adapters/ObsV5Adapter/ObsV5Adapter";
+import { ServiceAdapterTransformerSet } from "#infra/Shared/index";
+import { buildTransformerRegistry, conf_get } from "#shared";
 
-import * as EventTransformers from "@/Infrastructure/Adapters/ObsV5Adapter/Formatters/Events";
-import * as RequestTransformers from "@/Infrastructure/Adapters/ObsV5Adapter/Formatters/Requests";
+import * as EventTransformers from "#adapters/ObsV5Adapter/Formatters/Events/index";
+import * as RequestTransformers from "#adapters/ObsV5Adapter/Formatters/Requests/index";
 
 injected(
   ObsV5Adapter,

@@ -1,5 +1,5 @@
-import { TypedPubSubBus } from "../../Infrastructure";
-import { OverlayComponentType } from "../../Overlay/Shared/Types";
+import { TypedPubSubBus } from "#infra";
+import { OverlayComponentType } from "#overlay/Shared/Types";
 
 export default interface IOverlayComponent
 {

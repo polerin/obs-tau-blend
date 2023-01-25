@@ -1,5 +1,5 @@
-import IV5EventTransformer from "./Interfaces/IV5EventTransformer";
-import IV5RequestTransformer from "./Interfaces/IV5RequestTransformer";
+import IV5EventTransformer from "#adapters/ObsV5Adapter/Interfaces/IV5EventTransformer";
+import IV5RequestTransformer from "#adapters/ObsV5Adapter/Interfaces/IV5RequestTransformer";
 import type { OBSRequestTypes, OBSEventTypes, OBSResponseTypes } from "obs-websocket-js";
 
 export type ObsV5Events = OBSEventTypes;

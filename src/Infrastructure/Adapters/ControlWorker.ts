@@ -1,6 +1,5 @@
-import { injected, OVERLAY_TOKENS } from "../../Bindings";
-import { IControlWorker } from "../Interfaces";
-import { PortMessageAdapter } from "../Shared";
+import { IControlWorker } from "#infra/Interfaces/index";
+import { PortMessageAdapter } from "#infra/Shared/index";
 
 export default class ControlWorker extends PortMessageAdapter implements IControlWorker
 {

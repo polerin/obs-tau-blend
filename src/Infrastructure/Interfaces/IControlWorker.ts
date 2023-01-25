@@ -1,4 +1,4 @@
-import IPortMessageAdapter from "./IPortMessageAdapter";
+import IPortMessageAdapter from "#infra/Interfaces/IPortMessageAdapter";
 
 export default interface IControlWorker extends IPortMessageAdapter
 {

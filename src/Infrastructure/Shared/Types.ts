@@ -4,7 +4,7 @@ import {
   IAdapterEventTransformer,
   IAdapterRequestTransformer,
   IAdapterResponseTransformer,
-} from "../Interfaces";
+} from "#infra/Interfaces/index";
 
 export type ExternalConnectionStatus = {
   serviceName: string;

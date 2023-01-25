@@ -6,7 +6,7 @@ import {
   TransformerClassifications,
   TransformerInterfaceType,
   TransformerRegistry,
-} from "../../Infrastructure";
+} from "#infra";
 
 export function buildTransformerRegistry(
   classification: TransformerClassifications,

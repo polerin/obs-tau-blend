@@ -1,6 +1,6 @@
-import FollowNotification from "./FollowNotification/FollowNotification";
-import DebugContainer from "./DebugContainer/DebugContainer";
-import ControlElement from "./ControlElement/ControlElement";
+import FollowNotification from "#overlay/Components/FollowNotification/FollowNotification";
+import DebugContainer from "#overlay/Components/DebugContainer/DebugContainer";
+import ControlElement from "#overlay/Components/ControlElement/ControlElement";
 
 export {
     ControlElement,

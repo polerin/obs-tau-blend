@@ -1,4 +1,4 @@
-import { ObsRequestMessage } from "../../Shared/Definitions/Types";
+import { ObsRequestMessage } from "#shared/Definitions/Types";
 
 export const ObsRequest = {
   // Scene

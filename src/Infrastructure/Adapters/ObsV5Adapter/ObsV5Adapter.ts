@@ -1,20 +1,20 @@
 import type ObsWebsocket from "obs-websocket-js";
 
-import { IObsAdapter } from "@/Infrastructure";
+import { IObsAdapter } from "#infra";
 
 import {
   AbstractServiceAdapter,
   ExternalConnectionStatus,
   ServiceAdapterTransformerSet,
   TypedPubSubBus,
-} from "../../Shared";
+} from "#infra/Shared/index";
 import {
   isRequestTransformer,
   isResponseTransformer,
   ObsResponse,
   SystemMessage,
   SystemMessageNames,
-} from "../../../Shared";
+} from "#shared";
 
 import { OBSEventTypes } from "obs-websocket-js";
 

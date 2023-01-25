@@ -1,10 +1,9 @@
-import { LitElement } from "lit";
 import {customElement, state, property} from 'lit/decorators.js';
-import { TypedPubSubBus } from "../../../Infrastructure";
-import { IOverlayComponent, isSystemMessage } from "../../../Shared";
-import { OverlayComponentType } from "../../Shared/Types";
-import AbstractOverlayComponent from "../AbstractOverlayComponent";
-import elementTemplate from './DebugContainer.template';
+import { TypedPubSubBus } from "#infra";
+import { IOverlayComponent, isSystemMessage } from "#shared";
+import { OverlayComponentType } from "#overlay/Shared/Types";
+import AbstractOverlayComponent from "#overlay/Components/AbstractOverlayComponent";
+import elementTemplate from '#overlay/Components/DebugContainer/DebugContainer.template';
 
 
 @customElement('debug-container')

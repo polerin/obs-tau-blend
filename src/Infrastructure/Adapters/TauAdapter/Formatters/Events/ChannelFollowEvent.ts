@@ -1,7 +1,7 @@
-import { TauEvents, TauEventMap } from "../../Definitions/TauEvents";
-import { SystemMessageByName, TwitchEvent } from "../../../../../Shared/MessageHandling";
+import { TauEvents, TauEventMap } from "#adapters/TauAdapter/Definitions/TauEvents";
+import { SystemMessageByName, TwitchEvent } from "#shared";
 
-import ITauEventTransformer from "../../Interfaces/ITauEventTransformer";
+import ITauEventTransformer from "#adapters/TauAdapter/Interfaces/ITauEventTransformer";
 
 type _adapterEvent = typeof TauEventMap.ChannelFollow;
 type _systemEvent = typeof TwitchEvent.ChannelFollow

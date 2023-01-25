@@ -1,11 +1,11 @@
 import { LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { TypedPubSubBus } from "../../../Infrastructure";
-import { IOverlayComponent, ObsRequest, SystemMessages } from "../../../Shared";
-import { OverlayComponentType } from "../../Shared/Types";
-import AbstractOverlayComponent from "../AbstractOverlayComponent";
+import { TypedPubSubBus } from "#infra";
+import { IOverlayComponent, ObsRequest, SystemMessages } from "#shared";
+import { OverlayComponentType } from "#overlay/Shared/Types";
+import AbstractOverlayComponent from "#overlay/Components/AbstractOverlayComponent";
 
-import elementTemplate from "./ControlElement.template";
+import elementTemplate from "#overlay/Components/ControlElement/ControlElement.template";
 
 @customElement("control-element")
 export default class ControlElement extends AbstractOverlayComponent {

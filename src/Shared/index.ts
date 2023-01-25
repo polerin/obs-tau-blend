@@ -1,7 +1,7 @@
 
-export * from "./Interfaces";
-export * from "./Utility/AppConfig";
-export * from "./Utility/Message";
-export * from "./Utility/Transformer";
-export * from "./Definitions/Types";
-export * from "./MessageHandling";
+export * from "#shared/Interfaces/index";
+export * from "#shared/Utility/AppConfig";
+export * from "#shared/Utility/Message";
+export * from "#shared/Utility/Transformer";
+export * from "#shared/Definitions/Types";
+export * from "#shared/MessageHandling/index";

@@ -1,15 +1,15 @@
 import _ from "lodash";
-import { DebugContainer } from "../../Overlay/Components";
+import { DebugContainer } from "#overlay/Components/index";
 import {
   AppOverlay,
   IOverlayComponent,
   SystemMessageNames,
   SystemMessage,
   isSystemMessage,
-} from "../../Shared";
-import { IControlWorker } from "../Interfaces";
-import { TypedPubSubBus } from "../Shared";
-import AbstractController from "./AbstractController";
+} from "#shared";
+import { IControlWorker } from "#infra/Interfaces/index";
+import TypedPubSubBus from "#infra/Shared/TypedPubsubBus";
+import AbstractController from "#infra/Controllers/AbstractController";
 
 export default class OverlayController extends AbstractController {
   private defaultOptions: object = {

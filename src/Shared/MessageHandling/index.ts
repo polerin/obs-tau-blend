@@ -1,10 +1,10 @@
-import { ObsEvent, ObsEventMessages } from "./ObsEvents";
-import { ObsRequest, ObsRequestMessages } from "./ObsRequests";
-import { ObsResponse, ObsResponseMessages } from "./ObsResponses";
-import { TwitchChat, TwitchChatMessages } from "./TwitchChat";
-import { TwitchEvent, TwitchEventMessages } from "./TwitchEvents";
-import { AppControl, AppControlMessages } from "./AppControl";
-import { AppOverlay, AppOverlayMessages } from "./AppOverlay";
+import { ObsEvent, ObsEventMessages } from "#shared/MessageHandling/ObsEvents";
+import { ObsRequest, ObsRequestMessages } from "#shared/MessageHandling/ObsRequests";
+import { ObsResponse, ObsResponseMessages } from "#shared/MessageHandling/ObsResponses";
+import { TwitchChat, TwitchChatMessages } from "#shared/MessageHandling/TwitchChat";
+import { TwitchEvent, TwitchEventMessages } from "#shared/MessageHandling/TwitchEvents";
+import { AppControl, AppControlMessages } from "#shared/MessageHandling/AppControl";
+import { AppOverlay, AppOverlayMessages } from "#shared/MessageHandling/AppOverlay";
 
 export interface SystemMessages extends ObsEventMessages,  ObsRequestMessages, ObsResponseMessages, TwitchChatMessages, TwitchEventMessages, AppControlMessages, AppOverlayMessages {};
 

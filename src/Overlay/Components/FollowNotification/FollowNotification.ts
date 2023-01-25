@@ -1,17 +1,20 @@
 import _ from "lodash";
 import { customElement, property, state } from "lit/decorators.js";
 
-import singleFollowTemplate from "./SingleFollow.template";
-import multiFollowTemplate from "./MultiFollow.template";
-import { TypedPubSubBus } from "../../../Infrastructure";
+import singleFollowTemplate from "#overlay/Components/FollowNotification/SingleFollow.template";
+import multiFollowTemplate from "#overlay/Components/FollowNotification/MultiFollow.template";
+
+import { TypedPubSubBus } from "#infra";
+
+
 import {
   TwitchEvent,
   SystemMessageNames,
   SystemMessage,
   IOverlayComponent,
-} from "../../../Shared";
-import { OverlayComponentType } from "../../Shared/Types";
-import AbstractOverlayComponent from "../AbstractOverlayComponent";
+} from "#shared";
+import { OverlayComponentType } from "#overlay/Shared/Types";
+import AbstractOverlayComponent from "#overlay/Components/AbstractOverlayComponent";
 
 @customElement("follow-notification")
 export default class FollowNotification extends AbstractOverlayComponent
