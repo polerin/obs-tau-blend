@@ -14,8 +14,6 @@ export function isSystemMessage(subject : unknown) : subject is SystemMessage
         && typeof message['name'] === 'string'
         && 'type' in message
         && typeof message['type'] === 'string'
-        && 'source' in message
-        && typeof message['source'] === 'string'
     )) { 
         return false;
     }

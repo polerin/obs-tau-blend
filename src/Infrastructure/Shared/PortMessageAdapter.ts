@@ -42,6 +42,7 @@ export default class PortMessageAdapter implements IPortMessageAdapter {
   }
 
   public setCallback(callback: SystemMessageCallback | undefined): void {
+    console.log("setting callback", callback);
     this.portMessageCallback = callback;
   }
 
@@ -96,14 +97,16 @@ export default class PortMessageAdapter implements IPortMessageAdapter {
       return;
     }
 
-    if (!isSystemMessage(portMessage)) {
+    const systemMessage = (portMessage instanceof MessageEvent) ? portMessage.data : portMessage;
+
+    if (!isSystemMessage(systemMessage)) {
       return;
     }
 
-    if (!portMessage.name) {
+    if (!systemMessage.name) {
       return;
     }
 
-    this.portMessageCallback(portMessage.name, portMessage);
+    this.portMessageCallback(systemMessage.name, systemMessage);
   }
 }

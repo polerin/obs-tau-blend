@@ -19,7 +19,7 @@ export default class ControlElement extends AbstractOverlayComponent {
     const request = {
       name: ObsRequest.SetCurrentScene,
       type: "obsRequest",
-      sceneName: "SHOW RIGHT FULL",
+      sceneName: "SHOW MAIN UPPER",
     } as SystemMessages[typeof ObsRequest.SetCurrentScene];
 
     console.log("dispatching!", request);

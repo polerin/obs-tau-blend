@@ -30,6 +30,7 @@ export default abstract class AbstractController {
   ): void => {
     message.source = "Port";
 
+    console.log("in port message handler");
     // if the message handler returns true (or no message handler) publish the message on the bus
     if (this.callMessageHandler(messageName, message)) {
       console.log("Publishing port message", messageName, message);

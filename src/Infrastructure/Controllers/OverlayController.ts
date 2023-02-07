@@ -56,7 +56,7 @@ export default class OverlayController extends AbstractController {
   protected connectContainerComponents(container: HTMLElement | undefined | null): void {
 
     if (container === undefined || container === null) {
-      console.warn("attempting to connect a container while it is undefined or null");
+      console.warn("Overlay: Attempting to connect a container while it is undefined or null");
       return;
     }
 
@@ -73,8 +73,7 @@ export default class OverlayController extends AbstractController {
   }
 
   protected startControlWorker(): void {
-    console.debug("Control Worker starting");
-
+    console.debug("Overlay: Starting control worker");
     this.controlWorker.setCallback(this.portMessageHandler);
     this.controlWorker.connect();
   }
@@ -87,14 +86,17 @@ export default class OverlayController extends AbstractController {
     message: SystemMessage
   ): void => {
     if (!isSystemMessage(message) || message.name !== messageName) {
+      console.warn("Overlay: received non-system bus message");
       return;
     }
 
     if (message.source && message.source === "Port") {
+      console.debug(`Overlay: Skipping port message (${messageName})`);
       // don't echo port messages back to the port
       return;
     }
 
+    console.debug(`Overlay: dispatching message (${messageName})`)
     this.controlWorker.sendMessage(messageName, message);
   }
 }

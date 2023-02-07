@@ -3,7 +3,7 @@ import {
   subscribe,
   unsubscribe,
 } from "pubsub-js";
-import { isSystemMessage, SystemMessageCallback, SystemMessageNames, SystemMessages } from "#shared";
+import { isSystemMessage, SystemMessage, SystemMessageCallback, SystemMessageNames, SystemMessages } from "#shared";
 
 /**
  * Singleton facade to enforce typing for pubsub.js calls
@@ -26,9 +26,13 @@ export default class TypedPubSubBus {
         return;
       }
 
-      if (isSystemMessage(data)) {
+      if (messageName === '*') {
+        const coerced: SystemMessage = data as unknown as SystemMessage;
+        listener(coerced.name, coerced);
+
+      } else if (isSystemMessage(data)) {
         listener(name, data);
-      }
+      } 
     });
   }
 

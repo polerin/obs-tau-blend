@@ -18,9 +18,9 @@ import {
   SystemMessage,
 } from "#shared";
 
-import AbsstractController from "#infra/Controllers/AbstractController";
+import AbstractController from "#infra/Controllers/AbstractController";
 
-export default class CentralController extends AbsstractController {
+export default class CentralController extends AbstractController {
   protected defaultOptions: object = {
   };
 
@@ -34,9 +34,9 @@ export default class CentralController extends AbsstractController {
     super(eventBus);
   }
 
-  public async init(options: object): Promise<void> {
+  public async init(options: object, messagePort: MessagePort): Promise<void> {
     this.options = { ...this.defaultOptions, ...options };
-
+    this.setMessagePort(messagePort);
     this.registerListeners();
 
     await this.connectAdapters();
@@ -51,9 +51,8 @@ export default class CentralController extends AbsstractController {
     return Promise.all(connectionPromises);
   }
 
-  public onSharedWorkerConnect = (message: MessageEvent<any>): void => {
-    console.debug("Central controller port activated");
-    this.portMessageAdapter.setPort(message.ports[0]);
+  public setMessagePort = (messagePort: MessagePort): void => {
+    this.portMessageAdapter.setPort(messagePort);
     this.portMessageAdapter.connect();
   };
 

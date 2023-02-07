@@ -1,5 +1,5 @@
 import { ExternalConnectionStatus } from "#infra";
-import { ControlMessage } from "#shared/Definitions/Types";
+import { ControlMessage } from "#shared/Definitions/Types/index";
 
 export const AppControl = {
   ControlOnline: "app.control.online",

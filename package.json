@@ -7,41 +7,42 @@
   "scripts": {
     "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts'",
     "test-watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts' -w",
-    "build": "npm run clean && npm run build:lib && npm run build:types",
+    "build": "npm run clean && npm run build:lib",
     "build:watch": "tsc -w -p ./tsconfig.json",
     "build:lib": "tsc -p ./tsconfig.json",
     "build:types": "tsc -p ./tsconfig.types.json",
     "clean": "rm -rf ./lib/*"
   },
   "author": "Erin McCargar <polerin@eclexia.net>",
-  "main": "./lib/index.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "files": [
     "./lib"
   ],
   "exports": {
     ".": {
-      "types": "./lib/types",
-      "import": "./lib/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./Entry/Central": {
-      "types": "./lib/types/Entry/Central.d.ts",
-      "import": "./lib/Entry/Central.js"
+      "types": "./dist/Entry/Central.d.ts",
+      "import": "./dist/Entry/Central.js"
     },
     "./Entry/Overlay": {
-      "types": "./lib/types/Entry/Central.d.ts",
-      "import": "./lib/Entry/Central.js"
+      "types": "./dist/Entry/Overlay.d.ts",
+      "import": "./dist/Entry/Overlay.js"
     }
   },
   "imports": {
-    "#root": "./src/index.js",
-    "#root/*": "./src/*.js",
-    "#shared": "./src/Shared/index.js",
-    "#shared/*": "./src/Shared/*.js",
-    "#infra": "./src/Infrastructure/index.js",
-    "#infra/*": "./src/Infrastructure/*.js",
-    "#adapters/*": "./src/Infrastructure/Adapters/*.js",
-    "#overlay": "./src/Overlay/index.js",
-    "#overlay/*": "./src/Overlay/*.js"
+    "#root": "./src/index.ts",
+    "#root/*": "./src/*.ts",
+    "#shared": "./src/Shared/index.ts",
+    "#shared/*": "./src/Shared/*.ts",
+    "#infra": "./src/Infrastructure/index.ts",
+    "#infra/*": "./src/Infrastructure/*.ts",
+    "#adapters/*": "./src/Infrastructure/Adapters/*.ts",
+    "#overlay": "./src/Overlay/index.ts",
+    "#overlay/*": "./src/Overlay/*.ts"
   },
   "license": "To be Determined",
   "devDependencies": {

@@ -4,9 +4,9 @@
         "removeComments": false,
         "declaration": true,
         // "declarationDir" : "./lib/types",
-        // "outDir": "./lib/types",
+        "outDir": "./lib/types",
         "declarationMap": true,
         "emitDeclarationOnly": true,
     },
-    "exclude": ["*.test.ts"],
+    "exclude": ["./dist","*.test.ts"],
 }

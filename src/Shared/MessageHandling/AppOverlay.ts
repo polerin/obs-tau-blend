@@ -1,4 +1,4 @@
-import { ControlMessage } from "#shared/Definitions/Types";
+import { ControlMessage } from "#shared/Definitions/Types/index";
 
 export const AppOverlay = {
   OverlayOnline: "app.control.overlay.online",

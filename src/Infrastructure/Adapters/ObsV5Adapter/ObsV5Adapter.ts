@@ -99,7 +99,7 @@ export default class ObsV5Adapter
 
       console.log("after auth message");
       this.markActive();
-      this.sendMessage(ObsResponse.WebsocketAuthorized, {
+      this.notifyListener(ObsResponse.WebsocketAuthorized, {
         type: "obsResponse",
         name: ObsResponse.WebsocketAuthorized,
       });

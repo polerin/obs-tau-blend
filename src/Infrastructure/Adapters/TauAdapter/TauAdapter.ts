@@ -80,15 +80,13 @@ export default class TauAdapter
   protected registerEventTransformers(
     transformers: ServiceAdapterTransformerSet
   ): void {
-    if (!transformers.event) {
+    if (!transformers.event || this.tauSocket === undefined) {
       return;
     }
 
     // @todo Implement pre-websocket connect listeners somehow
     for (const transformer of Object.values(transformers.event)) {
-      // this.websocket.on(transformer.adapterEventName, (...eventData) =>
-      //   this.handleEvent(transformer.adapterEventName, eventData[0])
-      // );
+      this.tauSocket.on(transformer.adapterEventName, this.handleWebsocketMessage);
     }
   }
 
@@ -154,30 +152,35 @@ export default class TauAdapter
   };
 
   protected handleWebsocketMessage(event: Websocket.MessageEvent): void {
+    console.debug("received tau message", event);
     try {
       const tauEvent = this.parseSocketMessage(event);
       const eventName: TauEventNames = tauEvent.event_type as TauEventNames;
-
+      console.log("tau one ");
       if (!eventName) {
         throw {
-          message: "Unsupported message type:",
+          message: "Unsupported message type: " + Object.keys(tauEvent).join(', '),
           details: { message: event },
         };
       }
 
+      console.log("tau 2");
       const transformer = this.selectTransformer("event", tauEvent.event_type);
 
       if (!isEventTransformer(transformer)) {
         throw new Error(
-          "Unable to locate transformer for message: " + tauEvent.event_type
+          "Unable to locate transformer for message: " + eventName
         );
       }
-
+      console.log("tau 3");
       const message = transformer.buildEventMessage(tauEvent);
+      console.log("in tau? " + message.name + JSON.stringify(message));
 
       this.notifyListener(message.name, message);
-    } catch (e) {
-      console.warn("Unable to parse Tau message", { error: e, message: event });
+    } catch (e: any) {
+
+      const msg = (e instanceof Error) ? e.message : e;
+      console.warn("Unable to parse Tau message: " + msg + " \n " + JSON.stringify(event));
     }
   }
 

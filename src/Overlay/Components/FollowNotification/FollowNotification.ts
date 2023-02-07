@@ -30,7 +30,7 @@ export default class FollowNotification extends AbstractOverlayComponent
   public multiFollowShowCount: number = 5;
 
   @property({ type: Number })
-  public waitForMore = 5000;
+  public delay = 5000;
 
   @property({ type: Array })
   public singleFollowMessages = ["New Follower!", "New Friend!", "Oh Hello!"];
@@ -68,11 +68,10 @@ export default class FollowNotification extends AbstractOverlayComponent
 
   public constructor() {
     super();
-    this.handleFollowEvent = this.handleFollowEvent.bind(this);
-    this.displayTick = this.displayTick.bind(this);
   }
   
   public registerCallbacks(eventBus: TypedPubSubBus): void {
+    console.log("in follow register");
     super.registerCallbacks(eventBus);
 
     this.registerCallback(TwitchEvent.ChannelFollow, this.handleFollowEvent);
@@ -97,10 +96,10 @@ export default class FollowNotification extends AbstractOverlayComponent
   }
 
 
-  protected handleFollowEvent(
+  protected handleFollowEvent = (
     messageName: SystemMessageNames,
     incomingEvent: SystemMessage
-  ): void {
+  ): void => {
     if (
       incomingEvent === undefined ||
       incomingEvent.name !== TwitchEvent.ChannelFollow
@@ -120,13 +119,16 @@ export default class FollowNotification extends AbstractOverlayComponent
       return;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, this.waitForMore));
+    await new Promise((resolve) => setTimeout(resolve, this.delay));
 
     this.canDisplay = true;
     this.displayIntervalToken = setInterval(this.displayTick, this.displayTime);
+
+    // initial display of notification
+    this.displayTick();
   }
 
-  protected displayTick(): void {
+  protected displayTick = (): void => {
     if (!this.canDisplay || !this.displayIntervalToken) {
       // we aren't allowed to display yet, or the interval loop isn't running (?!)
       return;
@@ -147,7 +149,7 @@ export default class FollowNotification extends AbstractOverlayComponent
       );
 
       return;
-    }
+    };
 
     const nextFollow = this.newFollowBuffer.shift();
 

@@ -1,4 +1,4 @@
-import { ObsEventMessage } from "#shared/Definitions/Types";
+import { ObsEventMessage } from "#shared/Definitions/Types/index";
 
 export const ObsEvent = {
   // Scene
