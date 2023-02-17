@@ -55,6 +55,7 @@ export default class TauAdapter
     const uri = conf.socketProtocol + conf.socketHost + ":" + conf.socketPort + conf.socketPath;
 
     try {
+      console.debug('Attempting to connect to TAU at: ' + uri);
       this.tauSocket = new Websocket(uri);
 
       return new Promise<boolean>(this.handleConnectionOpened);
@@ -117,15 +118,18 @@ export default class TauAdapter
     }, this.options.connectTimeout);
 
     try {
+      const authHandler = this.buildAuthHandler(resolve, reject)
+      console.log("TAU auth handler created", authHandler);
+
+      this.tauSocket?.addEventListener("open", authHandler);
       this.tauSocket?.addEventListener("message", this.handleWebsocketMessage);
-      this.tauSocket?.addEventListener("open", this.buildAuthHandler(resolve, reject));
-      this.tauSocket?.addEventListener("error", () => {
-        console.info("connect failed?!?!");
+      this.tauSocket?.addEventListener("error", (e) => {
+        console.info("Tau connection failed", e);
 
         reject(false);
       });
     } catch (e) {
-      console.error("what the heckfart", e);
+      console.error("Unable to bind to tau socket", e);
     }
   };
 
@@ -133,18 +137,19 @@ export default class TauAdapter
     resolve: Function,
     reject: Function
   ): ((event: Websocket.Event) => void) => {
-    console.log("building auth handler");
-
     return (_event: Websocket.Event) => {
-      console.log('Auth handler called');
+      console.log('TAU Auth handler called');
+
       this.tauSocket?.send(JSON.stringify({ token: this.options.tauSecret }), (e?: Error) => {
+        
         if (e) {
           console.error("Unable to connect to TAU", e);
 
           reject(false);
           return;
         }
-        console.log("uhm", e);
+
+        console.log("TAU connected, attaching event listener", e);
         resolve(true);
       });
 
@@ -156,7 +161,8 @@ export default class TauAdapter
     try {
       const tauEvent = this.parseSocketMessage(event);
       const eventName: TauEventNames = tauEvent.event_type as TauEventNames;
-      console.log("tau one ");
+      console.log(`Received tau message: ${eventName}`, tauEvent);
+
       if (!eventName) {
         throw {
           message: "Unsupported message type: " + Object.keys(tauEvent).join(', '),
@@ -164,7 +170,6 @@ export default class TauAdapter
         };
       }
 
-      console.log("tau 2");
       const transformer = this.selectTransformer("event", tauEvent.event_type);
 
       if (!isEventTransformer(transformer)) {
@@ -172,9 +177,7 @@ export default class TauAdapter
           "Unable to locate transformer for message: " + eventName
         );
       }
-      console.log("tau 3");
       const message = transformer.buildEventMessage(tauEvent);
-      console.log("in tau? " + message.name + JSON.stringify(message));
 
       this.notifyListener(message.name, message);
     } catch (e: any) {

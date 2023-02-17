@@ -1,5 +1,4 @@
-import IEventBusAwareComponent from '#overlay/Shared/interfaces/IEventBusAwareComponent';
-
+export * from '#overlay/Shared/interfaces/index';
 export * from '#overlay/Shared/Types';
-
-export {IEventBusAwareComponent}
+export * from '#overlay/Shared/typeGuards/index';
+export * from '#overlay/Shared/componentControllers/index';

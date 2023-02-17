@@ -61,7 +61,7 @@ export default class ChannelPointRedemption extends AbstractOverlayComponent
   public render() {
     // return html`<div>this is just a test of the channel point redem system..</div>`;
     if (!this.canDisplay || this.currentRedemption === undefined) {
-      return html`<h1>redeem display : dafsdf</h1>`;
+      return;
     }
 
     return this.displayRedemption();
