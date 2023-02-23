@@ -5,7 +5,7 @@ export const ObsRequest = {
   SetCurrentScene: "obs.request.scene.switch",
 
   // Source
-  SetSourceFilterSettings: "obs.request.source.setFilterSettings",
+  SetSourceFilterSettings: "obs.request.source.filter.settings.set",
 } as const;
 
 export interface ObsRequestMessages {

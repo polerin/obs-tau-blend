@@ -4,8 +4,8 @@ export const ObsResponse = {
   // Core
   WebsocketAuthorized: "obs.websocket.authorized",
   WebsocketAuthorizationFailure: "obs.websocket.authorizationFailure",
-  SetCurrentScene: "obs.scene.response.setCurrent",
-  SetSourceFilterSettings: "obs.source.filter.setttings.set",
+  SetCurrentScene: "obs.response.scene.setCurrent",
+  SetSourceFilterSettings: "obs.response.source.filter.settings.set",
 } as const;
 
 export interface ObsResponseMessages {

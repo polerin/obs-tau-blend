@@ -1,8 +1,4 @@
-import {
-  publish,
-  subscribe,
-  unsubscribe,
-} from "pubsub-js";
+import pubsub from "pubsub-js";
 import { isSystemMessage, SystemMessage, SystemMessageCallback, SystemMessageNames, SystemMessages } from "#shared";
 
 /**
@@ -12,14 +8,14 @@ import { isSystemMessage, SystemMessage, SystemMessageCallback, SystemMessageNam
  */
 export default class TypedPubSubBus {
   public publish(messageName: SystemMessageNames, message: SystemMessages[SystemMessageNames]): boolean {
-    return publish(messageName, message);
+    return pubsub.publish(messageName, message);
   }
 
   public subscribe<MessageName extends SystemMessageNames | string>(
     messageName: MessageName,
     listener: SystemMessageCallback
   ): PubSubJS.Token {
-    return subscribe(messageName, (incomingName: string, data?: unknown) => {
+    return pubsub.subscribe(messageName, (incomingName: string, data?: unknown) => {
       const name = incomingName as SystemMessageNames;
 
       if (!name || !data) {
@@ -36,5 +32,7 @@ export default class TypedPubSubBus {
     });
   }
 
-  public unsubscribe = unsubscribe;
+  public unsubscribe = pubsub.unsubscribe;
+
+  public unsubscribeAll = pubsub.clearAllSubscriptions;
 }

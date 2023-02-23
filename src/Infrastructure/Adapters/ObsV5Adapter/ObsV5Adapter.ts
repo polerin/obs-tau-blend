@@ -59,6 +59,10 @@ export default class ObsV5Adapter
     messageName: SystemMessageNames,
     message: SystemMessage
   ): Promise<void> => {
+    if (!this.websocketConnected) {
+      throw new Error('OBS v5: Attempted to send message before websocket connection');
+    }
+
     const transformer = this.selectTransformer("request", messageName);
 
     if (!isRequestTransformer(transformer)) {
@@ -87,8 +91,7 @@ export default class ObsV5Adapter
   };
 
   public async connect(): Promise<boolean> {
-    debugger;
-    console.log("shared worker obs connect");
+    console.debug("shared worker obs connect");
     try {
       const websocketHost = `ws://${this.options.socketHost}:${this.options.socketPort}`;
       await this.websocket.connect(
@@ -97,7 +100,6 @@ export default class ObsV5Adapter
         {}
       );
 
-      console.log("after auth message");
       this.markActive();
       this.notifyListener(ObsResponse.WebsocketAuthorized, {
         type: "obsResponse",

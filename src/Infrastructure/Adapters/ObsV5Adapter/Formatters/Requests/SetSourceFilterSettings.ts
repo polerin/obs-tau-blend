@@ -18,6 +18,10 @@ export default class SetSourceFilterSettings implements
     
     public buildRequestMessage(systemMessage : SystemMessageByName<_systemRequest>) : ObsV5Requests[_adapterRequest]
     {
+        if (!systemMessage.sourceName || !systemMessage.filterName) {
+            throw new Error(`OBS v5: Attempted to transform invalid system message\n\tmessage name: ${this.systemRequestName}`);
+        }
+
         return {
             sourceName : systemMessage.sourceName,
             filterName : systemMessage.filterName,

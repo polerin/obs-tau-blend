@@ -3,7 +3,7 @@ import { describe } from 'mocha';
 import { SystemMessageByName, ObsEvent } from '#shared';
 
 import { EventSceneSwitch, } from '#adapters/ObsV5Adapter/Formatters/Events/index';
-import { ObsV5Events } from '#adapters/ObsV5Adapter/Types';
+import { ObsV5Events } from '#adapters/ObsV5Adapter/index';
 
 
 describe("ObsV5 EventSceneSwitch formatter tests", () => {
@@ -13,7 +13,7 @@ describe("ObsV5 EventSceneSwitch formatter tests", () => {
         const subject = buildSUT();
 
         expect(subject).to.be.a('object');
-        expect(subject.adapterEventName).to.be.equal("SwitchScenes");
+        expect(subject.adapterEventName).to.be.equal("CurrentProgramSceneChanged");
         expect(subject.systemEventName).to.be.equal("obs.scene.switched");
     });
 

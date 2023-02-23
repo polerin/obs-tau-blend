@@ -18,12 +18,19 @@ export default class SetCurrentScene implements
     
     public buildRequestMessage(systemMessage : SystemMessageByName<_systemRequest>) : ObsV5Requests[_adapterRequest]
     {
+        if(!systemMessage.sceneName) {
+            throw new Error("OBSv5: Attempted to switch scenes without supplying a new scene name");
+        }
+
         return {
-            "sceneName" : systemMessage.sceneName
+            "sceneName" : systemMessage.sceneName,
         };
     }
     
     public buildResponseMessage(adapterResponse: ObsV5Responses[_adapterResponse]): SystemMessageByName<_systemResponse> {
-        throw new Error("Method not implemented.");
+        return {
+            name: this.systemResponseName,
+            type: "obsResponse",
+        };    
     } 
 }

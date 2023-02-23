@@ -1,5 +1,5 @@
 // const localConfig = require("../../config.json");
-import { get, set }  from "lodash";
+import _  from "lodash";
 
 let localConfig : any = {};
 
@@ -26,7 +26,7 @@ export function conf_load(configObject : any) : void {
  * Keys use the . path syntax
  */
 export function conf_set(key : string, value : any) : void {
-    set(localConfig, key, value);
+    _.set(localConfig, key, value);
 }
 
 /**
@@ -35,5 +35,5 @@ export function conf_set(key : string, value : any) : void {
  * keys use the . path syntax
  */
 export function conf_get<ReturnType>(key : string, defaultVal : ReturnType | null) : ReturnType {
-    return get(localConfig, key, defaultVal);
+    return _.get(localConfig, key, defaultVal);
 };

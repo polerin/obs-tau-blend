@@ -4,9 +4,12 @@
   "description": "Streaming overlay application framework, for powerful interactive overlays",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^18.13.0"
+  },
   "scripts": {
-    "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts'",
-    "test-watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register --require tsconfig-paths/register './src/**/*.test.ts' -w",
+    "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register './src/**/*.test.ts'",
+    "test:watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register './src/**/*.test.ts' -w",
     "build": "npm run clean && npm run build:lib",
     "build:watch": "tsc -w -p ./tsconfig.json",
     "build:lib": "tsc -p ./tsconfig.json",
@@ -48,16 +51,18 @@
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
+    "@types/sinon": "^10.0.13",
     "chai": "^4.3.6",
     "esbuild": "^0.14.47",
+    "eslint": "^8.31.0",
     "mocha": "^10.0.0",
+    "prettier": "^2.8.2",
+    "sinon": "^15.0.1",
     "ts-auto-mock": "^3.6.2",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.8.1",
-    "tsconfig-paths": "^4.0.0",
-    "typescript": "^4.9.0",
-    "eslint": "^8.31.0",
-    "prettier": "^2.8.2"
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.0"
   },
   "dependencies": {
     "@hypersphere/omnibus": "^0.0.6",
@@ -67,7 +72,7 @@
     "@types/sharedworker": "^0.0.75",
     "@types/ws": "^8.5.3",
     "assert": "^2.0.0",
-    "brandi": "^4.0.2",
+    "brandi": "^5.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "bufferutil": "^4.0.6",
