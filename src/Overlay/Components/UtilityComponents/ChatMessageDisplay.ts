@@ -2,7 +2,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { html, LitElement } from "lit";
 
 import {
-  ChatMessage, TwitchUser,
+  TwitchChatMessage, TwitchUser,
 } from "#shared";
 import { stripHtml } from "#shared/Utility/dataCleaning";
 

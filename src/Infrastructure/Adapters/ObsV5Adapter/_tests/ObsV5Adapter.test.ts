@@ -123,12 +123,14 @@ describe("ObsV5Adapter tests", () => {
         };
 
         let error;
+        
         try {
             await subject.sendMessage(ObsResponse.SetCurrentScene, testMessage);
         } catch (e) { 
             error = (<Error>e).message;
         }
 
+        expect(subject.status.status).to.equal('disconnected');
         expect(error).to.equal('OBS v5: Attempted to send message before websocket connection');
     });
 

@@ -8,7 +8,7 @@
     "node": "^18.13.0"
   },
   "scripts": {
-    "test": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register './src/**/*.test.ts'",
+    "test": "TS_NODE_PROJECT='tsconfig.testing.json' nyc mocha --require ts-node/register './src/**/*.test.ts'",
     "test:watch": "TS_NODE_PROJECT='tsconfig.testing.json' mocha --require ts-node/register './src/**/*.test.ts' -w",
     "build": "npm run clean && npm run build:lib",
     "build:watch": "tsc -w -p ./tsconfig.json",
@@ -56,6 +56,7 @@
     "esbuild": "^0.14.47",
     "eslint": "^8.31.0",
     "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.8.2",
     "sinon": "^15.0.1",
     "ts-auto-mock": "^3.6.2",

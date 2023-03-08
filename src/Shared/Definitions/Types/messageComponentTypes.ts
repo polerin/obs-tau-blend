@@ -1,4 +1,6 @@
 export type ChatChannel = `#${string}`;
+export type TwitchSubTier = '1000' | '2000' | '3000';
+
 
 export type TwitchUser = {
     id?: string;
@@ -7,7 +9,7 @@ export type TwitchUser = {
     subscriber?: boolean;
 }
 
-export type ChatMessage = {
+export type TwitchChatMessage = {
     channel: ChatChannel;
     user: TwitchUser;
     text: string;

@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { customElement, property, state } from "lit/decorators.js";
 
-import singleFollowTemplate from "#overlay/Components/FollowNotification/SingleFollow.template";
-import multiFollowTemplate from "#overlay/Components/FollowNotification/MultiFollow.template";
+import singleFollowTemplate from "#overlay/Components/SubscriptionNotification/SingleFollow.template";
+import multiFollowTemplate from "#overlay/Components/SubscriptionNotification/MultiFollow.template";
 
 import { TypedPubSubBus } from "#infra";
 
@@ -11,16 +11,12 @@ import {
   TwitchEvent,
   SystemMessageNames,
   SystemMessage,
-  SystemMessages,
-  IOverlayComponent,
 } from "#shared";
-import { OverlayComponentType } from "#overlay/Shared/Types";
 import AbstractOverlayComponent from "#overlay/Components/AbstractOverlayComponent";
-import { IMultiItemQueueAwareComponent, MultiItemQueueController } from "#overlay/Shared/index";
+import { IMultiItemQueueAwareComponent, MultiItemQueueController, OverlayComponentType } from "#overlay/Shared/index";
 
-
-@customElement("follow-notification")
-export default class FollowNotification
+@customElement("subscription-notification")
+export default class SubscriptionNotification
   extends AbstractOverlayComponent
   implements IMultiItemQueueAwareComponent<string>
 {
@@ -38,10 +34,10 @@ export default class FollowNotification
   public delay = 5000;
 
   @property({ type: Array })
-  public singleFollowMessages = ["New Follower!", "New Friend!", "Oh Hello!"];
+  public singleFollowMessages = ["New subscription!", "Thank you for subscribing!"];
 
   @property({ type: Array })
-  public multiFollowMessages = ["New Followers!", "New Friends!", "Oh Hello!"];
+  public multiFollowMessages = ["New subscribers!"];
 
   @state()
   protected currentItems: Array<string> = [];
@@ -63,6 +59,8 @@ export default class FollowNotification
    * when and what to display.
    */
   protected queueController : MultiItemQueueController<string>;
+
+
 
   public constructor() {
     super();
@@ -90,7 +88,7 @@ export default class FollowNotification
   public registerCallbacks(eventBus: TypedPubSubBus): void {
     super.registerCallbacks(eventBus);
 
-    this.registerCallback(TwitchEvent.ChannelFollow, this.handleFollowEvent);
+    this.registerCallback(TwitchEvent.ChannelSubscribe, this.handleSubscribeEvent);
   }
 
   public disconnectedCallback(): void {
@@ -101,7 +99,7 @@ export default class FollowNotification
 
   protected render() {
     if (this.currentItems.length === 0) {
-      return;
+      return "YUUup?";
     }
 
     if (this.currentItems.length === 1) {
@@ -111,19 +109,20 @@ export default class FollowNotification
     return this.displayMultiFollow();
   }
 
-  protected handleFollowEvent = (
+  protected handleSubscribeEvent = (
     messageName: SystemMessageNames,
     incomingEvent: SystemMessage
   ): void => {
+
     if (
       incomingEvent === undefined ||
-      incomingEvent.name !== TwitchEvent.ChannelFollow
+      incomingEvent.name !== TwitchEvent.ChannelSubscribe
     ) {
       // just being careful
       return;
     }
 
-    this.queueController.addItem(incomingEvent.user_name);
+    this.queueController.addItem(incomingEvent.user.userName);
   }
 
   protected displaySingleFollow() {
@@ -155,6 +154,6 @@ export default class FollowNotification
 
 declare global {
   interface HTMLElementTagNameMap {
-    "follow-notification": FollowNotification;
+    "subscription-notification": SubscriptionNotification;
   }
 }

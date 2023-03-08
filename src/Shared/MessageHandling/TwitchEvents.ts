@@ -1,7 +1,8 @@
-import { TwitchMessageBase, TwitchUser } from "#shared/Definitions/Types/index";
+import { TwitchMessageBase, TwitchUser, TwitchChatMessage, TwitchSubTier } from "#shared/Definitions/Types/index";
 
 export const TwitchEvent = {
   ChannelFollow: "twitch.event.channel.follow",
+  ChannelSubscribe: "twitch.event.channel.subscribe",
   ChannelRedeem: "twitch.event.channel.reward.redemption.add",
 } as const;
 
@@ -30,5 +31,18 @@ export interface TwitchEventMessages {
        title: string;
        prompt: string;
     }
+  },
+
+  [TwitchEvent.ChannelSubscribe]: TwitchMessageBase & {
+
+    id: string;
+    name: typeof TwitchEvent.ChannelSubscribe;
+    broadcaster: TwitchUser;
+    user: TwitchUser;
+    tier: TwitchSubTier;
+    userInput: TwitchChatMessage;
+    cumulativeMonths: number;
+    streakMonths: number;
+    durationMonths: number;
   }
 }

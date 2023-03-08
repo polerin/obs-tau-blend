@@ -2,7 +2,7 @@ import { ReactiveController } from "lit";
 import { isVisibilityAwareComponent } from "#overlay/Shared/typeGuards/index";
 import { IVisibilityAwareComponent } from "#overlay/Shared/interfaces/index";
 
-export class VisibilityNotifyingController implements ReactiveController {
+export default class VisibilityNotifyingController implements ReactiveController {
 
     private observer?: IntersectionObserver;
 

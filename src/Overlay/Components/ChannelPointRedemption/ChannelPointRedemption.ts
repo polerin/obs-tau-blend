@@ -31,7 +31,7 @@ export default class ChannelPointRedemption extends AbstractOverlayComponent
   @state()
   protected canDisplay: boolean = false;
 
-  public componentType: OverlayComponentType = "persistant";
+  public componentType: OverlayComponentType = "event";
 
   /**
    * Buffer of redemptions that need to be handled
@@ -132,7 +132,7 @@ export default class ChannelPointRedemption extends AbstractOverlayComponent
 
   protected displayRedemption() {
     if (this.currentRedemption) {
-      // // @todo look at params to decide what to display!
+      // @todo look at params to decide what to display!
         return html`<slot
           name="${this.currentRedemption.reward.title}"
           .fromUser=${this.currentRedemption.user}
