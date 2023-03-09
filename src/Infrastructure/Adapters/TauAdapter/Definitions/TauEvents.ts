@@ -1,5 +1,9 @@
 import { TwitchEvent, TwitchSubTier } from "#shared";
 
+/**
+ * Incoming data formats for TAU messages
+ */
+
 export type TauEventBase = {
     id : string,
     event_id : string,
